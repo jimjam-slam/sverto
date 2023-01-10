@@ -1,0 +1,10 @@
+title: Svelte in Quarto
+author: 360info
+version: 0.0.1
+quarto-version: ">=1.2.0"
+contributes:
+  project:
+    project:
+      type: website
+      pre-render: prerender.ts
+      post-render: postrender.ts

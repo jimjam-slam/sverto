@@ -1,0 +1,8 @@
+# quarto backend folder
+/.quarto/
+
+# installed npm packages
+/node_modules/
+
+# system files
+.DS_Store

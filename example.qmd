@@ -1,0 +1,87 @@
+---
+title: Svelte example
+date: last-modified
+format:
+  svelte-quarto-html: default
+---
+
+Here's an example of how to use the included example Svelte component, `Circles.svelte`.
+
+`Circles.svelte` takes a prop called `data`. You can update the visualisation by giving it new `data`.
+
+First, let's define three different datasets for it to swap between:
+
+```{ojs}
+myDatasets = new Map([
+    ["Dataset A", [
+      {x: 10, r: 5},
+      {x: 30, r: 15},
+      {x: 50, r: 25},
+      {x: 70, r: 17},
+      {x: 90, r: 8}
+    ]],
+    ["Dataset B", [
+      {x: 10, r: 25},
+      {x: 30, r: 5},
+      {x: 50, r: 5}
+    ]],
+    ["Dataset C", [
+      {x: 5, r: 12},
+      {x: 25, r: 5},
+      {x: 32, r: 8},
+      {x: 45, r: 21},
+      {x: 70, r: 5}
+    ]]
+  ]);
+```
+
+Now, let's use our visualisation.
+
+First, import it:
+
+```{ojs}
+Circles = import("Circles.svelte");
+```
+
+:::{.callout-warning}
+This import syntax is a bit different to the way you import [Observable notebooks](https://quarto.org/docs/interactive/ojs/libraries.html#observablehq) (`import X from @user/notebook`) or [other npm modules](https://quarto.org/docs/interactive/ojs/libraries.html#npm) (`X = require(https://example.com/library)`).
+:::
+
+Then, create an instance of it called `myCircles`. We have to tell it where it's going to go (so we need to create an empty div for it) using the `target` option, and we pass default props for it using the `prop` option. Notice we pass some default `data` in this case:
+
+```{ojs}
+myCircles = new Circles.default({
+  target: document.querySelector("#mycircles"),
+  props: {
+    data: [
+      {x: 10, r: 5},
+      {x: 30, r: 15},
+      {x: 50, r: 25},
+      {x: 70, r: 17},
+      {x: 90, r: 8}
+    ]
+  }
+});
+```
+
+`myCircles` is going to go in a div at the bottom of the document whose ID matches the `target` above, `#mycircles`.
+
+Now that it's loaded, we can define a control using Observable Inputs and have our visual react to it.
+
+```{ojs}
+viewof selectedDataset =
+  Inputs.select(myDatasets, { label: "Selected dataset" });
+```
+
+And finally, we pass the `selectedDataset` to the `data` prop of our Svelte component. This will run again whenever the `selectedDataset` changes:
+
+```{ojs}
+myCircles.data = selectedDataset;
+```
+
+::: {#mycircles style="background-color: #eeeeee"}
+:::
+
+And there we go!
+
+For more help writing Svelte components, check out the [Svelte tutorial](https://svelte.dev/tutorial/basics).
