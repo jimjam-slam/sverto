@@ -8,11 +8,3 @@ try {
     throw error;
   }
 }
-
-// write project output path to .quarto/.svelte-output-path
-await Deno.writeTextFile(
-  ".quarto/.svelte-output-path",
-  Deno.env.get("QUARTO_PROJECT_OUTPUT_DIR"),
-  {
-    append: false
-  });
