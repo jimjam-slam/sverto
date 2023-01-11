@@ -6,7 +6,10 @@ contributes:
   project:
     project:
       type: website
-      pre-render:
-        - search.lua
-        - prerender.ts
+      pre-render: prerender.ts
       post-render: postrender.ts
+    format: svelte-quarto-html
+  formats:
+    html:
+      filters:
+        - search.lua
