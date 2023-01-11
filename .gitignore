@@ -6,3 +6,5 @@
 
 # system files
 .DS_Store
+
+/.luarc.json

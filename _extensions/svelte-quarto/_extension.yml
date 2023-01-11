@@ -6,5 +6,7 @@ contributes:
   project:
     project:
       type: website
-      pre-render: prerender.ts
+      pre-render:
+        - search.lua
+        - prerender.ts
       post-render: postrender.ts
