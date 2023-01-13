@@ -26,20 +26,20 @@ Add a magic block anywhere in your document that looks like this:
 
 ````
 :::{.svelteimport}
-{{< import .sverto/example.qmd >}}
+{{< import .sverto/import/example.qmd >}}
 :::
 ````
 
 :::{.svelteimport}
-{{< import .sverto/example.qmd >}}
+{{< import .sverto/import/example.qmd >}}
 :::
 
 Replace `example.qmd` with the path to your Quarto doc within the project. For example:
 
-**If your document is here...**         | **Use this import path**
-----------------------------------------|-----------------------------------
-example.qmd                             | .sverto/example.qmd
-posts/animals/turtles.qmd               | .sverto/posts/animals/turtles.qmd
+**If your document is here...** | **Use this import path**
+--------------------------------|------------------------------------------
+example.qmd                     | .sverto/import/example.qmd
+posts/animals/turtles.qmd       | .sverto/import/posts/animals/turtles.qmd
 
 > If you ever move or rename your Quarto document, you'll need to update this block with the new location and filename!
 
@@ -117,6 +117,10 @@ You can't see anything here, but if we scroll back up to where we added the empt
 ### 6. Render the project
 
 Render your Quarto project as you normally would, with commands like `quarto run` and `quarto preview`.
+
+> **Note:** you'll probably get the warning "OJS block count mismatch. Line number reporting is likely to be wrong" when rendering.
+> 
+> That's because of what we're doing under the hood to bring the Svelte files in. It won't stop your project from working, but be aware of it if you are referring to line numbers in code blocks!
 
 And there you go! 🚀
 

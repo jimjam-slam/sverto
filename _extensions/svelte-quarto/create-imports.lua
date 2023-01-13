@@ -38,29 +38,39 @@ if (svelte_key) then
     -- TODO - assert item is a pandoc string
     
     item_string = pandoc.utils.stringify(item)
-    item_js = string.sub(item_string, 1, string.len(item_string) - 7) .. ".js"
-    print("  - " .. item_string .. " => " .. item_js)
+    item_js = string.sub(item_string, 1, string.len(item_string) - 7)
+    print("  - " .. item_string .. " => " .. item_js .. ".js")
 
     -- write the item out to .sverto/.svelte-imports
     import_list_file = io.open(".sverto/.sverto-imports", "a")
-    io.output(import_list_file):write(item_js .. "\n")
+    io.output(import_list_file):write(item_string .. "\n")
     io.close(import_list_file)
 
     -- add the item to the require block
-    require_block = require_block .. "require(\"" .. item_js .."\")\n"
+    print(">>>>>> Next item:")
+    print(item_js .. ".js")
+    import_block = import_block ..
+      item_js .. " = import(\"/" .. item_js ..".js\")\n"
 
   end
   
-  -- write the require block out to .sverto/[path]
-  require_block = require_block .. "```"
-  print("Require block:")
-  print(require_block)
-  import_file = io.open(".sverto/" .. first_file_name, "w")
-  io.output(import_file):write(require_block .. "\n")
+  -- write the import block out to .sverto/import/[path]
+  import_block = import_block .. "```"
+  print("Import block:")
+  print(import_block)
+  print("Writing out to " .. ".sverto/import/" .. first_file_name)
+  os.execute("mkdir .sverto/import/")
+  import_file = io.open(".sverto/import/" .. first_file_name, "w")
+  io.output(import_file):write(import_block .. "\n")
   io.close(import_file)
 else
   print("No svelte key in " .. first_file_name)
 end
 
--- if there is and there's no {{< import .sverto/file.qmd >}}, add it
--- print(first_file_contents.blocks[1]) -- should be the import!
+-- write the output dir temporarily
+outdir_file = io.open(".sverto/.sverto-outdir", "w")
+io.output(outdir_file):write(
+  os.getenv("QUARTO_PROJECT_OUTPUT_DIR"))
+io.close(outdir_file)
+
+-- TODO - if there's no {{< import .sverto/file.qmd >}} block, add it

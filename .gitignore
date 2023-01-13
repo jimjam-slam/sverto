@@ -1,10 +1,16 @@
 # quarto backend folder
 /.quarto/
 
+# .sverto directory (except rollup.config.js)
+/.sverto/import
+/.sverto/.sverto-*
+!/.sverto/rollup.config.js
+
 # installed npm packages
 /node_modules/
 
 # system files
 .DS_Store
 
+# lua
 /.luarc.json
