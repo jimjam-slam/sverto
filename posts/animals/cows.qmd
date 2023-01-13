@@ -1,0 +1,44 @@
+---
+title: Cows, huh?
+author: James Goldie, 360info
+date: last-modified
+svelte:
+  - Circles.svelte
+---
+
+Cows are rad, hey?
+
+:::{.svelteimport}
+{{< include /.sverto/posts/animals/cows.qmd >}}
+:::
+
+```{ojs}
+myCircles = new Circles.default({
+  target: document.querySelector("#mycircles"),
+  props: {
+    data: [5, 15, 25, 17, 8]
+  }
+});
+```
+
+```{ojs}
+// here are some datasets...
+allDatasets = new Map([
+    ["Dataset A", [5, 15, 25, 17, 8]],
+    ["Dataset B", [25, 5, 5]],
+    ["Dataset C", [12, 5, 8, 21, 5]]
+  ]);
+```
+
+```{ojs}
+viewof selectedDataset =
+  Inputs.select(allDatasets, { label: "Selected dataset" });
+```
+
+```{ojs}
+myCircles.data = selectedDataset
+```
+
+:::{#mycircles}
+:::
+
