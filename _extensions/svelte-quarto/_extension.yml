@@ -6,10 +6,14 @@ contributes:
   project:
     project:
       type: website
-      pre-render: prerender.ts
-      post-render: postrender.ts
+      pre-render:
+        - create-imports.lua
+        - compile-imports.ts
     format: svelte-quarto-html
   formats:
     html:
       filters:
-        - search.lua
+        - lift-imports.lua
+    revealjs:
+      filters:
+        - lift-imports.lua
