@@ -29,11 +29,11 @@ This will install everything you need for your Svelte components to work to the 
 Here's the short version of adding Svelte components to your Quarto docs:
 
 1. Add a list of Svelte components (eg. `Circles.svelte`) you want to add to your document frontmatter under `svelte`
-2. Add a magic placeholder div to your document using the `.svelteimport` class and a [Quarto include](https://quarto.org/docs/authoring/includes.html) to the path to your Quarto doc, prefixed with `.sverto/`. For example:
+2. Add a magic placeholder div to your document using the `.svelteimport` class and a [Quarto include](https://quarto.org/docs/authoring/includes.html) to the path to your Quarto doc, prefixed with `/.sverto/`. For example:
 
     ````
     :::{.svelteimport}
-    {{< include .sverto/example.qmd >}}
+    {{< include /.sverto/example.qmd >}}
     :::
     ````
 

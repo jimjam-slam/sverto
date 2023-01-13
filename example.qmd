@@ -26,14 +26,14 @@ Add a magic block anywhere in your document that looks like this:
 
 ````markdown
 :::{.svelteimport}
-{{< import .sverto/example.qmd >}}
+{{< import /.sverto/example.qmd >}}
 :::
 ````
 
 When this document renders, it'll turn into an OJS block with a series of statements like `X = import("X.js")`:
 
 :::{.svelteimport}
-{{< include .sverto/example.qmd >}}
+{{< include /.sverto/example.qmd >}}
 :::
 
 Replace `example.qmd` with the path to your Quarto doc within the project. For example:
