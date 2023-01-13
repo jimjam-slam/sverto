@@ -11,7 +11,7 @@ Add Svelte visualisations to your Quarto documents
 Install the project extension using:
 
 ```
-quarto use template 360-info/sverto
+quarto use template 360-info/sverto@bugdemo-preview
 ```
 
 This will add the extension itself (which includes some project scripts) to the `_extension` folder, as well as a few other files.
