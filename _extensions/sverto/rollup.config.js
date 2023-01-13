@@ -42,9 +42,6 @@ const svelteFiles = fs.readFileSync('.sverto/.sverto-imports', 'utf8')
 // remove duplicate svelte components (being used by several qmds)
 const uniqueSvelteFiles = [... new Set(svelteFiles)]
 
-console.log(">>> ROLLUP: QUARTO OUTPUT DIR IS ", quartoOutDir);
-console.log(">>> ROLLUP: SVELTE FILES ARE... ", uniqueSvelteFiles);
-
 // we export an array of rollup configs: one for each input svelte file
 export default uniqueSvelteFiles.map(
 	svelteFile => ({
