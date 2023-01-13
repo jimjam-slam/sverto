@@ -7,10 +7,9 @@ contributes:
     project:
       type: website
       pre-render:
+        - refresh.ts
         - create-imports.lua
-        - npm run build .sverto/rollup.config.js
-      post-render:
-        - cleanup.ts
+        - compile-imports.ts
     format: sverto-html
   formats:
     html:

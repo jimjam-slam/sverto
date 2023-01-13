@@ -24,22 +24,24 @@ svelte:
 
 Add a magic block anywhere in your document that looks like this:
 
-````
+````markdown
 :::{.svelteimport}
-{{< import .sverto/import/example.qmd >}}
+{{< import .sverto/example.qmd >}}
 :::
 ````
 
+When this document renders, it'll turn into an OJS block with a series of statements like `X = import("X.js")`:
+
 :::{.svelteimport}
-{{< import .sverto/import/example.qmd >}}
+{{< include .sverto/example.qmd >}}
 :::
 
 Replace `example.qmd` with the path to your Quarto doc within the project. For example:
 
 **If your document is here...** | **Use this import path**
 --------------------------------|------------------------------------------
-example.qmd                     | .sverto/import/example.qmd
-posts/animals/turtles.qmd       | .sverto/import/posts/animals/turtles.qmd
+`example.qmd`                   | `.sverto/example.qmd`
+`posts/animals/turtles.qmd`     | `.sverto/posts/animals/turtles.qmd`
 
 > If you ever move or rename your Quarto document, you'll need to update this block with the new location and filename!
 
@@ -49,7 +51,7 @@ We need to create an instance of our imported component, but---unlike a typical 
 
 Create an empty div in your document and give it an #id with the hashtag. This will be the "target" in the next step, when we bring the component to life, or _instantiate_ it:
 
-````
+````markdown
 :::{#mycircles}
 :::
 ````
