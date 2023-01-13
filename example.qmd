@@ -1,87 +1,123 @@
 ---
 title: Svelte example
+author: James Goldie, 360info
 date: last-modified
-format:
-  svelte-quarto-html: default
+svelte:
+  - Circles.svelte
 ---
 
-Here's an example of how to use the included example Svelte component, `Circles.svelte`.
+Here's an example of how to use the included example Svelte component, `Circles.svelte`. There are six steps:
 
-`Circles.svelte` takes a prop called `data`. You can update the visualisation by giving it new `data`.
+### 1. Import the component
 
-First, let's define three different datasets for it to swap between:
+The first thing you should note is in the frontmatter: a `svelte` key with a list of Svelte components. For example:
 
-```{ojs}
-myDatasets = new Map([
-    ["Dataset A", [
-      {x: 10, r: 5},
-      {x: 30, r: 15},
-      {x: 50, r: 25},
-      {x: 70, r: 17},
-      {x: 90, r: 8}
-    ]],
-    ["Dataset B", [
-      {x: 10, r: 25},
-      {x: 30, r: 5},
-      {x: 50, r: 5}
-    ]],
-    ["Dataset C", [
-      {x: 5, r: 12},
-      {x: 25, r: 5},
-      {x: 32, r: 8},
-      {x: 45, r: 21},
-      {x: 70, r: 5}
-    ]]
-  ]);
+```yaml
+---
+title: Svelte example
+svelte:
+  - Circles.svelte
+---
 ```
 
-Now, let's use our visualisation.
+### 2. Add a magic block to your document
 
-First, import it:
+Add a magic block anywhere in your document that looks like this:
 
-```{ojs}
-Circles = import("Circles.svelte");
-```
+````
+:::{.svelteimport}
+{{< import .sverto/example.qmd >}}
+:::
+````
 
-:::{.callout-warning}
-This import syntax is a bit different to the way you import [Observable notebooks](https://quarto.org/docs/interactive/ojs/libraries.html#observablehq) (`import X from @user/notebook`) or [other npm modules](https://quarto.org/docs/interactive/ojs/libraries.html#npm) (`X = require(https://example.com/library)`).
+:::{.svelteimport}
+{{< import .sverto/example.qmd >}}
 :::
 
-Then, create an instance of it called `myCircles`. We have to tell it where it's going to go (so we need to create an empty div for it) using the `target` option, and we pass default props for it using the `prop` option. Notice we pass some default `data` in this case:
+Replace `example.qmd` with the path to your Quarto doc within the project. For example:
+
+**If your document is here...**         | **Use this import path**
+----------------------------------------|-----------------------------------
+example.qmd                             | .sverto/example.qmd
+posts/animals/turtles.qmd               | .sverto/posts/animals/turtles.qmd
+
+> If you ever move or rename your Quarto document, you'll need to update this block with the new location and filename!
+
+### 3. Create a place for your visual to live
+
+We need to create an instance of our imported component, but---unlike a typical OJS block---Svelte components put the visual itself somewhere else in the document.
+
+Create an empty div in your document and give it an #id with the hashtag. This will be the "target" in the next step, when we bring the component to life, or _instantiate_ it:
+
+````
+:::{#mycircles}
+:::
+````
+
+:::{#mycircles}
+:::
+
+> **Tip:** this block can go anywhere in your document! In fact, order doesn't matter for any of these steps, other than the frontmatter.
+
+
+### 4. Instantiate your component
+
+Bring your component to life by creating an instance of it with `new [Component Name].default()`. This function takes an object as an argument with two properties:
+
+- `target` is the place your visual will go. Use the `document.querySelector` to point it to the empty block we just made above, `#mycricles`.
+- `props`: is an object where we pass props, or properties, to the component. This will vary depending on how the component is written: the one included as an example with this package, `Circles.svelte`, requires a prop called `data`.
+
+Here's how we instantiate `Circles.svelte`:
 
 ```{ojs}
 myCircles = new Circles.default({
   target: document.querySelector("#mycircles"),
   props: {
-    data: [
-      {x: 10, r: 5},
-      {x: 30, r: 15},
-      {x: 50, r: 25},
-      {x: 70, r: 17},
-      {x: 90, r: 8}
-    ]
+    data: [5, 15, 25, 17, 8]
   }
 });
 ```
 
-`myCircles` is going to go in a div at the bottom of the document whose ID matches the `target` above, `#mycircles`.
+> **Important:** if you're creating a visual that will react in response to changing OJS (for example, some data that you've calculated in your document, or the value of an Observable Input), _do not put that data here._
+>
+> If you put changing data here, the Svelte component will rebuild from scratch every time the data changes, and it will not animate.
+>
+> Instead, we're going to take advantage of Svelte's own reactivity in the next step.
 
-Now that it's loaded, we can define a control using Observable Inputs and have our visual react to it.
+### 5. Update your component
+
+Now the fun part - updating our visual when our document changes. It's as simple as referring to the prop using `componentInstance.propName =`.
+
+For example, here are three datasets and an Observable Inputs dropdown menu that lets you select one of three datasets:
+
+```{ojs}
+// here are some datasets...
+allDatasets = new Map([
+    ["Dataset A", [5, 15, 25, 17, 8]],
+    ["Dataset B", [25, 5, 5]],
+    ["Dataset C", [12, 5, 8, 21, 5]]
+  ]);
+```
 
 ```{ojs}
 viewof selectedDataset =
-  Inputs.select(myDatasets, { label: "Selected dataset" });
+  Inputs.select(allDatasets, { label: "Selected dataset" });
 ```
 
-And finally, we pass the `selectedDataset` to the `data` prop of our Svelte component. This will run again whenever the `selectedDataset` changes:
+Now we can update the prop `data` of the visual `myCircles` using:
 
 ```{ojs}
-myCircles.data = selectedDataset;
+myCircles.data = selectedDataset
 ```
 
-::: {#mycircles style="background-color: #eeeeee"}
-:::
+You can't see anything here, but if we scroll back up to where we added the empty `#mycircles` block, you can see it transition whenever we select a new dataset!
 
-And there we go!
+> **Tip:** you can put `#mycircles` wherever you want in the document - it doesn't have to be in order!
+
+### 6. Render the project
+
+Render your Quarto project as you normally would, with commands like `quarto run` and `quarto preview`.
+
+And there you go! 🚀
 
 For more help writing Svelte components, check out the [Svelte tutorial](https://svelte.dev/tutorial/basics).
