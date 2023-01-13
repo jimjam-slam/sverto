@@ -1,4 +1,4 @@
-# svelte-quarto
+# sverto
 Add Svelte visualisations to your Quarto documents
 
 ## 🛍 Prerequisites
@@ -11,7 +11,7 @@ Add Svelte visualisations to your Quarto documents
 Install the project extension using:
 
 ```
-quarto use template 360-info/svelte-quarto 
+quarto use template 360-info/sverto
 ```
 
 This will add the extension itself (which includes some project scripts) to the `_extension` folder, as well as a few other files.
@@ -67,4 +67,4 @@ You must compiled Svelte component to ES6 bundles, and you must enable accessors
 
 ## ❓ Issues
 
-If you have any problems with the extension, please feel free to [create an issue](https://github.com/360-info/svelte-quarto)!
+If you have any problems with the extension, please feel free to [create an issue](https://github.com/360-info/sverto)!
