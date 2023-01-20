@@ -14,7 +14,7 @@ contributes:
   formats:
     html:
       filters:
-        - lift-imports.lua
+        - cleanup-transform.lua
     revealjs:
       filters:
-        - lift-imports.lua
+        - cleanup-transform.lua

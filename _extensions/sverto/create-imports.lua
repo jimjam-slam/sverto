@@ -1,4 +1,34 @@
--- ref: https://pandoc.org/lua-filters.html#pandoc-module
+-- return contents of named file
+function read_file(name)
+  local file = io.open(name, "r")
+  if file == nil then
+      return ""
+  end
+  local contents = file:read("a")
+  file:close()
+  return contents
+end
+
+-- write content to named file path
+function write_file(name, content)
+  local file = io.open(name, "w")
+  if file == nil then
+      return ""
+  end
+  file:write(content)
+  file:close()
+  return content
+end
+
+function append_to_file(name, content)
+  local file = io.open(name, "a")
+  if file == nil then
+      return ""
+  end
+  file:write(content)
+  file:close()
+  return content
+end
 
 -- use mkdir (windows) or mkdir -p (*nix) to create directories
 -- from https://stackoverflow.com/a/14425862/3246758
@@ -6,13 +36,10 @@ function get_path_sep()
   return package.config:sub(1, 1)
 end
 
+-- create a folder recursively (mkdir on windows, mkdir -p on *nix)
 function create_dir_recursively(path)
-  print("Creating " .. path)
   local path_separator = get_path_sep()
   if path_separator == "\\" or path_separator == "\"" then
-    -- windows
-    -- NOTE - there is one edge case where folders might not be made
-    -- recursively, https://www.robvanderwoude.com/cmdextmsg.php
     os.execute("mkdir " .. path)
   else
     -- macos/linux
@@ -26,67 +53,86 @@ function path_dir(path)
     return path:match("(.*".. get_path_sep() ..")") or ""
 end
 
--- create .sverto
+-- TODO - 
+
+local preprocess_qmd_filter = {
+  
+  -- search for `import_svelte("X.svelte")` refs in codeblocks and switch them
+  -- to `import("X.js")`
+  CodeBlock = function(block)
+    if block.classes:includes("{ojs}") then
+
+      local svelte_import_syntax =
+        "import%_svelte%(\"([%w;,/%?:@&=%+%$%-_%.!~%*'%(%)#]+)%.svelte\"%)"
+
+      local block_text = block.text
+    
+      print(">>> OJS block found...")
+      print(block_text)
+
+      -- first, extract .svelte paths in import_svelte() statements
+      for svelte_path in block_text:gmatch(svelte_import_syntax) do
+        print("Svelte file found...")
+        print(svelte_path)
+        -- table.insert(svelte_files, svelte_path .. ".svelte")
+        append_to_file(".sverto/.sverto-imports", svelte_path .. ".svelte\n")
+      end
+
+      -- now change `import_svelte("X.svelte")` refs to `import("X.js")`
+      block.text = block_text:gsub(
+        svelte_import_syntax,
+        "import(\"%1.js\")")
+
+    end
+    return block
+  end,
+
+  -- return the doc as a a whole unchanged...
+  -- except without the first block (the include statement)
+  Pandoc = function(doc)
+    local new_blocks = pandoc.Blocks({})
+    for i, v in ipairs(doc.blocks) do
+      if i ~= 1 then
+          new_blocks:insert(v)
+      end
+    end
+    doc.blocks = new_blocks
+    return doc
+
+  end
+}
+
 create_dir_recursively(".sverto/")
 
--- get the input files as a table
+-- collect the input qmd paths
 in_file_string = os.getenv("QUARTO_PROJECT_INPUT_FILES")
 in_files = {}
 for in_file in string.gmatch(in_file_string,  "([^\n]+)") do
   table.insert(in_files, in_file)
 end
 
--- create_imports: given a quarto doc path, writes the svelte import
--- declarations to .svelte/[path]
-function create_imports(quarto_doc_name)
-  local doc_handle = io.open(quarto_doc_name, "r")
-  local doc_content = pandoc.read(io.output(doc_handle):read("a"))
+-- transform each input qmd, saving the transformation in .sverto/[path]
+-- (write the identified .svelte files out to a file too!)
+for key, qmd_path in ipairs(in_files) do
   
-  -- check if there's svelte in the frontmatter
+  -- print(">>> CREATING IMPORT FOR " .. qmd_path)
+  local doc = pandoc.read(read_file(qmd_path))
   
-  local svelte_key = doc_content.meta["svelte"]
-  
-  if (svelte_key) then
-    local import_block = "```{ojs}\n"
+  -- pre-process the qmd, populating `svelte_files` in the process
+  -- local svelte_files = {}
+  local transformed_doc = doc:walk(preprocess_qmd_filter)
+  create_dir_recursively(".sverto/" .. path_dir(qmd_path))
+  write_file(".sverto/" .. qmd_path, pandoc.write(transformed_doc, "markdown"))
 
-    -- write each svelte file in this doc's  frontmatter out to
-    -- (a) the require block of this doc, and
-    -- (b) the global imports file going to the svelte compiler
-    for i, item in ipairs(svelte_key) do
-      -- TODO - assert item is a pandoc string
-      
-      local item_string = pandoc.utils.stringify(item)
-      local item_js = string.sub(item_string, 1, string.len(item_string) - 7)
-      
-      -- write the item out to .sverto/.svelte-imports
-      local import_list_file = io.open(".sverto/.sverto-imports", "a")
-      io.output(import_list_file):write(item_string .. "\n")
-      io.close(import_list_file)
+  -- write the svelte_files out to .sverto-imports
+  -- svelte_file_text = table.concat(svelte_files, "\n")
+  -- print("Saving Svelte imports:")
+  -- print(svelte_file_text)
+  -- write_file(".sverto/.sverto-imports", svelte_file_text)
   
-      -- add the item to the require block
-      import_block = import_block ..
-        item_js .. " = import(\"/" .. item_js ..".js\")\n"
-  
-    end
-    
-    -- write the import block (inc. the final backticks) out to .sverto/[path]
-    create_dir_recursively(".sverto/" .. path_dir(quarto_doc_name))
-    local import_block = import_block .. "```"
-    local import_file = io.open(".sverto/" .. quarto_doc_name, "w")
-    io.output(import_file):write(import_block .. "\n")
-    io.close(import_file)
-  end
-end
-
--- create the imports for each quarto doc
-for key, value in ipairs(in_files) do
-  create_imports(value)
 end
 
 -- write the output dir path temporarily (so rollup can use it)
-outdir_file = io.open(".sverto/.sverto-outdir", "w")
-io.output(outdir_file):write(
-  os.getenv("QUARTO_PROJECT_OUTPUT_DIR"))
-io.close(outdir_file)
+write_file(".sverto/.sverto-outdir", os.getenv("QUARTO_PROJECT_OUTPUT_DIR"))
 
--- TODO - if there's no {{< import .sverto/file.qmd >}} block, add it
+-- TODO - if there's no {{< import .sverto/file.qmd >}} block, add it?
