@@ -79,9 +79,11 @@ local preprocess_qmd_filter = {
       end
 
       -- now change `import_svelte("X.svelte")` refs to `import("X.js")`
+      -- TODO - neaten up relative paths instead of assuming we're going from
+      -- /site_libs/quarto-ojs
       block.text = block_text:gsub(
         svelte_import_syntax,
-        "import(\"%1.js\")")
+        "import(\"./../../%1.js\");")
 
     end
     return block
