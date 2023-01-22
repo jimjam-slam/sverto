@@ -26,17 +26,17 @@ This will install everything you need for your Svelte components to work to the 
 
 ## 🎉 Use
 
-Here's the short version of adding Svelte components to your Quarto docs:
+Here's the short way to add Svelte component you've written to a Quarto doc:
 
-1. Add a list of Svelte components (eg. `Circles.svelte`) you want to add to your document frontmatter under `svelte`
-2. Add a magic placeholder div to your document using the `.svelteimport` class and a [Quarto include](https://quarto.org/docs/authoring/includes.html) to the path to your Quarto doc, prefixed with `/.sverto/`. For example:
+1. Add a magic placeholder block to your document with a [Quarto include](https://quarto.org/docs/authoring/includes.html) to the path to your Quarto doc, prefixed with `/.sverto/`. For example:
 
-    ````
-    :::{.svelteimport}
+    ```
+    :::{}
     {{< include /.sverto/example.qmd >}}
     :::
-    ````
+    ```
 
+2. Import your Svelte component with `Component = import_svelte("Component.svelte")`
 3. Add a target block for your visual and give it an `#id`
 4. Instantiate the Svelte component with `myVisual = Component.default()` using some default props and your target block
 5. Update the instantiated component with `myVisual.propName`
@@ -49,7 +49,7 @@ Here's the short version of adding Svelte components to your Quarto docs:
 * [`example.qmd`](./example.qmd): an example Quarto doc that uses a Svelte component
 * [`Circles.svelte`](./Circles.svelte): an example Svelte visualisation
 * [`package.json`](./package.json): this is used to keep track of the dependencies of your Svelte components. You should add this to version control.
-* Once you've run `npm install`, there'll also be a `package-lock.json`. You should version control this too.
+* Once you've run `npm install`, there'll also be a `package-lock.json` and a `.luarc.json`. You should version control these too (although you oughtn't need to edit them manually).
 
 See [`example.qmd`](./example.qmd) to learn how to add Svelte components to your documents and the [Svelte tutorial](https://svelte.dev/tutorial/basics) to learn how to create them.
 
@@ -61,9 +61,11 @@ If you want to refer to other JavaScript libraries in your Svelte component (lik
 npm install d3-scale
 ```
 
-If you'd prefer to compile your own Svelte components instead of letting this extension do it, you can skip steps 1 and 2 and simply refer to the compiled bundle with, for example, `Circles = require("Circles.js")` in an OJS block.
+## Use pre-compiled Svelte components
 
-You must compiled Svelte component to ES6 bundles, and you must enable accessors when compiling if you want to be able to update them from OJS.
+If you'd prefer to compile your own Svelte components instead of letting this extension do it, you can skip steps 1 and 2 and simply refer to the compiled bundle with, for example, `Component = import("Component.js")` in an OJS block.
+
+> **Note:** you must compile the Svelte component to an ES6 bundle, and you must enable accessors when compiling if you want to be able to update them from OJS. Refer to `_extensions/sverto/rollup.config.js` for guidance on configuring Rollup to do this.
 
 ## ❓ Issues
 
