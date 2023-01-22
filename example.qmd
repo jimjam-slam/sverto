@@ -4,19 +4,19 @@ author: James Goldie, 360info
 date: last-modified
 ---
 
-:::{.svelteimport}
+:::{}
 {{< include /.sverto/example.qmd >}}
 :::
 
 Here's an example of how to use the included example Svelte component, `Circles.svelte`. There are six steps:
 
-### 2. Add a magic block to the top of your document
+### 1. Add a magic block to the top of your document
 
 Add a magic block anywhere in your document that looks like this:
 
 ````markdown
-:::
-{{< include /.sverto/example.qmd >}}
+:::{}
+{{{< include /.sverto/example.qmd >}}}
 :::
 ````
 
@@ -24,14 +24,18 @@ Replace `example.qmd` with the path to your Quarto doc within the project. For e
 
 **If your document is here...** | **Use this import path**
 --------------------------------|------------------------------------------
-`example.qmd`                   | `.sverto/example.qmd`
-`posts/animals/turtles.qmd`     | `.sverto/posts/animals/turtles.qmd`
+`example.qmd`                   | `/.sverto/example.qmd`
+`posts/animals/turtles.qmd`     | `/.sverto/posts/animals/turtles.qmd`
 
-> If you ever move or rename your Quarto document, you'll need to update this block with the new location and filename!
+:::{.callout-warning}
+This magic block must be the **first** thing in your document---straight after the frontmatter!
+
+If you ever move or rename your Quarto document, you'll need to update this block with the new location and filename.
+:::
 
 ### 2. Import the component
 
-Import your Svelte file in an OJS block. Here we call the result `Circles`:
+Import your Svelte file in an OJS block using the `import_svelte` function. Here we call the result `Circles`:
 
 ```{ojs}
 Circles = import_svelte("Circles.svelte")
@@ -43,16 +47,21 @@ We need to create an instance of our imported component, but---unlike a typical 
 
 Create an empty div in your document and give it an #id with the hashtag. This will be the "target" in the next step, when we bring the component to life, or _instantiate_ it:
 
-````markdown
+```markdown
 :::{#mycircles}
 :::
-````
+```
 
 :::{#mycircles}
 :::
 
-> **Tip:** this block can go anywhere in your document! In fact, order doesn't matter for any of these steps, other than the frontmatter.
+:::{.callout-tip}
+This block can go anywhere in your document! Feel free to put it well after the following steps, where you actually want your visualisation to appear.
+:::
 
+:::{.callout-tip}
+If you know how how to use CSS, you can target `#mycircles` to position or size your visualisation as you'd like.
+:::
 
 ### 4. Instantiate your component
 
@@ -72,11 +81,13 @@ myCircles = new Circles.default({
 });
 ```
 
-> **Important:** if you're creating a visual that will react in response to changing OJS (for example, some data that you've calculated in your document, or the value of an Observable Input), _do not put that data here._
->
-> If you put changing data here, the Svelte component will rebuild from scratch every time the data changes, and it will not animate.
->
-> Instead, we're going to take advantage of Svelte's own reactivity in the next step.
+::: {.callout-important}
+If you're creating a visual that will react in response to changing OJS (for example, some data that you've calculated in your document, or the value of an Observable Input), **do not put that data here.**
+
+If you put changing data here, the Svelte component will rebuild from scratch every time the data changes, and it will not animate.
+
+Instead, we're going to take advantage of Svelte's own reactivity in the next step.
+:::
 
 ### 5. Update your component
 
@@ -106,15 +117,19 @@ myCircles.data = selectedDataset
 
 You can't see anything here, but if we scroll back up to where we added the empty `#mycircles` block, you can see it transition whenever we select a new dataset!
 
-> **Tip:** you can put `#mycircles` wherever you want in the document - it doesn't have to be in order!
+:::{.callout-tip}
+You can put `#mycircles` wherever you want in the document - it doesn't have to be in order!
+:::
 
 ### 6. Render the project
 
 Render your Quarto project as you normally would, with commands like `quarto run` and `quarto preview`.
 
-> **Note:** you'll probably get the warning "OJS block count mismatch. Line number reporting is likely to be wrong" when rendering.
-> 
-> That's because of what we're doing under the hood to bring the Svelte files in. It won't stop your project from working, but be aware of it if you are referring to line numbers in code blocks!
+:::{.callout-note}
+You'll probably get the warning `OJS block count mismatch. Line number reporting is likely to be wrong` when rendering.
+ 
+That's because of what we're doing under the hood to bring the Svelte files in. It won't stop your project from working, but be aware of it if you are referring to line numbers in code blocks!
+:::
 
 And there you go! 🚀
 
