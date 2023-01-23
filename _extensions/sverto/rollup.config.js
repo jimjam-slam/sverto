@@ -34,12 +34,21 @@ const production = !process.env.ROLLUP_WATCH;
 
 // get quarto project output directory and list of inputs
 // const quartoOutDir = process.env.QUARTO_PROJECT_OUTPUT_DIR;
-const quartoOutDir = fs.readFileSync('.sverto/.sverto-outdir', 'utf8')
-const svelteFiles = fs.readFileSync('.sverto/.sverto-imports', 'utf8')
+const quartoOutDir = fs.readFileSync('.sverto/.sverto-outdir', 'utf8');
+
+let svelteConfig = {};
+const svelteImportListPath = '.sverto/.sverto-imports';
+
+// skip svelte compilation if there's nothing to compile
+if (!fs.existsSync(svelteImportListPath)) {
+	console.log("ℹ No Svelte imports to process; skipping compilation");
+	process.exit();
+}
+  
+// get the list of unique imports to compile
+const svelteFiles = fs.readFileSync(svelteImportListPath, 'utf8')
 	.split("\n")
 	.filter(d => d !== "");
-
-// remove duplicate svelte components (being used by several qmds)
 const uniqueSvelteFiles = [... new Set(svelteFiles)]
 
 // we export an array of rollup configs: one for each input svelte file
