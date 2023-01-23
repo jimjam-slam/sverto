@@ -81,7 +81,7 @@ local preprocess_qmd_filter = {
       -- /site_libs/quarto-ojs
       block.text = block_text:gsub(
         svelte_import_syntax,
-        "import(\"./../../%1.js\");")
+        "import(\"./../../" .. current_qmd_path .. "%1.js\");")
 
     end
     return block
