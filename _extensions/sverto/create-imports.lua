@@ -66,16 +66,14 @@ local preprocess_qmd_filter = {
         "import%_svelte%(\"([%w;,/%?:@&=%+%$%-_%.!~%*'%(%)#]+)%.svelte\"%)"
 
       local block_text = block.text
-    
-      print(">>> OJS block found...")
-      print(block_text)
+
+      -- get the qmd_path from disk
+      local current_qmd_path = read_file(".sverto/.sverto-current-qmd-folder")
 
       -- first, extract .svelte paths in import_svelte() statements
       for svelte_path in block_text:gmatch(svelte_import_syntax) do
-        print("Svelte file found...")
-        print(svelte_path)
-        -- table.insert(svelte_files, svelte_path .. ".svelte")
-        append_to_file(".sverto/.sverto-imports", svelte_path .. ".svelte\n")
+        append_to_file(".sverto/.sverto-imports",
+          current_qmd_path .. svelte_path .. ".svelte\n")
       end
 
       -- now change `import_svelte("X.svelte")` refs to `import("X.js")`
@@ -117,20 +115,16 @@ end
 -- (write the identified .svelte files out to a file too!)
 for key, qmd_path in ipairs(in_files) do
   
-  -- print(">>> CREATING IMPORT FOR " .. qmd_path)
   local doc = pandoc.read(read_file(qmd_path))
+
+  -- store the current qmd_path on disk so the filter can access it
+  write_file(".sverto/.sverto-current-qmd-folder", path_dir(qmd_path))
   
   -- pre-process the qmd, populating `svelte_files` in the process
   -- local svelte_files = {}
   local transformed_doc = doc:walk(preprocess_qmd_filter)
   create_dir_recursively(".sverto/" .. path_dir(qmd_path))
   write_file(".sverto/" .. qmd_path, pandoc.write(transformed_doc, "markdown"))
-
-  -- write the svelte_files out to .sverto-imports
-  -- svelte_file_text = table.concat(svelte_files, "\n")
-  -- print("Saving Svelte imports:")
-  -- print(svelte_file_text)
-  -- write_file(".sverto/.sverto-imports", svelte_file_text)
   
 end
 
