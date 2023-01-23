@@ -8,6 +8,10 @@ date: last-modified
 {{< include /.sverto/index.qmd >}}
 :::
 
+```{ojs}
+BarChart = import_svelte("examples/barchart/BarChart.svelte")
+```
+
 **Sverto** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website.
 
 Your Svelte components can seamlessly react to your ObservableJS code, making it quick and easy to build visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document.

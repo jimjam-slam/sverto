@@ -3,3 +3,14 @@ project:
   
 execute:
   freeze: auto
+
+website:
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        file: index.qmd
+      - text: "Example: bar chart"
+        file: examples/barchart/index.qmd
+      # - about.qmd
