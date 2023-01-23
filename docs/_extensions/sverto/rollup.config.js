@@ -1,7 +1,6 @@
 import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
-// import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
 
@@ -11,34 +10,9 @@ const path = require('node:path');
 // this is false when we run rollup with -w/--watch (never presently)
 const production = !process.env.ROLLUP_WATCH;
 
-console.log("Svelte compile running from " + process.cwd())
-
-// function serve() {
-// 	let server;
-
-// 	function toExit() {
-// 		if (server) server.kill(0);
-// 	}	
-
-// 	return {
-// 		writeBundle() {
-// 			if (server) return;
-// 			server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
-// 				stdio: ['ignore', 'inherit', 'inherit'],
-// 				shell: true
-// 			});
-
-// 			process.on('SIGTERM', toExit);
-// 			process.on('exit', toExit);
-// 		}
-// 	};
-// }
-
 // get quarto project output directory and list of inputs
-// const quartoOutDir = process.env.QUARTO_PROJECT_OUTPUT_DIR;
 const quartoOutDir = fs.readFileSync('.sverto/.sverto-outdir', 'utf8');
 
-let svelteConfig = {};
 const svelteImportListPath = '.sverto/.sverto-imports';
 
 // skip svelte compilation if there's nothing to compile
@@ -82,11 +56,6 @@ export default uniqueSvelteFiles.map(
 				dedupe: ["svelte"]
 			}),
 			commonjs(),
-			// !production && serve(),
-			// !production && livereload("public"),
 			production && terser()
-		]//,
-		// watch: {
-		// 	clearScreen: false
-		// }
+		]
 	}));
