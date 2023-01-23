@@ -14,3 +14,8 @@
 
 # lua
 /.luarc.json
+
+# rendered documentation site
+/docs/_site/
+/docs/.quarto/
+/docs/.sverto/

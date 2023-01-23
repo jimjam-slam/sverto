@@ -1,4 +1,5 @@
 project:
   type: sverto
-  output-dir: ../docs
   
+execute:
+  freeze: auto
