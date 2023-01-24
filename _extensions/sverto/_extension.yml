@@ -1,0 +1,20 @@
+title: Sverto
+author: 360info
+version: 0.0.1
+quarto-version: ">=1.2.0"
+contributes:
+  project:
+    project:
+      type: website
+      pre-render:
+        - refresh.ts
+        - create-imports.lua
+        - compile-imports.ts
+    format: sverto-html
+  formats:
+    html:
+      filters:
+        - cleanup-transform.lua
+    revealjs:
+      filters:
+        - cleanup-transform.lua

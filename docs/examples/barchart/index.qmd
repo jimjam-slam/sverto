@@ -1,0 +1,98 @@
+---
+title: "Examples: basic barchart"
+author: James Goldie, 360info
+date: last-modified
+---
+
+:::{}
+{{< include /.sverto/examples/barchart/index.qmd >}}
+:::
+
+Let's start with a simple barchart.
+
+This isn't going to be one of those barcharts you've seen on TV, what with tick marks and hover effects and such. This one's just some bars, some labels and a baseline. It will, however, come with some useful features to help us reuse it.
+
+::::: {.columns .column-page}
+
+# Try it out
+
+::::{.column width="40%"}
+
+The following code initialises our bar chart.
+
+```{ojs}
+//| code-fold: true
+
+BarChart =
+  import_svelte("BarChart.svelte")
+
+myBarChart = new BarChart.default({
+  target: document.querySelector("#mybarchart"),
+  props: {
+    data: [5, 5, 5, 5, 5],
+    height: 200,
+    width: 200,
+    barWidth: 25,
+    barColor: "#36a7e9"
+  }
+});
+```
+
+:::{#mybarchart}
+:::
+
+[See the bar chart source at [BarChart.svelte](./BarChart.svelte)]{style="font-size: smaller; font-color: #999999"}
+
+::::
+
+<!-- TODO - .svelte file content here? -->
+
+::::{.column width="5%"}
+::::
+
+
+::::{.column width="45%"}
+This Svelte component accepts a few props:
+
+* `data`: a simple array of (up to) 5 numbers
+* `height`: the height of the chart in pixels
+* `width`: the width of the chart in pixels
+* `barWidth`: the width of each bar
+* `barColor`: the colour of the bars and labels (note the US spelling here)
+
+We can hook any of those values up to OJS code using `myBarChart.propName`.
+
+For example, let's make the data user-configurable:
+
+```{ojs}
+//| code-fold: true
+
+viewof userData = Inputs.form([
+  Inputs.text({type: "number", value: 25, width: 20}),
+  Inputs.text({type: "number", value: 35, width: 20}),
+  Inputs.text({type: "number", value: 65, width: 20}),
+  Inputs.text({type: "number", value: 5, width: 20}),
+  Inputs.text({type: "number", value: 50, width: 20})
+]);
+myBarChart.data = [...userData];
+```
+
+Or the colour:
+
+```{ojs}
+//| code-fold: true
+viewof userColor = Inputs.color({value: "#36a7e9"});
+myBarChart.barColor = userColor;
+```
+::::
+
+:::::
+
+## Challenges
+
+This Svelte component's pretty basic, though. What else is it missing?
+
+* The height and width are configurable, and the bars resize in response to them, but their CSS transitions are slow to catch up. Ideally we'd have the bars apply the transition when they resize because of a change in data but _not_ in response to a change in chart height or width.
+* We have no axes other than the baseline. That's fine for a lot of uses, but we might want to add those elements for other uses.
+  - We could add those elements manually, but the [`d3-axis`](https://github.com/d3/d3-axis) package has some helpers for creating axes quickly!
+* The bars are all the same colour. We could write a function that converts each bar's data value to a colour, and use it for the `<rect>` `fill` attribute, but the [`d3-scale-chromatic`](https://github.com/d3/d3-scale-chromatic) also has some helpers to do this quickly!
