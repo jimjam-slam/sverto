@@ -72,6 +72,8 @@ local preprocess_qmd_filter = {
 
       -- first, extract .svelte paths in import_svelte() statements
       for svelte_path in block_text:gmatch(svelte_import_syntax) do
+        print("Sending to Svelte compiler: " ..
+          current_qmd_path .. svelte_path .. ".svelte\n")
         append_to_file(".sverto/.sverto-imports",
           current_qmd_path .. svelte_path .. ".svelte\n")
       end
@@ -124,6 +126,7 @@ for key, qmd_path in ipairs(in_files) do
   -- local svelte_files = {}
   local transformed_doc = doc:walk(preprocess_qmd_filter)
   create_dir_recursively(".sverto/" .. path_dir(qmd_path))
+  print("Creating .sverto/" .. qmd_path)
   write_file(".sverto/" .. qmd_path, pandoc.write(transformed_doc, "markdown"))
   
 end

@@ -1,8 +1,22 @@
-# sverto
+---
+title: Sverto
+author: James Goldie, 360info
+date: last-modified
+---
+
+:::{}
+{{< include /.sverto/index.qmd >}}
+:::
+
+```{ojs}
+BarChart = import_svelte("examples/barchart/BarChart.svelte")
+```
 
 **Sverto** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website.
 
 Your Svelte components can seamlessly react to your ObservableJS code, making it quick and easy to build visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document.
+
+<!-- examples here! -->
 
 ## 📋 Prerequisites
 
@@ -37,7 +51,7 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
 
     ```
     :::{}
-    {{< include /.sverto/example.qmd >}}
+    {{{< include /.sverto/example.qmd >}}}
     :::
     ```
 
@@ -45,18 +59,9 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
 3. Add a target block for your visual using `:::` and give it an `#id`
 4. Instantiate the Svelte component with `myVisual = Component.default()` using some default props and your target block
 5. Update the instantiated component with `myVisual.propName`
-6. Render your Quarto website as usual with `quarto render` or `quarto preview`.
+6. Render your Quarto project as usual with `quarto render` or `quarto preview`.
 
-**To see this all in practice, check out [`example.qmd`](./example.qmd).**
-
-## 📦 What's in the box?
-
-* [`example.qmd`](./example.qmd): an example Quarto doc that uses a Svelte component
-* [`Circles.svelte`](./Circles.svelte): an example Svelte visualisation
-* [`package.json`](./package.json): this is used to keep track of the dependencies of your Svelte components. You should add this to version control.
-* Once you've run `npm install`, there'll also be a `package-lock.json` and a `.luarc.json`. You should version control these too (although you oughtn't need to edit them manually).
-
-See [`example.qmd`](./example.qmd) to learn how to add Svelte components to your documents and the [Svelte tutorial](https://svelte.dev/tutorial/basics) to learn how to create them.
+**To see this all in practice, check out [`example.qmd`](https://github.com/360-info/sverto/blob/firstrelease/example.qmd).**
 
 ## 🛍 Use other libraries in your Svelte component
 
@@ -76,4 +81,4 @@ If you'd prefer to compile your own Svelte components instead of letting this ex
 
 If you have any problems with the extension, please feel free to [create an issue](https://github.com/360-info/sverto)!
 
-Special thanks to [Carlos Scheidegger](https://github.com/cscheid) from [Posit](https://posit.co) for his time and guidance getting Sverto working!
+Special thanks to Carlos Scheidegger from [Posit](https://posit.co) for his time and guidance in designing Sverto!

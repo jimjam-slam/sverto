@@ -1,0 +1,23 @@
+---
+title: "Examples: barchart"
+author: James Goldie, 360info
+date: last-modified
+---
+
+:::{}
+{{< include /.sverto/examples/barchart/index.qmd >}}
+:::
+
+Let's start with a barchart.
+
+```{ojs}
+BarChart = import_svelte("BarChart.svelte")
+myBarChart = new BarChart.default({
+  target: document.querySelector("#mybarchart")
+});
+```
+
+:::{#mybarchart}
+:::
+
+There it is!
