@@ -274,6 +274,20 @@ Note
 <li><p>Render your Quarto project as usual with <code>quarto render</code> or <code>quarto preview</code>.</p></li>
 </ol>
 <p><strong>To see this all in practice, check out <a href="https://github.com/360-info/sverto/blob/firstrelease/example.qmd"><code>example.qmd</code></a>.</strong></p>
+<div class="callout callout-style-default callout-note callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>quarto preview</code> command won’t “live reload” when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.</p>
+<p>If you want to quickly iterate on the Svelte component and you aren’t too concerned about the rest of your Quarto doc, you might find the <a href="https://marketplace.visualstudio.com/items?itemName=RafaelMartinez.svelte-preview">Svelte Preview</a> extension for VSCode handy.</p>
+</div>
+</div>
 </section>
 <section id="use-other-libraries-in-your-svelte-component" class="level2">
 <h2 class="anchored" data-anchor-id="use-other-libraries-in-your-svelte-component">🛍 Use other libraries in your Svelte component</h2>
