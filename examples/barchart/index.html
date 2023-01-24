@@ -282,40 +282,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>barColor</code>: the colour of the bars and labels (note the US spelling here)</li>
 </ul>
 <p>We can hook any of those values up to OJS code using <code>myBarChart.propName</code>.</p>
-<p>For example, let’s make the data user-configurable:</p>
+<p>Let’s give the user the choice between a randomly changing bar chart and user-configurable data and colours:</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2" data-startfrom="70" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 69;"><span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>viewof userData <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">form</span>([</span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>  Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">25</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})<span class="op">,</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>  Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">35</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})<span class="op">,</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>  Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">65</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})<span class="op">,</span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>  Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})<span class="op">,</span></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>  Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>myBarChart<span class="op">.</span><span class="at">data</span> <span class="op">=</span> [<span class="op">...</span>userData]<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2" data-startfrom="68" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 67;"><span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>viewof changeType <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="st">"Random"</span><span class="op">,</span> <span class="st">"Custom"</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">"Random"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-2-1" data-nodetype="declaration">
+<div id="ojs-cell-2" data-nodetype="declaration">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-2-2" data-nodetype="expression">
-
-</div>
-</div>
-</div>
-</div>
-<p>Or the colour:</p>
+<p>Here’s how we generate data and colours that change every two seconds</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3" data-startfrom="84" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 83;"><span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>viewof userColor <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">color</span>({<span class="dt">value</span><span class="op">:</span> <span class="st">"#36a7e9"</span>})<span class="op">;</span></span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>myBarChart<span class="op">.</span><span class="at">barColor</span> <span class="op">=</span> userColor<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3" data-startfrom="76" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 75;"><span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>randomData <span class="op">=</span> {</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(<span class="kw">true</span>) {</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> Promises<span class="op">.</span><span class="fu">delay</span>(<span class="dv">2000</span><span class="op">,</span> [</span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>      <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">100</span>)<span class="op">.</span><span class="fu">toString</span>()<span class="op">,</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>      <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">100</span>)<span class="op">.</span><span class="fu">toString</span>()<span class="op">,</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>      <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">100</span>)<span class="op">.</span><span class="fu">toString</span>()<span class="op">,</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>      <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">100</span>)<span class="op">.</span><span class="fu">toString</span>()<span class="op">,</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>      <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">100</span>)<span class="op">.</span><span class="fu">toString</span>()</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    ])<span class="op">;</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>randomColor <span class="op">=</span> {</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(<span class="kw">true</span>) {</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> Promises<span class="op">.</span><span class="fu">delay</span>(<span class="dv">2000</span><span class="op">,</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>    <span class="vs">`#</span><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">256</span>)<span class="op">.</span><span class="fu">toString</span>(<span class="dv">16</span>)<span class="sc">}${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">256</span>)<span class="op">.</span><span class="fu">toString</span>(<span class="dv">16</span>)<span class="sc">}${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">*</span> <span class="dv">256</span>)<span class="op">.</span><span class="fu">toString</span>(<span class="dv">16</span>)<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -326,7 +326,66 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="cell-output cell-output-display">
 <div>
-<div id="ojs-cell-3-2" data-nodetype="expression">
+<div id="ojs-cell-3-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<p>And here are inputs that allow the user to change the data and colour:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4" data-startfrom="100" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 99;"><span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>viewof userData <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">form</span>(</span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>  [</span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>    Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">25</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})<span class="op">,</span></span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>    Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">35</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})<span class="op">,</span></span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>    Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">65</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})<span class="op">,</span></span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>    Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})<span class="op">,</span></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>    Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"number"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">20</span>})</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span> {</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>    <span class="dt">disabled</span><span class="op">:</span> changeType <span class="op">==</span> <span class="st">"Random"</span></span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>viewof userColor <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">color</span>({</span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="st">"#36a7e9"</span><span class="op">,</span></span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>  <span class="dt">disabled</span><span class="op">:</span> changeType <span class="op">==</span> <span class="st">"Random"</span>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<p>Finally, we update the visual whenever either the choice type changes or the random data does:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5" data-startfrom="120" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 119;"><span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>myBarChart<span class="op">.</span><span class="at">data</span> <span class="op">=</span> changeType <span class="op">==</span> <span class="st">"Random"</span> <span class="op">?</span> randomData <span class="op">:</span> [<span class="op">...</span>userData]<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-5-1" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6" data-startfrom="121" data-source-offset="-71"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 120;"><span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>myBarChart<span class="op">.</span><span class="at">barColor</span> <span class="op">=</span> changeType <span class="op">==</span> <span class="st">"Random"</span> <span class="op">?</span> randomColor <span class="op">:</span> userColor<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-5-2" data-nodetype="expression">
 
 </div>
 </div>
@@ -350,7 +409,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\nBarChart =\n  import(\"./../../examples/barchart/BarChart.js\")\n\nmyBarChart = new BarChart.default({\n  target: document.querySelector(\"#mybarchart\"),\n  props: {\n    data: [5, 5, 5, 5, 5],\n    height: 200,\n    width: 200,\n    barWidth: 25,\n    barColor: \"#36a7e9\"\n  }\n});\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"\nviewof userData = Inputs.form([\n  Inputs.text({type: \"number\", value: 25, width: 20}),\n  Inputs.text({type: \"number\", value: 35, width: 20}),\n  Inputs.text({type: \"number\", value: 65, width: 20}),\n  Inputs.text({type: \"number\", value: 5, width: 20}),\n  Inputs.text({type: \"number\", value: 50, width: 20})\n]);\nmyBarChart.data = [...userData];\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"viewof userColor = Inputs.color({value: \"#36a7e9\"});\nmyBarChart.barColor = userColor;\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"\nBarChart =\n  import_svelte(\"BarChart.svelte\")\n\nmyBarChart = new BarChart.default({\n  target: document.querySelector(\"#mybarchart\"),\n  props: {\n    data: [5, 5, 5, 5, 5],\n    height: 200,\n    width: 200,\n    barWidth: 25,\n    barColor: \"#36a7e9\"\n  }\n});\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"\nviewof userData = Inputs.form([\n  Inputs.text({type: \"number\", value: 25, width: 20}),\n  Inputs.text({type: \"number\", value: 35, width: 20}),\n  Inputs.text({type: \"number\", value: 65, width: 20}),\n  Inputs.text({type: \"number\", value: 5, width: 20}),\n  Inputs.text({type: \"number\", value: 50, width: 20})\n]);\nmyBarChart.data = [...userData];\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"viewof userColor = Inputs.color({value: \"#36a7e9\"});\nmyBarChart.barColor = userColor;\n"},{"methodName":"interpretQuiet","source":"shinyInput('userData')"},{"methodName":"interpretQuiet","source":"shinyInput('userColor')"}]}
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\nBarChart =\n  import(\"./../../examples/barchart/BarChart.js\")\n\nmyBarChart = new BarChart.default({\n  target: document.querySelector(\"#mybarchart\"),\n  props: {\n    data: [5, 5, 5, 5, 5],\n    height: 200,\n    width: 200,\n    barWidth: 25,\n    barColor: \"#36a7e9\"\n  }\n});\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"viewof changeType = Inputs.radio([\"Random\", \"Custom\"], {value: \"Random\"})\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"randomData = {\n  while(true) {\n    yield Promises.delay(2000, [\n      Math.floor(Math.random() * 100).toString(),\n      Math.floor(Math.random() * 100).toString(),\n      Math.floor(Math.random() * 100).toString(),\n      Math.floor(Math.random() * 100).toString(),\n      Math.floor(Math.random() * 100).toString()\n    ]);\n  }\n}\n\nrandomColor = {\n  while(true) {\n    yield Promises.delay(2000,\n    `#${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}`);\n  }\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"viewof userData = Inputs.form(\n  [\n    Inputs.text({type: \"number\", value: 25, width: 20}),\n    Inputs.text({type: \"number\", value: 35, width: 20}),\n    Inputs.text({type: \"number\", value: 65, width: 20}),\n    Inputs.text({type: \"number\", value: 5, width: 20}),\n    Inputs.text({type: \"number\", value: 50, width: 20})\n  ], {\n    disabled: changeType == \"Random\"\n  });\n\nviewof userColor = Inputs.color({\n  value: \"#36a7e9\",\n  disabled: changeType == \"Random\"});\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"myBarChart.data = changeType == \"Random\" ? randomData : [...userData];\nmyBarChart.barColor = changeType == \"Random\" ? randomColor : userColor;\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"\nBarChart =\n  import_svelte(\"BarChart.svelte\")\n\nmyBarChart = new BarChart.default({\n  target: document.querySelector(\"#mybarchart\"),\n  props: {\n    data: [5, 5, 5, 5, 5],\n    height: 200,\n    width: 200,\n    barWidth: 25,\n    barColor: \"#36a7e9\"\n  }\n});\n"},{"methodName":"interpret","cellName":"ojs-cell-7","inline":false,"source":"viewof changeType = Inputs.radio([\"Random\", \"Custom\"], {value: \"Random\"})\n"},{"methodName":"interpret","cellName":"ojs-cell-8","inline":false,"source":"randomData = {\n  while(true) {\n    yield Promises.delay(2000, [\n      Math.floor(Math.random() * 100).toString(),\n      Math.floor(Math.random() * 100).toString(),\n      Math.floor(Math.random() * 100).toString(),\n      Math.floor(Math.random() * 100).toString(),\n      Math.floor(Math.random() * 100).toString()\n    ]);\n  }\n}\n\nrandomColor = {\n  while(true) {\n    yield Promises.delay(2000,\n    `#${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}`);\n  }\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-9","inline":false,"source":"viewof userData = Inputs.form(\n  [\n    Inputs.text({type: \"number\", value: 25, width: 20}),\n    Inputs.text({type: \"number\", value: 35, width: 20}),\n    Inputs.text({type: \"number\", value: 65, width: 20}),\n    Inputs.text({type: \"number\", value: 5, width: 20}),\n    Inputs.text({type: \"number\", value: 50, width: 20})\n  ], {\n    disabled: changeType == \"Random\"\n  });\n\nviewof userColor = Inputs.color({\n  value: \"#36a7e9\",\n  disabled: changeType == \"Random\"});\n"},{"methodName":"interpret","cellName":"ojs-cell-10","inline":false,"source":"myBarChart.data = changeType == \"Random\" ? randomData : [...userData];\nmyBarChart.barColor = changeType == \"Random\" ? randomColor : userColor;\n"},{"methodName":"interpretQuiet","source":"shinyInput('changeType')"},{"methodName":"interpretQuiet","source":"shinyInput('userData')"},{"methodName":"interpretQuiet","source":"shinyInput('userColor')"}]}
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
