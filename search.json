@@ -1,0 +1,65 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Sverto",
+    "section": "",
+    "text": "Your Svelte components can seamlessly react to your ObservableJS code, making it quick and easy to build bespoke visuals that animate in response to user inputs or other changing data in your document."
+  },
+  {
+    "objectID": "index.html#prerequisites",
+    "href": "index.html#prerequisites",
+    "title": "Sverto",
+    "section": "📋 Prerequisites",
+    "text": "📋 Prerequisites\nYou’ll need to install two things to run Sverto:\n\nQuarto\nNode and the Node Package Manager (npm)"
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "Sverto",
+    "section": "⚙️ Installation",
+    "text": "⚙️ Installation\nInstall the project extension using:\nquarto use template 360-info/sverto@firstrelease-docs\nThen run:\nnpm install\nThis will add the extension itself (which includes some project scripts) to the _extension folder, as well as a few other files.\n\n\n\n\n\n\nNote\n\n\n\nSverto depends on running project pre-render scripts, so you can’t currently use it with single documents."
+  },
+  {
+    "objectID": "index.html#use",
+    "href": "index.html#use",
+    "title": "Sverto",
+    "section": "🎉 Use",
+    "text": "🎉 Use\nHere’s the short way to add Svelte component you’ve written to a Quarto doc:\n\nAdd a magic placeholder block to your document with a Quarto include to the path to your Quarto doc, prefixed with /.sverto/. For example:\n:::{}\n{{< include /.sverto/example.qmd >}}\n:::\nImport your Svelte component with Component = import_svelte(\"Component.svelte\")\nAdd a target block for your visual using ::: and give it an #id\nInstantiate the Svelte component with myVisual = Component.default() using some default props and your target block\nUpdate the instantiated component with myVisual.propName\nRender your Quarto project as usual with quarto render or quarto preview.\n\nTo see this all in practice, check out example.qmd."
+  },
+  {
+    "objectID": "index.html#use-other-libraries-in-your-svelte-component",
+    "href": "index.html#use-other-libraries-in-your-svelte-component",
+    "title": "Sverto",
+    "section": "🛍 Use other libraries in your Svelte component",
+    "text": "🛍 Use other libraries in your Svelte component\nIf you want to refer to other JavaScript libraries in your Svelte component (like d3, for example), add them to the project using npm install package1 [package2 ...]. For example:\nnpm install d3-scale"
+  },
+  {
+    "objectID": "index.html#use-pre-compiled-svelte-components",
+    "href": "index.html#use-pre-compiled-svelte-components",
+    "title": "Sverto",
+    "section": "🔨 Use pre-compiled Svelte components",
+    "text": "🔨 Use pre-compiled Svelte components\nIf you’d prefer to compile your own Svelte components instead of letting this extension do it, you can skip steps 1 and 2 and simply refer to the compiled bundle with, for example, Component = import(\"Component.js\") in an OJS block.\n\n\n\n\n\n\nNote\n\n\n\nYou must compile the Svelte component to an ES6 bundle, and you must enable accessors when compiling if you want to be able to update them from OJS. Refer to _extensions/sverto/rollup.config.js for guidance on configuring Rollup to do this."
+  },
+  {
+    "objectID": "index.html#issues",
+    "href": "index.html#issues",
+    "title": "Sverto",
+    "section": "❓ Issues",
+    "text": "❓ Issues\nIf you have any problems with the extension, please feel free to create an issue!\nSpecial thanks to Carlos Scheidegger from Posit for his time and advice!"
+  },
+  {
+    "objectID": "examples/barchart/index.html",
+    "href": "examples/barchart/index.html",
+    "title": "Examples: basic barchart",
+    "section": "",
+    "text": "Let’s start with a simple barchart.\nThis isn’t going to be one of those barcharts you’ve seen on TV, what with tick marks and hover effects and such. This one’s just some bars, some labels and a baseline. It will, however, come with some useful features to help us reuse it."
+  },
+  {
+    "objectID": "examples/barchart/index.html#challenges",
+    "href": "examples/barchart/index.html#challenges",
+    "title": "Examples: basic barchart",
+    "section": "Challenges",
+    "text": "Challenges\nThis Svelte component’s pretty basic, though. What else is it missing?\n\nThe height and width are configurable, and the bars resize in response to them, but their CSS transitions are slow to catch up. Ideally we’d have the bars apply the transition when they resize because of a change in data but not in response to a change in chart height or width.\nWe have no axes other than the baseline. That’s fine for a lot of uses, but we might want to add those elements for other uses.\n\nWe could add those elements manually, but the d3-axis package has some helpers for creating axes quickly!\n\nThe bars are all the same colour. We could write a function that converts each bar’s data value to a colour, and use it for the <rect> fill attribute, but the d3-scale-chromatic also has some helpers to do this quickly!"
+  }
+]
