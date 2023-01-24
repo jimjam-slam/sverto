@@ -25,7 +25,7 @@ You'll need to install two things to run Sverto:
 Install the project extension using:
 
 ```sh
-quarto use template 360-info/sverto@firstrelease-docs
+quarto use template 360-info/sverto
 ```
 
 Then run:
@@ -52,7 +52,7 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
     :::
     ```
 
-2. Import your Svelte component with `Component = import_svelte("Component.svelte")`
+2. Import your Svelte component in OJS with `Component = import_svelte("Component.svelte")`
 3. Add a target block for your visual using `:::` and give it an `#id`
 4. Instantiate the Svelte component with `myVisual = Component.default()` using some default props and your target block
 5. Update the instantiated component with `myVisual.propName`

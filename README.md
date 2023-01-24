@@ -16,7 +16,7 @@ You'll need to install two things to run Sverto:
 Install the project extension using:
 
 ```
-quarto use template 360-info/sverto@firstrelease-docs
+quarto use template 360-info/sverto
 ```
 
 Then run:
@@ -41,7 +41,7 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
     :::
     ```
 
-2. Import your Svelte component with `Component = import_svelte("Component.svelte")`
+2. Import your Svelte component in OJS with `Component = import_svelte("Component.svelte")`
 3. Add a target block for your visual using `:::` and give it an `#id`
 4. Instantiate the Svelte component with `myVisual = Component.default()` using some default props and your target block
 5. Update the instantiated component with `myVisual.propName`
@@ -51,10 +51,12 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
 
 ## 📦 What's in the box?
 
+When you use the Sverto template in a project, it creates some files for you:
+
 * [`example.qmd`](./example.qmd): an example Quarto doc that uses a Svelte component
 * [`Circles.svelte`](./Circles.svelte): an example Svelte visualisation
 * [`package.json`](./package.json): this is used to keep track of the dependencies of your Svelte components. You should add this to version control.
-* Once you've run `npm install`, there'll also be a `package-lock.json` and a `.luarc.json`. You should version control these too (although you oughtn't need to edit them manually).
+* Once you've run `npm install`, there'll also be a `package-lock.json` and a `.luarc.json`. You should version control these too (although you oughtn't need to edit them manually). You don't need to touch the `node_modules` folder, either.
 
 See [`example.qmd`](./example.qmd) to learn how to add Svelte components to your documents and the [Svelte tutorial](https://svelte.dev/tutorial/basics) to learn how to create them.
 
