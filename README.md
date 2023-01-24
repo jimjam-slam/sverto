@@ -4,6 +4,14 @@
 
 Your Svelte components can seamlessly react to your ObservableJS code, making it quick and easy to build visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document.
 
+## 💭 Why Sverto?
+
+[Quarto](https://quarto.org) helps users build beautiful documents regardless of their language of choice, and it encourages data analysts and scientists to explore web visualisation by making JavaScript accessible and easy to use. It makes interactive visualisations intuitive to write, but animated visuals are still a challenge that require either dipping into a high-level JavaScript library or learning a lower-level one like [d3](https://d3js.org).
+
+[Svelte](https://svelte.dev) is a framework for building web visualisations and apps in JavaScript. Svelte goes out of its way to make writing self-contained components, like charts, comfortable and intuitive. It has a great [playground environment](https://svelte.dev/repl/hello-world?version=3.55.1) for developing and testing components, but like many web frameworks, the experience is much more complex when you start developing locally.
+
+_Sverto aims to make it as easy to use Svelte components in Quarto documents as it is to work on them in the Svelte REPL: just write a `.svelte` file, add it to a Quarto document, and Sverto should take care of the rest._
+
 ## 📋 Prerequisites
 
 You'll need to install two things to run Sverto:
@@ -63,6 +71,8 @@ When you use the Sverto template in a project, it creates some files for you:
 * Once you've run `npm install`, there'll also be a `package-lock.json` and a `.luarc.json`. You should version control these too (although you oughtn't need to edit them manually). You don't need to touch the `node_modules` folder, either.
 
 See [`example.qmd`](./example.qmd) to learn how to add Svelte components to your documents and the [Svelte tutorial](https://svelte.dev/tutorial/basics) to learn how to create them.
+
+As well as the project format, Sverto ships with document formats (the default is `sverto-html`). If you need to change document options that would normally go under `format: html`, use `format: sverto-html` or `format-sverto-revealjs` instead.
 
 ## 🛍 Use other libraries in your Svelte component
 
