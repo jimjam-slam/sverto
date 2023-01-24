@@ -68,13 +68,13 @@ If you want to refer to other JavaScript libraries in your Svelte component (lik
 npm install d3-scale
 ```
 
-## Use pre-compiled Svelte components
+## 🔨 Use pre-compiled Svelte components
 
 If you'd prefer to compile your own Svelte components instead of letting this extension do it, you can skip steps 1 and 2 and simply refer to the compiled bundle with, for example, `Component = import("Component.js")` in an OJS block.
 
 :::{.callout-note}
 You must compile the Svelte component to an ES6 bundle, and you must enable accessors when compiling if you want to be able to update them from OJS. Refer to [`_extensions/sverto/rollup.config.js`](https://github.com/360-info/sverto/blob/firstrelease/_extensions/sverto/rollup.config.js) for guidance on configuring Rollup to do this.
-```
+:::
 
 ## ❓ Issues
 

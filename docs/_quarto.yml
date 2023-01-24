@@ -6,16 +6,25 @@ execute:
 
 website:
   navbar:
-    title: Sverto
-    background: black
+    logo: 360info-logo.png
+    logo-href: https://github.com/360-info
+    background: "#222222"
     search: true
     left:
-      - text: "Home"
+      - text: "Sverto"
         file: index.qmd
-      - text: "Example: bar chart"
-        file: examples/barchart/index.qmd
+      - text: "Examples"
+        menu:
+          - text: "Bar chart"
+            file: examples/barchart/index.qmd
       # - about.qmd
+    right:
+      - icon: github
+        href: https://github.com/360-info/sverto
 
 format:
   sverto-html:
     title-block-banner: "#e1e4e6"
+    theme: default
+    linkcolor: "#36a7e9"
+    
