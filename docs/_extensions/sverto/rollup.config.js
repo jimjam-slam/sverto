@@ -2,7 +2,6 @@ import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
-import css from 'rollup-plugin-css-only';
 
 const fs = require('fs');
 const path = require('node:path');
@@ -40,16 +39,13 @@ export default uniqueSvelteFiles.map(
 		},
 		plugins: [
 			svelte({
+				// css is added to the js bundle instead
+				emitCss: false,
 				compilerOptions: {
+					// required for ojs reactivity
 					accessors: true,
 					dev: !production,
 				}
-			}),
-			css({
-				output: path.join(
-					quartoOutDir,
-					path.dirname(svelteFile),
-					path.basename(svelteFile, ".svelte") + ".css")
 			}),
 			resolve({
 				browser: true,
