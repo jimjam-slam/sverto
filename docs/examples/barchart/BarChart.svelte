@@ -15,9 +15,15 @@
 
 </script>
 
+<style>
+  svg text {
+    fill: red;
+  }
+</style>
+
 <!-- we use svelte's in/out transitions for entering and leaving dom elements,
      and vanilla css transitions for retained elements that change. the
      #each block means we create an svg <circle> for each element of data -->
 <svg>
-  <text cx="50%" cy ="50%">Hello world!</text>
+  <text x="50" y="50">Hello world!</text>
 </svg>
