@@ -76,4 +76,4 @@ If you'd prefer to compile your own Svelte components instead of letting this ex
 
 If you have any problems with the extension, please feel free to [create an issue](https://github.com/360-info/sverto)!
 
-Special thanks to Carlos Scheidegger from [Posit](https://posit.co) for his time and guidance in designing Sverto!
+Special thanks to [Carlos Scheidegger](https://github.com/cscheid) from [Posit](https://posit.co) for his time and guidance getting Sverto working!
