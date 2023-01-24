@@ -4,9 +4,10 @@
   // https://svelte.dev/tutorial/transition
   import { fly } from "svelte/transition";
 
-  // here we declare `data` as a prop that this component can expect
+  // here we declare `data` as a prop that this component can expect. it has
+  // a default value in case we don't provide anything
   // https://svelte.dev/tutorial/declaring-props
-  export let data;
+  export let data = [5, 15, 10, 12, 14];
 
   // prefix a statement with $: to make it reactive (so it runs every time
   // data changes)
