@@ -49,6 +49,10 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
 
 **To see this all in practice, check out [`example.qmd`](./example.qmd).**
 
+> **Note:** `quarto preview` won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
+> 
+> If you want to quickly iterate on the Svelte component and you aren't too concerned about the rest of your Quarto doc, you might find the [Svelte Preview](https://marketplace.visualstudio.com/items?itemName=RafaelMartinez.svelte-preview) extension for VSCode handy.
+
 ## 📦 What's in the box?
 
 When you use the Sverto template in a project, it creates some files for you:

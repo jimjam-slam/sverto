@@ -60,6 +60,12 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
 
 **To see this all in practice, check out [`example.qmd`](https://github.com/360-info/sverto/blob/firstrelease/example.qmd).**
 
+:::{.callout-note}
+The `quarto preview` command won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
+
+If you want to quickly iterate on the Svelte component and you aren't too concerned about the rest of your Quarto doc, you might find the [Svelte Preview](https://marketplace.visualstudio.com/items?itemName=RafaelMartinez.svelte-preview) extension for VSCode handy.
+:::
+
 ## 🛍 Use other libraries in your Svelte component
 
 If you want to refer to other JavaScript libraries in your Svelte component (like d3, for example), add them to the project using `npm install package1 [package2 ...]`. For example:
