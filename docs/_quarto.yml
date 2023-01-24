@@ -6,7 +6,8 @@ execute:
 
 website:
   navbar:
-    background: primary
+    title: Sverto
+    background: black
     search: true
     left:
       - text: "Home"
@@ -14,3 +15,7 @@ website:
       - text: "Example: bar chart"
         file: examples/barchart/index.qmd
       # - about.qmd
+
+format:
+  sverto-html:
+    title-block-banner: "#e1e4e6"
