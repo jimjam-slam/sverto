@@ -18,14 +18,14 @@
     "href": "index.html#installation",
     "title": "Sverto",
     "section": "⚙️ Installation",
-    "text": "⚙️ Installation\nInstall the project extension using:\nquarto use template 360-info/sverto@firstrelease-docs\nThen run:\nnpm install\nThis will add the extension itself (which includes some project scripts) to the _extension folder, as well as a few other files.\n\n\n\n\n\n\nNote\n\n\n\nSverto depends on running project pre-render scripts, so you can’t currently use it with single documents."
+    "text": "⚙️ Installation\nInstall the project extension using:\nquarto use template 360-info/sverto\nThen run:\nnpm install\nThis will add the extension itself (which includes some project scripts) to the _extension folder, as well as a few other files.\n\n\n\n\n\n\nNote\n\n\n\nSverto depends on running project pre-render scripts, so you can’t currently use it with single documents."
   },
   {
     "objectID": "index.html#use",
     "href": "index.html#use",
     "title": "Sverto",
     "section": "🎉 Use",
-    "text": "🎉 Use\nHere’s the short way to add Svelte component you’ve written to a Quarto doc:\n\nAdd a magic placeholder block to your document with a Quarto include to the path to your Quarto doc, prefixed with /.sverto/. For example:\n:::{}\n{{< include /.sverto/example.qmd >}}\n:::\nImport your Svelte component with Component = import_svelte(\"Component.svelte\")\nAdd a target block for your visual using ::: and give it an #id\nInstantiate the Svelte component with myVisual = Component.default() using some default props and your target block\nUpdate the instantiated component with myVisual.propName\nRender your Quarto project as usual with quarto render or quarto preview.\n\nTo see this all in practice, check out example.qmd."
+    "text": "🎉 Use\nHere’s the short way to add Svelte component you’ve written to a Quarto doc:\n\nAdd a magic placeholder block to your document with a Quarto include to the path to your Quarto doc, prefixed with /.sverto/. For example:\n:::{}\n{{< include /.sverto/example.qmd >}}\n:::\nImport your Svelte component in OJS with Component = import_svelte(\"Component.svelte\")\nAdd a target block for your visual using ::: and give it an #id\nInstantiate the Svelte component with myVisual = Component.default() using some default props and your target block\nUpdate the instantiated component with myVisual.propName\nRender your Quarto project as usual with quarto render or quarto preview.\n\nTo see this all in practice, check out example.qmd."
   },
   {
     "objectID": "index.html#use-other-libraries-in-your-svelte-component",

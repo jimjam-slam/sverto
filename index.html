@@ -241,7 +241,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="installation" class="level2">
 <h2 class="anchored" data-anchor-id="installation">⚙️ Installation</h2>
 <p>Install the project extension using:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> use template 360-info/sverto@firstrelease-docs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> use template 360-info/sverto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then run:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will add the extension itself (which includes some project scripts) to the <code>_extension</code> folder, as well as a few other files.</p>
@@ -267,7 +267,7 @@ Note
 <pre><code>:::{}
 {{&lt; include /.sverto/example.qmd &gt;}}
 :::</code></pre></li>
-<li><p>Import your Svelte component with <code>Component = import_svelte("Component.svelte")</code></p></li>
+<li><p>Import your Svelte component in OJS with <code>Component = import_svelte("Component.svelte")</code></p></li>
 <li><p>Add a target block for your visual using <code>:::</code> and give it an <code>#id</code></p></li>
 <li><p>Instantiate the Svelte component with <code>myVisual = Component.default()</code> using some default props and your target block</p></li>
 <li><p>Update the instantiated component with <code>myVisual.propName</code></p></li>
