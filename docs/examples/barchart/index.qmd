@@ -62,27 +62,63 @@ This Svelte component accepts a few props:
 
 We can hook any of those values up to OJS code using `myBarChart.propName`.
 
-For example, let's make the data user-configurable:
+Let's give the user the choice between a randomly changing bar chart and user-configurable data and colours:
 
 ```{ojs}
 //| code-fold: true
-
-viewof userData = Inputs.form([
-  Inputs.text({type: "number", value: 25, width: 20}),
-  Inputs.text({type: "number", value: 35, width: 20}),
-  Inputs.text({type: "number", value: 65, width: 20}),
-  Inputs.text({type: "number", value: 5, width: 20}),
-  Inputs.text({type: "number", value: 50, width: 20})
-]);
-myBarChart.data = [...userData];
+viewof changeType = Inputs.radio(["Random", "Custom"], {value: "Random"})
 ```
 
-Or the colour:
+Here's how we generate data and colours that change every two seconds
 
 ```{ojs}
 //| code-fold: true
-viewof userColor = Inputs.color({value: "#36a7e9"});
-myBarChart.barColor = userColor;
+randomData = {
+  while(true) {
+    yield Promises.delay(2000, [
+      Math.floor(Math.random() * 100).toString(),
+      Math.floor(Math.random() * 100).toString(),
+      Math.floor(Math.random() * 100).toString(),
+      Math.floor(Math.random() * 100).toString(),
+      Math.floor(Math.random() * 100).toString()
+    ]);
+  }
+}
+
+randomColor = {
+  while(true) {
+    yield Promises.delay(2000,
+    `#${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}`);
+  }
+}
+```
+
+And here are inputs that allow the user to change the data and colour:
+
+```{ojs}
+//| code-fold: true
+viewof userData = Inputs.form(
+  [
+    Inputs.text({type: "number", value: 25, width: 20}),
+    Inputs.text({type: "number", value: 35, width: 20}),
+    Inputs.text({type: "number", value: 65, width: 20}),
+    Inputs.text({type: "number", value: 5, width: 20}),
+    Inputs.text({type: "number", value: 50, width: 20})
+  ], {
+    disabled: changeType == "Random"
+  });
+
+viewof userColor = Inputs.color({
+  value: "#36a7e9",
+  disabled: changeType == "Random"});
+```
+
+Finally, we update the visual whenever either the choice type changes or the random data does:
+
+```{ojs}
+//| code-fold: true
+myBarChart.data = changeType == "Random" ? randomData : [...userData];
+myBarChart.barColor = changeType == "Random" ? randomColor : userColor;
 ```
 ::::
 

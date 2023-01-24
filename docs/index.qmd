@@ -3,6 +3,10 @@ title: Sverto
 description: "**Sverto** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website."
 author: James Goldie, 360info
 date: last-modified
+format:
+    sverto-html:
+      toc: true
+      toc-location: left
 ---
 
 :::{}
@@ -11,7 +15,13 @@ date: last-modified
 
 Your Svelte components can seamlessly react to your ObservableJS code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document.
 
-<!-- examples here! -->
+## 💭 Why Sverto?
+
+[Quarto](https://quarto.org) helps users build beautiful documents regardless of their language of choice, and it encourages data analysts and scientists to explore web visualisation by making JavaScript accessible and easy to use. It makes interactive visualisations intuitive to write, but animated visuals are still a challenge that require either dipping into a high-level JavaScript library or learning a lower-level one like [d3](https://d3js.org).
+
+[Svelte](https://svelte.dev) is a framework for building web visualisations and apps in JavaScript. Svelte goes out of its way to make writing self-contained components, like charts, comfortable and intuitive. It has a great [playground environment](https://svelte.dev/repl/hello-world?version=3.55.1) for developing and testing components, but like many web frameworks, the experience is much more complex when you start developing locally.
+
+_Sverto aims to make it as easy to use animated Svelte charts in Quarto documents as it is to work on them in the Svelte REPL: just write a `.svelte` file, add it to a Quarto document, and Sverto should take care of the rest._
 
 ## 📋 Prerequisites
 
@@ -25,7 +35,7 @@ You'll need to install two things to run Sverto:
 Install the project extension using:
 
 ```sh
-quarto use template 360-info/sverto@firstrelease-docs
+quarto use template 360-info/sverto
 ```
 
 Then run:
@@ -52,13 +62,21 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
     :::
     ```
 
-2. Import your Svelte component with `Component = import_svelte("Component.svelte")`
+2. Import your Svelte component in OJS with `Component = import_svelte("Component.svelte")`
 3. Add a target block for your visual using `:::` and give it an `#id`
 4. Instantiate the Svelte component with `myVisual = Component.default()` using some default props and your target block
 5. Update the instantiated component with `myVisual.propName`
 6. Render your Quarto project as usual with `quarto render` or `quarto preview`.
 
 **To see this all in practice, check out [`example.qmd`](https://github.com/360-info/sverto/blob/firstrelease/example.qmd).**
+
+:::{.callout-note}
+The `quarto preview` command won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
+
+If you want to quickly iterate on the Svelte component and you aren't too concerned about the rest of your Quarto doc, you might find the [Svelte Preview](https://marketplace.visualstudio.com/items?itemName=RafaelMartinez.svelte-preview) extension for VSCode handy.
+:::
+
+As well as the project format, Sverto ships with document formats (the default is `sverto-html`). If you need to change document options that would normally go under `format: html`, use `format: sverto-html` or `format-sverto-revealjs` instead.
 
 ## 🛍 Use other libraries in your Svelte component
 
