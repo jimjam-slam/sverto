@@ -7,6 +7,13 @@
     "text": "Your Svelte components can seamlessly react to your ObservableJS code, making it quick and easy to build bespoke visuals that animate in response to user inputs or other changing data in your document."
   },
   {
+    "objectID": "index.html#why-sverto",
+    "href": "index.html#why-sverto",
+    "title": "Sverto",
+    "section": "💭 Why Sverto?",
+    "text": "💭 Why Sverto?\nQuarto helps users build beautiful documents regardless of their language of choice, and it encourages data analysts and scientists to explore web visualisation by making JavaScript accessible and easy to use. It makes interactive visualisations intuitive to write, but animated visuals are still a challenge that require either dipping into a high-level JavaScript library or learning a lower-level one like d3.\nSvelte is a framework for building web visualisations and apps in JavaScript. Svelte goes out of its way to make writing self-contained components, like charts, comfortable and intuitive. It has a great playground environment for developing and testing components, but like many web frameworks, the experience is much more complex when you start developing locally.\nSverto aims to make it as easy to use Svelte components in Quarto documents as it is to work on them in the Svelte REPL: just write a .svelte file, add it to a Quarto document, and Sverto should take care of the rest."
+  },
+  {
     "objectID": "index.html#prerequisites",
     "href": "index.html#prerequisites",
     "title": "Sverto",
@@ -25,7 +32,7 @@
     "href": "index.html#use",
     "title": "Sverto",
     "section": "🎉 Use",
-    "text": "🎉 Use\nHere’s the short way to add Svelte component you’ve written to a Quarto doc:\n\nAdd a magic placeholder block to your document with a Quarto include to the path to your Quarto doc, prefixed with /.sverto/. For example:\n:::{}\n{{< include /.sverto/example.qmd >}}\n:::\nImport your Svelte component in OJS with Component = import_svelte(\"Component.svelte\")\nAdd a target block for your visual using ::: and give it an #id\nInstantiate the Svelte component with myVisual = Component.default() using some default props and your target block\nUpdate the instantiated component with myVisual.propName\nRender your Quarto project as usual with quarto render or quarto preview.\n\nTo see this all in practice, check out example.qmd.\n\n\n\n\n\n\nNote\n\n\n\nThe quarto preview command won’t “live reload” when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.\nIf you want to quickly iterate on the Svelte component and you aren’t too concerned about the rest of your Quarto doc, you might find the Svelte Preview extension for VSCode handy."
+    "text": "🎉 Use\nHere’s the short way to add Svelte component you’ve written to a Quarto doc:\n\nAdd a magic placeholder block to your document with a Quarto include to the path to your Quarto doc, prefixed with /.sverto/. For example:\n:::{}\n{{< include /.sverto/example.qmd >}}\n:::\nImport your Svelte component in OJS with Component = import_svelte(\"Component.svelte\")\nAdd a target block for your visual using ::: and give it an #id\nInstantiate the Svelte component with myVisual = Component.default() using some default props and your target block\nUpdate the instantiated component with myVisual.propName\nRender your Quarto project as usual with quarto render or quarto preview.\n\nTo see this all in practice, check out example.qmd.\n\n\n\n\n\n\nNote\n\n\n\nThe quarto preview command won’t “live reload” when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.\nIf you want to quickly iterate on the Svelte component and you aren’t too concerned about the rest of your Quarto doc, you might find the Svelte Preview extension for VSCode handy.\n\n\nAs well as the project format, Sverto ships with document formats (the default is sverto-html). If you need to change document options that would normally go under format: html, use format: sverto-html or format-sverto-revealjs instead."
   },
   {
     "objectID": "index.html#use-other-libraries-in-your-svelte-component",

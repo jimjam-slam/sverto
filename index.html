@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="James Goldie, 360info">
-<meta name="dcterms.date" content="2023-01-24">
+<meta name="dcterms.date" content="2023-01-25">
 <meta name="description" content="Sverto is an extension for Quarto that lets you seamlessly write and include Svelte components, like charts and other visuals, in your Quarto website.">
 
 <title>Sverto</title>
@@ -140,7 +140,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -185,7 +185,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Sverto</h1>
@@ -210,7 +210,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 24, 2023</p>
+        <p class="date">January 25, 2023</p>
       </div>
     </div>
     
@@ -220,8 +220,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-sverto" id="toc-why-sverto" class="nav-link active" data-scroll-target="#why-sverto">💭 Why Sverto?</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">📋 Prerequisites</a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">⚙️ Installation</a></li>
+  <li><a href="#use" id="toc-use" class="nav-link" data-scroll-target="#use">🎉 Use</a></li>
+  <li><a href="#use-other-libraries-in-your-svelte-component" id="toc-use-other-libraries-in-your-svelte-component" class="nav-link" data-scroll-target="#use-other-libraries-in-your-svelte-component">🛍 Use other libraries in your Svelte component</a></li>
+  <li><a href="#use-pre-compiled-svelte-components" id="toc-use-pre-compiled-svelte-components" class="nav-link" data-scroll-target="#use-pre-compiled-svelte-components">🔨 Use pre-compiled Svelte components</a></li>
+  <li><a href="#issues" id="toc-issues" class="nav-link" data-scroll-target="#issues">❓ Issues</a></li>
+  </ul>
+</nav>
+</nav>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -229,7 +245,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <p>Your Svelte components can seamlessly react to your ObservableJS code, making it quick and easy to build bespoke visuals that animate in response to <a href="https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs">user inputs</a> or other changing data in your document.</p>
-<!-- examples here! -->
+<section id="why-sverto" class="level2">
+<h2 class="anchored" data-anchor-id="why-sverto">💭 Why Sverto?</h2>
+<p><a href="https://quarto.org">Quarto</a> helps users build beautiful documents regardless of their language of choice, and it encourages data analysts and scientists to explore web visualisation by making JavaScript accessible and easy to use. It makes interactive visualisations intuitive to write, but animated visuals are still a challenge that require either dipping into a high-level JavaScript library or learning a lower-level one like <a href="https://d3js.org">d3</a>.</p>
+<p><a href="https://svelte.dev">Svelte</a> is a framework for building web visualisations and apps in JavaScript. Svelte goes out of its way to make writing self-contained components, like charts, comfortable and intuitive. It has a great <a href="https://svelte.dev/repl/hello-world?version=3.55.1">playground environment</a> for developing and testing components, but like many web frameworks, the experience is much more complex when you start developing locally.</p>
+<p><em>Sverto aims to make it as easy to use Svelte components in Quarto documents as it is to work on them in the Svelte REPL: just write a <code>.svelte</code> file, add it to a Quarto document, and Sverto should take care of the rest.</em></p>
+</section>
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">📋 Prerequisites</h2>
 <p>You’ll need to install two things to run Sverto:</p>
@@ -288,6 +309,7 @@ Note
 <p>If you want to quickly iterate on the Svelte component and you aren’t too concerned about the rest of your Quarto doc, you might find the <a href="https://marketplace.visualstudio.com/items?itemName=RafaelMartinez.svelte-preview">Svelte Preview</a> extension for VSCode handy.</p>
 </div>
 </div>
+<p>As well as the project format, Sverto ships with document formats (the default is <code>sverto-html</code>). If you need to change document options that would normally go under <code>format: html</code>, use <code>format: sverto-html</code> or <code>format-sverto-revealjs</code> instead.</p>
 </section>
 <section id="use-other-libraries-in-your-svelte-component" class="level2">
 <h2 class="anchored" data-anchor-id="use-other-libraries-in-your-svelte-component">🛍 Use other libraries in your Svelte component</h2>
