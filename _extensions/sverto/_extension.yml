@@ -1,6 +1,6 @@
 title: Sverto
 author: 360info
-version: 0.0.1
+version: 0.0.2
 quarto-version: ">=1.2.0"
 contributes:
   project:
