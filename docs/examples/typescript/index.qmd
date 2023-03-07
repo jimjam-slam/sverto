@@ -1,0 +1,127 @@
+---
+title: "Examples: Typescript"
+author: James Goldie, 360info
+date: last-modified
+---
+
+:::{}
+{{< include /.sverto/examples/typescript/index.qmd >}}
+:::
+
+Here's a variation on our basic barchart that uses Typescript.
+
+::::: {.columns .column-page}
+
+# Try it out
+
+::::{.column width="40%"}
+
+The following code initialises our bar chart.
+
+```{ojs}
+//| code-fold: true
+
+BarChart =
+  import_svelte("TypedBarChart.svelte")
+
+myBarChart = new BarChart.default({
+  target: document.querySelector("#mybarchart"),
+  props: {
+    data: [5, 5, 5, 5, 5],
+    height: 200,
+    width: 200,
+    barWidth: 25,
+    barColor: "#36a7e9"
+  }
+});
+```
+
+:::{#mybarchart}
+:::
+
+[See the bar chart source at [TypedBarChart.svelte](./BarChart.svelte)]{style="font-size: smaller; font-color: #999999"}
+
+::::
+
+<!-- TODO - .svelte file content here? -->
+
+::::{.column width="5%"}
+::::
+
+
+::::{.column width="45%"}
+Unlike the [other barchart example](/examples/barchart), this one has a few additions that take advantage of TypeScript:
+
+* Instead of enclosing the JavaScript block of the [barchart component](./TypedBarChart.svelte) with a `<script>` tag, we use `<script lang="ts">`. This tells our tools to run the code through TypeScript before it's processed by Svelte.
+
+
+Let's give the user the choice between a randomly changing bar chart and user-configurable data and colours:
+
+```{ojs}
+//| code-fold: true
+viewof changeType = Inputs.radio(["Random", "Custom"], {value: "Random"})
+```
+
+Here's how we generate data and colours that change every two seconds
+
+```{ojs}
+//| code-fold: true
+randomData = {
+  while(true) {
+    yield Promises.delay(2000, [
+      Math.floor(Math.random() * 100).toString(),
+      Math.floor(Math.random() * 100).toString(),
+      Math.floor(Math.random() * 100).toString(),
+      Math.floor(Math.random() * 100).toString(),
+      Math.floor(Math.random() * 100).toString()
+    ]);
+  }
+}
+
+randomColor = {
+  while(true) {
+    yield Promises.delay(2000,
+    `#${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}`);
+  }
+}
+```
+
+And here are inputs that allow the user to change the data and colour:
+
+```{ojs}
+//| code-fold: true
+viewof userData = Inputs.form(
+  [
+    Inputs.text({type: "number", value: 25, width: 20}),
+    Inputs.text({type: "number", value: 35, width: 20}),
+    Inputs.text({type: "number", value: 65, width: 20}),
+    Inputs.text({type: "number", value: 5, width: 20}),
+    Inputs.text({type: "number", value: 50, width: 20})
+  ], {
+    disabled: changeType == "Random"
+  });
+
+viewof userColor = Inputs.color({
+  value: "#36a7e9",
+  disabled: changeType == "Random"});
+```
+
+Finally, we update the visual whenever either the choice type changes or the random data does:
+
+```{ojs}
+//| code-fold: true
+myBarChart.data = changeType == "Random" ? randomData : [...userData];
+myBarChart.barColor = changeType == "Random" ? randomColor : userColor;
+```
+::::
+
+:::::
+
+## Challenges
+
+This Svelte component's pretty basic, though. What else is it missing?
+
+* The height and width are configurable, and the bars resize in response to them, but their CSS transitions are slow to catch up. Ideally we'd have the bars apply the transition when they resize because of a change in data but _not_ in response to a change in chart height or width.
+* We have no axes other than the baseline. That's fine for a lot of uses, but we might want to add those elements for other uses.
+  - We could add those elements manually, but the [`d3-axis`](https://github.com/d3/d3-axis) package has some helpers for creating axes quickly!
+* The bars are all the same colour. We could write a function that converts each bar's data value to a colour, and use it for the `<rect>` `fill` attribute, but the [`d3-scale-chromatic`](https://github.com/d3/d3-scale-chromatic) also has some helpers to do this quickly!

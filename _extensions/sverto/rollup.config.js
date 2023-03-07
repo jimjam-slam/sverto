@@ -2,6 +2,8 @@ import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
+import sveltePreprocess from 'svelte-preprocess';
+import typescript from '@rollup/plugin-typescript';
 
 const fs = require('fs');
 const path = require('node:path');
@@ -41,6 +43,7 @@ export default uniqueSvelteFiles.map(
 			svelte({
 				// css is added to the js bundle instead
 				emitCss: false,
+				preprocess: sveltePreprocess({ sourceMap: !production }),
 				compilerOptions: {
 					// required for ojs reactivity
 					accessors: true,
@@ -52,6 +55,10 @@ export default uniqueSvelteFiles.map(
 				dedupe: ["svelte"]
 			}),
 			commonjs(),
+			typescript({
+				sourceMap: !production,
+				inlineSources: !production
+			}),
 			production && terser()
 		]
 	}));

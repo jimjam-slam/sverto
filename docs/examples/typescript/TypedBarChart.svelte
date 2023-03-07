@@ -44,6 +44,11 @@
 <svg width={width} height={height}>
   <!-- for each data element, draw a rectangle and a label -->
   {#each normalisedData as d, i (i)}
+  <Bar
+    xpos=
+  >
+
+  </Bar>
   <rect
     in:fly="{{x: 10}}" out:fly="{{x: 10}}"
     style={"transition: all 1s ease-out"}
