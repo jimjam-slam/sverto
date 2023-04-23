@@ -68,7 +68,7 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
 5. Update the instantiated component with `myVisual.propName`
 6. Render your Quarto project as usual with `quarto render` or `quarto preview`.
 
-**To see this all in practice, check out [`example.qmd`](https://github.com/360-info/sverto/blob/firstrelease/example.qmd).**
+**To see this all in practice, check out [`example.qmd`](https://github.com/360-info/sverto/blob/main/example.qmd).**
 
 :::{.callout-note}
 The `quarto preview` command won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.

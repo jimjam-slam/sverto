@@ -17,6 +17,8 @@ website:
         menu:
           - text: "Bar chart"
             file: examples/barchart/index.qmd
+      - text: Changelog
+        file: news.qmd
       # - about.qmd
     right:
       - icon: github
