@@ -1,2 +1,6 @@
 README.md
+NEWS.md
 LICENSE
+docs/
+.quarto/
+!.gitignore
