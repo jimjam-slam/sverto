@@ -1,5 +1,19 @@
 [
   {
+    "objectID": "news.html",
+    "href": "news.html",
+    "title": "News",
+    "section": "",
+    "text": "Bump minimum Quarto version to 1.3.0.\nFixes for compatibility with newer Quarto 1.3 pre-releases\n\nQuarto’s switch from Pandoc 2 to Pandoc 3 caused some issues with the way Sverto identifies Svelte import statements. This should no longer be a problem.\n\nWe now take advantage of the improved .quartoignore functionality in Quarto 1.3 to:\n\navoid copying the docs folder in with the project template; and\ninclude the .gitignore with the template"
+  },
+  {
+    "objectID": "news.html#section",
+    "href": "news.html#section",
+    "title": "News",
+    "section": "0.0.1",
+    "text": "0.0.1\n\nInitial release"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Sverto",
