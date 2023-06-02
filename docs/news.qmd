@@ -1,12 +1,16 @@
 ---
 title: News
-author: James Goldie, 360info
+author: James Goldie
 date: last-modified
 format:
     html:
       title-block-banner: "#e1e4e6"
       linkcolor: "#36a7e9"
 ---
+
+## (Unreleased) Sverto 0.0.3
+
+- Migrated from [`360-info/sverto`](https://github.comn/360-info/sverto) to [`jimjam-slam/sverto`](htps://github.com/jimjam-slam/sverto). Old GitHub links are maintained.
 
 ## Sverto 0.0.2
 

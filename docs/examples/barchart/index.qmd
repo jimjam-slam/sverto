@@ -1,6 +1,6 @@
 ---
 title: "Examples: basic barchart"
-author: James Goldie, 360info
+author: James Goldie
 date: last-modified
 ---
 

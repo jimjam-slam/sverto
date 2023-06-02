@@ -6,8 +6,6 @@ execute:
 
 website:
   navbar:
-    logo: 360info-logo.png
-    logo-href: https://github.com/360-info
     background: "#222222"
     search: true
     left:
@@ -22,7 +20,7 @@ website:
       # - about.qmd
     right:
       - icon: github
-        href: https://github.com/360-info/sverto
+        href: https://github.com/jimjam-slam/sverto
 
 format:
   sverto-html:

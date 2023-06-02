@@ -24,7 +24,7 @@ You'll need to install two things to run Sverto:
 Install the project extension using:
 
 ```
-quarto use template 360-info/sverto
+quarto use template jimjam-slam/sverto
 ```
 
 Then run:
@@ -90,7 +90,7 @@ If you'd prefer to compile your own Svelte components instead of letting this ex
 
 ## ❓ Issues
 
-If you have any problems with the extension, please feel free to [create an issue](https://github.com/360-info/sverto)!
+If you have any problems with the extension, please feel free to [create an issue](https://github.com/jimjam-slam/sverto)!
 
 Special thanks to [Carlos Scheidegger](https://github.com/cscheid) from [Posit](https://posit.co) for his time and guidance getting Sverto working!
 

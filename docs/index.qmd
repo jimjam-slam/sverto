@@ -1,7 +1,7 @@
 ---
 title: Sverto
 description: "**Sverto** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website."
-author: James Goldie, 360info
+author: James Goldie
 date: last-modified
 format:
     sverto-html:
@@ -35,7 +35,7 @@ You'll need to install two things to run Sverto:
 Install the project extension using:
 
 ```sh
-quarto use template 360-info/sverto
+quarto use template jimjam-slam/sverto
 ```
 
 Then run:
@@ -68,7 +68,7 @@ Here's the short way to add Svelte component you've written to a Quarto doc:
 5. Update the instantiated component with `myVisual.propName`
 6. Render your Quarto project as usual with `quarto render` or `quarto preview`.
 
-**To see this all in practice, check out [`example.qmd`](https://github.com/360-info/sverto/blob/main/example.qmd).**
+**To see this all in practice, check out [`example.qmd`](https://github.com/jimjam-slam/sverto/blob/main/example.qmd).**
 
 :::{.callout-note}
 The `quarto preview` command won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
@@ -91,11 +91,11 @@ npm install d3-scale
 If you'd prefer to compile your own Svelte components instead of letting this extension do it, you can skip steps 1 and 2 and simply refer to the compiled bundle with, for example, `Component = import("Component.js")` in an OJS block.
 
 :::{.callout-note}
-You must compile the Svelte component to an ES6 bundle, and you must enable accessors when compiling if you want to be able to update them from OJS. Refer to [`_extensions/sverto/rollup.config.js`](https://github.com/360-info/sverto/blob/firstrelease/_extensions/sverto/rollup.config.js) for guidance on configuring Rollup to do this.
+You must compile the Svelte component to an ES6 bundle, and you must enable accessors when compiling if you want to be able to update them from OJS. Refer to [`_extensions/sverto/rollup.config.js`](https://github.com/jimjam-slam/sverto/blob/firstrelease/_extensions/sverto/rollup.config.js) for guidance on configuring Rollup to do this.
 :::
 
 ## ❓ Issues
 
-If you have any problems with the extension, please feel free to [create an issue](https://github.com/360-info/sverto)!
+If you have any problems with the extension, please feel free to [create an issue](https://github.com/jimjam-slam/sverto)!
 
 Special thanks to [Carlos Scheidegger](https://github.com/cscheid) from [Posit](https://posit.co) for his time and advice!
