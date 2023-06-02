@@ -1,10 +1,38 @@
 [
   {
+    "objectID": "examples/barchart/index.html",
+    "href": "examples/barchart/index.html",
+    "title": "Examples: basic barchart",
+    "section": "",
+    "text": "Let’s start with a simple barchart.\nThis isn’t going to be one of those barcharts you’ve seen on TV, what with tick marks and hover effects and such. This one’s just some bars, some labels and a baseline. It will, however, come with some useful features to help us reuse it."
+  },
+  {
+    "objectID": "examples/barchart/index.html#challenges",
+    "href": "examples/barchart/index.html#challenges",
+    "title": "Examples: basic barchart",
+    "section": "Challenges",
+    "text": "Challenges\nThis Svelte component’s pretty basic, though. What else is it missing?\n\nThe height and width are configurable, and the bars resize in response to them, but their CSS transitions are slow to catch up. Ideally we’d have the bars apply the transition when they resize because of a change in data but not in response to a change in chart height or width.\nWe have no axes other than the baseline. That’s fine for a lot of uses, but we might want to add those elements for other uses.\n\nWe could add those elements manually, but the d3-axis package has some helpers for creating axes quickly!\n\nThe bars are all the same colour. We could write a function that converts each bar’s data value to a colour, and use it for the &lt;rect&gt; fill attribute, but the d3-scale-chromatic also has some helpers to do this quickly!"
+  },
+  {
     "objectID": "news.html",
     "href": "news.html",
     "title": "News",
     "section": "",
-    "text": "Bump minimum Quarto version to 1.3.0.\nFixes for compatibility with newer Quarto 1.3 pre-releases\n\nQuarto’s switch from Pandoc 2 to Pandoc 3 caused some issues with the way Sverto identifies Svelte import statements. This should no longer be a problem.\n\nWe now take advantage of the improved .quartoignore functionality in Quarto 1.3 to:\n\navoid copying the docs folder in with the project template; and\ninclude the .gitignore with the template"
+    "text": "Migrated from 360-info/sverto to jimjam-slam/sverto. Old GitHub links are maintained."
+  },
+  {
+    "objectID": "news.html#unreleased-sverto-0.0.3",
+    "href": "news.html#unreleased-sverto-0.0.3",
+    "title": "News",
+    "section": "",
+    "text": "Migrated from 360-info/sverto to jimjam-slam/sverto. Old GitHub links are maintained."
+  },
+  {
+    "objectID": "news.html#sverto-0.0.2",
+    "href": "news.html#sverto-0.0.2",
+    "title": "News",
+    "section": "Sverto 0.0.2",
+    "text": "Sverto 0.0.2\n\nBump minimum Quarto version to 1.3.0.\nFixes for compatibility with newer Quarto 1.3 pre-releases\n\nQuarto’s switch from Pandoc 2 to Pandoc 3 caused some issues with the way Sverto identifies Svelte import statements. This should no longer be a problem.\n\nWe now take advantage of the improved .quartoignore functionality in Quarto 1.3 to:\n\navoid copying the docs folder in with the project template; and\ninclude the .gitignore with the template"
   },
   {
     "objectID": "news.html#section",
@@ -39,14 +67,14 @@
     "href": "index.html#installation",
     "title": "Sverto",
     "section": "⚙️ Installation",
-    "text": "⚙️ Installation\nInstall the project extension using:\nquarto use template 360-info/sverto\nThen run:\nnpm install\nThis will add the extension itself (which includes some project scripts) to the _extension folder, as well as a few other files.\n\n\n\n\n\n\nNote\n\n\n\nSverto depends on running project pre-render scripts, so you can’t currently use it with single documents."
+    "text": "⚙️ Installation\nInstall the project extension using:\nquarto use template jimjam-slam/sverto\nThen run:\nnpm install\nThis will add the extension itself (which includes some project scripts) to the _extension folder, as well as a few other files.\n\n\n\n\n\n\nNote\n\n\n\nSverto depends on running project pre-render scripts, so you can’t currently use it with single documents."
   },
   {
     "objectID": "index.html#use",
     "href": "index.html#use",
     "title": "Sverto",
     "section": "🎉 Use",
-    "text": "🎉 Use\nHere’s the short way to add Svelte component you’ve written to a Quarto doc:\n\nAdd a magic placeholder block to your document with a Quarto include to the path to your Quarto doc, prefixed with /.sverto/. For example:\n:::{}\n{{< include /.sverto/example.qmd >}}\n:::\nImport your Svelte component in OJS with Component = import_svelte(\"Component.svelte\")\nAdd a target block for your visual using ::: and give it an #id\nInstantiate the Svelte component with myVisual = Component.default() using some default props and your target block\nUpdate the instantiated component with myVisual.propName\nRender your Quarto project as usual with quarto render or quarto preview.\n\nTo see this all in practice, check out example.qmd.\n\n\n\n\n\n\nNote\n\n\n\nThe quarto preview command won’t “live reload” when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.\nIf you want to quickly iterate on the Svelte component and you aren’t too concerned about the rest of your Quarto doc, you might find the Svelte Preview extension for VSCode handy.\n\n\nAs well as the project format, Sverto ships with document formats (the default is sverto-html). If you need to change document options that would normally go under format: html, use format: sverto-html or format-sverto-revealjs instead."
+    "text": "🎉 Use\nHere’s the short way to add Svelte component you’ve written to a Quarto doc:\n\nAdd a magic placeholder block to your document with a Quarto include to the path to your Quarto doc, prefixed with /.sverto/. For example:\n:::{}\n{{&lt; include /.sverto/example.qmd &gt;}}\n:::\nImport your Svelte component in OJS with Component = import_svelte(\"Component.svelte\")\nAdd a target block for your visual using ::: and give it an #id\nInstantiate the Svelte component with myVisual = Component.default() using some default props and your target block\nUpdate the instantiated component with myVisual.propName\nRender your Quarto project as usual with quarto render or quarto preview.\n\nTo see this all in practice, check out example.qmd.\n\n\n\n\n\n\nNote\n\n\n\nThe quarto preview command won’t “live reload” when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.\nIf you want to quickly iterate on the Svelte component and you aren’t too concerned about the rest of your Quarto doc, you might find the Svelte Preview extension for VSCode handy.\n\n\nAs well as the project format, Sverto ships with document formats (the default is sverto-html). If you need to change document options that would normally go under format: html, use format: sverto-html or format-sverto-revealjs instead."
   },
   {
     "objectID": "index.html#use-other-libraries-in-your-svelte-component",
@@ -68,19 +96,5 @@
     "title": "Sverto",
     "section": "❓ Issues",
     "text": "❓ Issues\nIf you have any problems with the extension, please feel free to create an issue!\nSpecial thanks to Carlos Scheidegger from Posit for his time and advice!"
-  },
-  {
-    "objectID": "examples/barchart/index.html",
-    "href": "examples/barchart/index.html",
-    "title": "Examples: basic barchart",
-    "section": "",
-    "text": "Let’s start with a simple barchart.\nThis isn’t going to be one of those barcharts you’ve seen on TV, what with tick marks and hover effects and such. This one’s just some bars, some labels and a baseline. It will, however, come with some useful features to help us reuse it."
-  },
-  {
-    "objectID": "examples/barchart/index.html#challenges",
-    "href": "examples/barchart/index.html#challenges",
-    "title": "Examples: basic barchart",
-    "section": "Challenges",
-    "text": "Challenges\nThis Svelte component’s pretty basic, though. What else is it missing?\n\nThe height and width are configurable, and the bars resize in response to them, but their CSS transitions are slow to catch up. Ideally we’d have the bars apply the transition when they resize because of a change in data but not in response to a change in chart height or width.\nWe have no axes other than the baseline. That’s fine for a lot of uses, but we might want to add those elements for other uses.\n\nWe could add those elements manually, but the d3-axis package has some helpers for creating axes quickly!\n\nThe bars are all the same colour. We could write a function that converts each bar’s data value to a colour, and use it for the <rect> fill attribute, but the d3-scale-chromatic also has some helpers to do this quickly!"
   }
 ]

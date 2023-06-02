@@ -5,7 +5,52 @@ const sectionChanged = new CustomEvent("quarto-sectionChanged", {
   composed: false,
 });
 
+const layoutMarginEls = () => {
+  // Find any conflicting margin elements and add margins to the
+  // top to prevent overlap
+  const marginChildren = window.document.querySelectorAll(
+    ".column-margin.column-container > * "
+  );
+
+  let lastBottom = 0;
+  for (const marginChild of marginChildren) {
+    if (marginChild.offsetParent !== null) {
+      // clear the top margin so we recompute it
+      marginChild.style.marginTop = null;
+      const top = marginChild.getBoundingClientRect().top + window.scrollY;
+      console.log({
+        childtop: marginChild.getBoundingClientRect().top,
+        scroll: window.scrollY,
+        top,
+        lastBottom,
+      });
+      if (top < lastBottom) {
+        const margin = lastBottom - top;
+        marginChild.style.marginTop = `${margin}px`;
+      }
+      const styles = window.getComputedStyle(marginChild);
+      const marginTop = parseFloat(styles["marginTop"]);
+
+      console.log({
+        top,
+        height: marginChild.getBoundingClientRect().height,
+        marginTop,
+        total: top + marginChild.getBoundingClientRect().height + marginTop,
+      });
+      lastBottom = top + marginChild.getBoundingClientRect().height + marginTop;
+    }
+  }
+};
+
 window.document.addEventListener("DOMContentLoaded", function (_event) {
+  // Recompute the position of margin elements anytime the body size changes
+  if (window.ResizeObserver) {
+    const resizeObserver = new window.ResizeObserver(
+      throttle(layoutMarginEls, 50)
+    );
+    resizeObserver.observe(window.document.body);
+  }
+
   const tocEl = window.document.querySelector('nav.toc-active[role="doc-toc"]');
   const sidebarEl = window.document.getElementById("quarto-sidebar");
   const leftTocEl = window.document.getElementById("quarto-sidebar-toc-left");
@@ -431,39 +476,47 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
     };
   };
 
-  // Find any conflicting margin elements and add margins to the
-  // top to prevent overlap
-  const marginChildren = window.document.querySelectorAll(
-    ".column-margin.column-container > * "
-  );
-
-  const layoutMarginEls = () => {
-    let lastBottom = 0;
-    for (const marginChild of marginChildren) {
-      if (marginChild.offsetParent !== null) {
-        // clear the top margin so we recompute it
-        marginChild.style.marginTop = null;
-        const top = marginChild.getBoundingClientRect().top + window.scrollY;
-        if (top < lastBottom) {
-          const margin = lastBottom - top;
-          marginChild.style.marginTop = `${margin}px`;
-        }
-        const styles = window.getComputedStyle(marginChild);
-        const marginTop = parseFloat(styles["marginTop"]);
-        lastBottom =
-          top + marginChild.getBoundingClientRect().height + marginTop;
-      }
-    }
-  };
-  nexttick(layoutMarginEls);
-
   const tabEls = document.querySelectorAll('a[data-bs-toggle="tab"]');
   for (const tabEl of tabEls) {
     const id = tabEl.getAttribute("data-bs-target");
     if (id) {
-      const columnEl = document.querySelector(`${id} .column-margin`);
+      const columnEl = document.querySelector(
+        `${id} .column-margin, .tabset-margin-content`
+      );
       if (columnEl)
-        tabEl.addEventListener("shown.bs.tab", function (_event) {
+        tabEl.addEventListener("shown.bs.tab", function (event) {
+          const el = event.srcElement;
+          if (el) {
+            const visibleCls = `${el.id}-margin-content`;
+            // walk up until we find a parent tabset
+            let panelTabsetEl = el.parentElement;
+            while (panelTabsetEl) {
+              if (panelTabsetEl.classList.contains("panel-tabset")) {
+                break;
+              }
+              panelTabsetEl = panelTabsetEl.parentElement;
+            }
+
+            if (panelTabsetEl) {
+              const prevSib = panelTabsetEl.previousElementSibling;
+              if (
+                prevSib &&
+                prevSib.classList.contains("tabset-margin-container")
+              ) {
+                const childNodes = prevSib.querySelectorAll(
+                  ".tabset-margin-content"
+                );
+                for (const childEl of childNodes) {
+                  if (childEl.classList.contains(visibleCls)) {
+                    childEl.classList.remove("collapse");
+                  } else {
+                    childEl.classList.add("collapse");
+                  }
+                }
+              }
+            }
+          }
+
           layoutMarginEls();
         });
     }
@@ -614,7 +667,6 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
       manageTransition("TOC", slow);
       manageTransition("quarto-sidebar", slow);
     };
-
     const readerMode = !isReaderMode();
     setReaderModeValue(readerMode);
 
@@ -623,6 +675,7 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
       slowTransition(readerMode);
     }
     highlightReaderToggle(readerMode);
+    hideOverlappedSidebars();
 
     // If we're exiting reader mode, restore the non-slow transition
     if (!readerMode) {
@@ -660,6 +713,9 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
   };
   let localReaderMode = null;
 
+  const tocOpenDepthStr = tocEl?.getAttribute("data-toc-expanded");
+  const tocOpenDepth = tocOpenDepthStr ? Number(tocOpenDepthStr) : 1;
+
   // Walk the TOC and collapse/expand nodes
   // Nodes are expanded if:
   // - they are top level
@@ -685,7 +741,13 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
 
     // Process the collapse state if this is an UL
     if (el.tagName === "UL") {
-      if (depth === 1 || hasActiveChild || prevSiblingIsActiveLink(el)) {
+      if (tocOpenDepth === -1 && depth > 1) {
+        el.classList.add("collapse");
+      } else if (
+        depth <= tocOpenDepth ||
+        hasActiveChild ||
+        prevSiblingIsActiveLink(el)
+      ) {
         el.classList.remove("collapse");
       } else {
         el.classList.add("collapse");
