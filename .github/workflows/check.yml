@@ -1,0 +1,37 @@
+# workflow to test sverto
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+name: sverto-check
+
+jobs:
+  sverto-check:
+    
+    runs-on: ["ubuntu-latest", "macos-latest", "windows-latest"]
+    
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "latest"
+
+      - name: Change into docs folder
+        run: cd docs
+
+      - name: Install Sverto docs npm dependencies
+        run: npm install
+
+      - name: Render sverto docs
+        uses: quarto-dev/quarto-actions/render@v2
