@@ -11,7 +11,11 @@ name: sverto-check
 jobs:
   sverto-check:
     
-    runs-on: ["ubuntu-latest", "macos-latest", "windows-latest"]
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "windows-latest"]
+    
+    runs-on: ${{ matrix.os }}
     
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
