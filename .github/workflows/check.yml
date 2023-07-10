@@ -1,6 +1,7 @@
 # workflow to test sverto
 
 on:
+  workflow_dispatch:
   push:
     branches: [main, dev]
   pull_request:
