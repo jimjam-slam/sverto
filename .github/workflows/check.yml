@@ -31,11 +31,11 @@ jobs:
         with:
           node-version: "latest"
 
-      - name: Change into docs folder
-        run: cd docs
-
       - name: Install Sverto docs npm dependencies
         run: npm install
+        working-directory: ./docs
 
       - name: Render sverto docs
         uses: quarto-dev/quarto-actions/render@v2
+        with:
+          path: docs
