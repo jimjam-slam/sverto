@@ -5,6 +5,8 @@ import * as path from "https://deno.land/std/path/mod.ts";
 const thisScript = path.fromFileUrl(import.meta.url);
 const rollupConfig = path.join(path.dirname(thisScript), "rollup.config.js");
 
+console.log(">>> ROLLUP CONFIIG PATH: " + rollupConfig);
+
 // call rollup with the config file
 const cmd = ["npm", "run", "build", rollupConfig];
 const compileStep = Deno.run({ cmd });
