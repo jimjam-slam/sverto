@@ -12,14 +12,18 @@ end
 function inject_svelte(m)
 
   quarto.log.warning("PROCESSING DOC")
-  quarto.log.warning("QUARTO_PROJECT_RENDER_ALL is ")
-  quarto.log.warning(os.getenv("QUARTO_PROJECT_RENDER_ALL"))
-  quarto.log.warning("QUARTO_PROJECT_OUTPUT_DIR is ")
-  quarto.log.warning(os.getenv("QUARTO_PROJECT_OUTPUT_DIR"))
-  quarto.log.warning("QUARTO_PROJECT_INPUT_FILES is ")
-  quarto.log.warning(os.getenv("QUARTO_PROJECT_INPUT_FILES"))
-  quarto.log.warning("QUARTO_PROJECT_OUTPUT_FILES is ")
-  quarto.log.warning(os.getenv("QUARTO_PROJECT_OUTPUT_FILES"))
+  quarto.log.warning("Profile:")
+  quarto.log.warning(quarto.project.profile)
+  quarto.log.warning("Project dir")
+  quarto.log.warning(quarto.project.directory)
+  quarto.log.warning("Project output dir")
+  quarto.log.warning(quarto.project.output_directory)
+  quarto.log.warning("Offset (curr. doc rel. project root)")
+  quarto.log.warning(quarto.project.offset)
+  quarto.log.warning("Doc in path")
+  quarto.log.warning(quarto.doc.input_file)
+  quarto.log.warning("Doc out path")
+  quarto.log.warning(quarto.doc.output_file)
 
   quarto.log.warning("Path separator is:")
   local sep = pandoc.path.separator
@@ -93,7 +97,7 @@ function inject_svelte(m)
     quarto.doc.include_text("before-body", svelteInsert)
 
     -- now run the svelte compiler... if we're not in a project
-    -- os.execute?
+    -- (use quarto.project.[directory or output_directory])
     -- os.execute("")
     quarto.log.warning("TODO - compile svelte imports")
   end
