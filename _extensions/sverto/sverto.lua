@@ -1,3 +1,5 @@
+quarto.log.warning(">>> sverto.lua START")
+invokeCount = 0
 
 function append_to_file(name, content)
   local file = io.open(name, "a")
@@ -11,7 +13,11 @@ end
 
 function inject_svelte(m)
 
+  invokeCount = invokeCount + 1
   quarto.log.warning("PROCESSING DOC")
+  
+  quarto.log.warning("INVOCATION " .. invokeCount)
+
   quarto.log.warning("Profile:")
   quarto.log.warning(quarto.project.profile)
   quarto.log.warning("Project dir")
@@ -25,8 +31,8 @@ function inject_svelte(m)
   quarto.log.warning("Doc out path")
   quarto.log.warning(quarto.doc.output_file)
 
-  quarto.log.warning("Path separator is:")
   local sep = pandoc.path.separator
+  quarto.log.warning("Path separator is: " .. sep)
 
   -- quarto.log.warning("DOC META:")
   -- quarto.log.warning(m)
@@ -38,7 +44,7 @@ function inject_svelte(m)
 
   -- no files to process? abort
   if m.sverto == nil or m.sverto.use == nil then
-    quarto.log.warning("Define sverto.use in frontmatter")
+    quarto.log.warning("No Svelte files found. To use sverto with this document, add .svelte files to the document frontmatter under the `sverto.use` key.")
     return nil
   end
 
@@ -51,6 +57,8 @@ function inject_svelte(m)
       "sverto.use should be Inlines, not " .. 
       pandoc.utils.type(m["sverto"]["use"]))
   end
+
+  local sveltePaths = ""
 
   -- either add text to start of body (and return nil), or return a rawblock
   -- %s: obj_name
@@ -82,11 +90,14 @@ function inject_svelte(m)
     local obj_name = pandoc.path.split_extension(in_name)
     local compiled_path = pandoc.path.join({
       in_dir,
-      obj_name .. ".sverto.js"
+      obj_name .. ".js"
     })
   
     quarto.log.warning("Processing: " .. in_path ..
       " => " .. compiled_path)
+
+    -- add path to svelte compiler path list
+    sveltePaths = sveltePaths .. in_path .. ":"
 
     local svelteInsert = string.format(svelteInitTemplate,
       obj_name, compiled_path, obj_name, obj_name)
@@ -97,9 +108,19 @@ function inject_svelte(m)
     quarto.doc.include_text("before-body", svelteInsert)
 
     -- now run the svelte compiler... if we're not in a project
-    -- (use quarto.project.[directory or output_directory])
-    -- os.execute("")
-    quarto.log.warning("TODO - compile svelte imports")
+    if quarto.project.directory != nil then
+      quarto.log.warning("Project found; deferring Svelte compilation to post-render script")
+    else
+      local svelteCommand =
+        "npm run build rollup.config.js --" ..
+        ' --quarto-out-path="./"' ..        
+        ' --sverto-in-paths="' .. sveltePaths .. '"'
+      quarto.log.warning("Calling Svelte compiler with command:")
+      quarto.log.warning(svelteCommand)
+      local svelteResult = os.execute(svelteCommand)
+      quarto.log.warning("Svelte compiler finished with code " .. svelteResult)
+      
+    end
   end
 
 end

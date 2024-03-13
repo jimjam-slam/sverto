@@ -1,22 +1,14 @@
 title: Sverto
-author: 360info
+author: James Goldie
 version: 1.0.0
 quarto-version: ">=1.4.0"
 contributes:
-  shortcodes:
-    - create-imports.lua
-  # project:
-  #   project:
-  #     type: website
-  #     pre-render:
-  #       - refresh.ts
-  #       - create-imports.lua
-  #       - compile-imports.ts
-  #   format: sverto-html
-  # formats:
-  #   html:
-  #     filters:
-  #       - cleanup-transform.lua
-  #   revealjs:
-  #     filters:
-  #       - cleanup-transform.lua
+  filters:
+    - sverto.lua
+  # shortcodes:
+  #   - create-imports.lua
+  project:
+    project:
+      type: website
+      # post-render: compile-svelte.ts
+      # blah

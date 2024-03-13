@@ -1,30 +1,30 @@
 project:
   type: sverto
   
-execute:
-  freeze: auto
+# execute:
+#   freeze: auto
 
-website:
-  navbar:
-    background: "#222222"
-    search: true
-    left:
-      - text: "Sverto"
-        file: index.qmd
-      - text: "Examples"
-        menu:
-          - text: "Bar chart"
-            file: examples/barchart/index.qmd
-      - text: Changelog
-        file: news.qmd
-      # - about.qmd
-    right:
-      - icon: github
-        href: https://github.com/jimjam-slam/sverto
+# website:
+#   navbar:
+#     background: "#222222"
+#     search: true
+#     left:
+#       - text: "Sverto"
+#         file: index.qmd
+#       - text: "Examples"
+#         menu:
+#           - text: "Bar chart"
+#             file: examples/barchart/index.qmd
+#       - text: Changelog
+#         file: news.qmd
+#       # - about.qmd
+#     right:
+#       - icon: github
+#         href: https://github.com/jimjam-slam/sverto
 
-format:
-  sverto-html:
-    title-block-banner: "#e1e4e6"
-    theme: default
-    linkcolor: "#36a7e9"
+# format:
+#   sverto-html:
+#     title-block-banner: "#e1e4e6"
+#     theme: default
+#     linkcolor: "#36a7e9"
     

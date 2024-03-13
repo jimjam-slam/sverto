@@ -2,43 +2,41 @@
 title: Svelte example
 author: James Goldie, 360info
 date: last-modified
+filters:
+  - sverto
+sverto:
+  use:
+    - Circles.svelte
+    - Test.svelte
 ---
-
-:::{}
-{{< include /.sverto/example.qmd >}}
-:::
 
 Here's an example of how to use the included example Svelte component, `Circles.svelte`. There are six steps:
 
-### 1. Add a magic block to the top of your document
+### 1. Install Sverto
 
-Add a magic block anywhere in your document that looks like this:
+```bash
+quarto add jimjam-slam/sverto
+```
 
-````markdown
-:::{}
-{{{< include /.sverto/example.qmd >}}}
-:::
-````
+### 2. Add Sverto to your document
 
-Replace `example.qmd` with the path to your Quarto doc within the project. For example:
+In the document frontmatter:
 
-**If your document is here...** | **Use this import path**
---------------------------------|------------------------------------------
-`example.qmd`                   | `/.sverto/example.qmd`
-`posts/animals/turtles.qmd`     | `/.sverto/posts/animals/turtles.qmd`
+```yaml
+---
+# filters:
+#   - sverto
+---
+```
 
-:::{.callout-warning}
-This magic block must be the **first** thing in your document---straight after the frontmatter!
+#### (For projects only: use the sverto project type)
 
-If you ever move or rename your Quarto document, you'll need to update this block with the new location and filename.
-:::
+In `_quarto.yml`:
 
-### 2. Import the component
 
-Import your Svelte file in an OJS block using the `import_svelte` function. Here we call the result `Circles`:
-
-```{ojs}
-Circles = import_svelte("Circles.svelte")
+```yaml
+project:
+  type: sverto
 ```
 
 ### 3. Create a place for your visual to live
