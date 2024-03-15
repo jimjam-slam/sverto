@@ -1,5 +1,4 @@
 quarto.log.warning(">>> sverto.lua START")
-invokeCount = 0
 
 function append_to_file(name, content)
   local file = io.open(name, "a")
@@ -13,11 +12,7 @@ end
 
 function inject_svelte(m)
 
-  invokeCount = invokeCount + 1
   quarto.log.warning("PROCESSING DOC")
-  
-  quarto.log.warning("INVOCATION " .. invokeCount)
-
   quarto.log.warning("Profile:")
   quarto.log.warning(quarto.project.profile)
   quarto.log.warning("Project dir")
@@ -52,10 +47,10 @@ function inject_svelte(m)
   -- quarto.log.warning(m.sverto.use)
 
   -- abort if sverto.use is not a list of MetaInlines
-  if pandoc.utils.type(m["sverto"]["use"]) ~= "List" then
+  if pandoc.utils.type(m.sverto.use) ~= "List" then
     quarto.log.error(
       "sverto.use should be Inlines, not " .. 
-      pandoc.utils.type(m["sverto"]["use"]))
+      pandoc.utils.type(m.sverto.use))
   end
 
   local sveltePaths = ""
@@ -108,13 +103,13 @@ function inject_svelte(m)
     quarto.doc.include_text("before-body", svelteInsert)
 
     -- now run the svelte compiler... if we're not in a project
-    if quarto.project.directory != nil then
+    if quarto.project.directory ~= nil then
       quarto.log.warning("Project found; deferring Svelte compilation to post-render script")
     else
       local svelteCommand =
-        "npm run build rollup.config.js --" ..
-        ' --quarto-out-path="./"' ..        
-        ' --sverto-in-paths="' .. sveltePaths .. '"'
+        "npm run build rollup.config.js -- " ..
+        '--quarto-out-path="./" ' ..
+        '--sverto-in-paths="' .. sveltePaths .. '"'
       quarto.log.warning("Calling Svelte compiler with command:")
       quarto.log.warning(svelteCommand)
       local svelteResult = os.execute(svelteCommand)

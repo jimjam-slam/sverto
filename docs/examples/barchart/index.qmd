@@ -2,11 +2,12 @@
 title: "Examples: basic barchart"
 author: James Goldie
 date: last-modified
+filters:
+  - sverto
+sverto:
+  use:
+    - BarChart.svelte
 ---
-
-:::{}
-{{< include /.sverto/examples/barchart/index.qmd >}}
-:::
 
 Let's start with a simple barchart.
 
@@ -22,9 +23,6 @@ The following code initialises our bar chart.
 
 ```{ojs}
 //| code-fold: true
-
-BarChart =
-  import_svelte("BarChart.svelte")
 
 myBarChart = new BarChart.default({
   target: document.querySelector("#mybarchart"),

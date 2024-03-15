@@ -4,14 +4,10 @@ description: "**Sverto** is an extension for [Quarto](https://quarto.org) that l
 author: James Goldie
 date: last-modified
 format:
-    sverto-html:
+    html:
       toc: true
       toc-location: left
 ---
-
-:::{}
-{{< include /.sverto/index.qmd >}}
-:::
 
 Your Svelte components can seamlessly react to your ObservableJS code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document.
 

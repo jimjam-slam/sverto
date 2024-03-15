@@ -5,10 +5,7 @@ quarto-version: ">=1.4.0"
 contributes:
   filters:
     - sverto.lua
-  # shortcodes:
-  #   - create-imports.lua
   project:
     project:
       type: website
-      # post-render: compile-svelte.ts
-      # blah
+      pre-render: sverto-prerender.lua
