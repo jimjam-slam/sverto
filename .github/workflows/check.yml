@@ -40,7 +40,7 @@ jobs:
         run: mkdir docs/_extensions
 
       - name: Copy Sverto extension into docs 
-        run: cp -Rf _extensions/sverto docs/_extensions/sverto
+        run: cp -rf _extensions/sverto docs/_extensions/sverto
 
       - name: Render sverto docs
         uses: quarto-dev/quarto-actions/render@v2
