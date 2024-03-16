@@ -38,9 +38,11 @@ jobs:
 
       - name: Create docs _extensions folder
         run: mkdir docs/_extensions
+        shell: bash
 
       - name: Copy Sverto extension into docs 
         run: cp -rf _extensions/sverto docs/_extensions/sverto
+        shell: bash
 
       - name: Render sverto docs
         uses: quarto-dev/quarto-actions/render@v2
