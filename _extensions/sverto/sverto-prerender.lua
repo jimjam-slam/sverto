@@ -61,7 +61,6 @@ function reduce_relative_path(path)
   end
 
   local final_path = pandoc.utils.stringify(pandoc.path.join(reduced_path))
-  print("Reduced " .. tostring(path) .. " to " .. final_path)
   return final_path
   
 end
@@ -102,13 +101,11 @@ for input_path in input_paths:gmatch("[^\n]+") do
     Meta = function(m)
 
       if m.sverto == nil or m.sverto.use == nil then
-        print("No Sverto paths in this file")
         return nil
       end
 
       -- single string: add one path
       if type(m.sverto.use) == "string" then
-        print("Adding single path: " .. m.sverto.use)
         local offset_path = offset_svelte_path(m.sverto.use, input_path)
         svelte_paths[offset_path] = offset_path
       end
@@ -133,7 +130,6 @@ end
 -- now concatenate them with : and send them to the svelte compiler
 svelte_path_string = ""
 for _, svelte_path in pairs(svelte_paths) do
-  print("Concatenating path: " .. svelte_path)
   svelte_path_string = svelte_path_string .. svelte_path .. ":"
 end
 
@@ -155,13 +151,10 @@ cmd =
   '--quarto-out-path="' .. os.getenv("QUARTO_PROJECT_OUTPUT_DIR") .. '" ' ..
   '--svelte-in-paths="' .. svelte_path_string .. '"'
 
-print("Calling Svelte compiler via rollup using command: \n\n")
-print(cmd)
-
 local svelteResult = os.execute(cmd)
 
 if svelteResult == nil then
-  print("Svelte compiler finished")
+  print("Svelte compiler finished!")
 else
   print("Svelte compiler finished with code " .. svelteResult)
 end
