@@ -3,7 +3,7 @@
 Render (getting the latest copy of Sverto) and preview using:
 
 ```bash
-cp -r ../_extensions/sverto _extensions/sverto && quarto render
+cp -Rf ../_extensions/sverto _extensions/sverto && quarto render
 
 quarto preview
 ```
