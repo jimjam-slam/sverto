@@ -1,14 +1,14 @@
 
 -- return contents of named file
--- function read_file(name)
---   local file = io.open(name, "r")
---   if file == nil then
---       return ""
---   end
---   local contents = file:read("a")
---   file:close()
---   return contents
--- end
+function read_file(name)
+  local file = io.open(name, "r")
+  if file == nil then
+      return ""
+  end
+  local contents = file:read("a")
+  file:close()
+  return contents
+end
 
 -- get a prefix for calling npm run based on windows or *nix/macos
 -- using path separator: i don't know pandoc.system.os() values
@@ -42,20 +42,47 @@ function file_exists(name)
   end
 end
 
--- offset a relative svelte_path to be relative to the
--- input_path
+-- break a path up into folders, and if you encounter ".." then remove both that
+-- and the preceding piece (unless you're going back past the project root)
+function reduce_relative_path(path)
+
+  local split_path = pandoc.path.split(path)
+  local reduced_path = {}
+  for _, component in pairs(split_path) do
+    local component_str = tostring(component)
+
+    -- if you find a ".." in the path and there are folders left to remove,
+    -- remove one. otheriwse, add it
+    if component_str == ".." and #reduced_path > 0 then
+      table.remove(reduced_path)
+    else
+      table.insert(reduced_path, component_str)
+    end
+  end
+
+  local final_path = pandoc.utils.stringify(pandoc.path.join(reduced_path))
+  print("Reduced " .. tostring(path) .. " to " .. final_path)
+  return final_path
+  
+end
+
+-- offset a relative svelte_path to be relative to the project directory, via
+-- the .qmd it's in
 function offset_svelte_path(svelte_path, input_path)
   
   if not pandoc.path.is_relative(svelte_path) then
     return svelte_path
   end
 
-  -- is relative: offset
-  local offset_path =
-    pandoc.path.make_relative(svelte_path, input_path, false)
-  quarto.log.info("Offsetting svelte path from qmd: " .. input_path .. " + " .. svelte_path .. " => " ..
-    offset_path)
-  return tostring(offset_path)
+  -- is relative: join qmd path and svelte path
+  local qmd_folder = pandoc.path.directory(input_path)
+  local qmd_relative_path = pandoc.path.join({
+    pandoc.utils.stringify(qmd_folder),
+    pandoc.utils.stringify(svelte_path)
+  })
+
+  -- finally reduce any unnecessary ".." out to find duplicates
+  return reduce_relative_path(qmd_relative_path)
 
 end
 
@@ -69,11 +96,10 @@ svelte_paths = {}
 -- for _, input_path in ipairs(input_paths) do
 for input_path in input_paths:gmatch("[^\n]+") do
 
-  print("Looking for Svelte files in " .. input_path)
-  local doc = pandoc.read(input_path, "markdown")
+  local doc = pandoc.read(read_file(input_path), "markdown")
 
   doc:walk {
-    Meta = function (m)
+    Meta = function(m)
 
       if m.sverto == nil or m.sverto.use == nil then
         print("No Sverto paths in this file")
@@ -88,10 +114,11 @@ for input_path in input_paths:gmatch("[^\n]+") do
       end
 
       -- list: add each unique path, offsetting it from its input_path .qmd
-      if pandoc.utils.type(m.sverto.use) ~= "List" then
+      if pandoc.utils.type(m.sverto.use) == "List" then
         for i, svelte_path in ipairs(m.sverto.use) do
-          print("Adding path from list: " .. svelte_path)
-          local offset_path = offset_svelte_path(svelte_path, input_path)
+          local offset_path = offset_svelte_path(
+            pandoc.utils.stringify(svelte_path),
+            input_path)
           svelte_paths[offset_path] = offset_path
         end
       end
@@ -105,7 +132,8 @@ end
 
 -- now concatenate them with : and send them to the svelte compiler
 svelte_path_string = ""
-for _, svelte_path in ipairs(svelte_paths) do
+for _, svelte_path in pairs(svelte_paths) do
+  print("Concatenating path: " .. svelte_path)
   svelte_path_string = svelte_path_string .. svelte_path .. ":"
 end
 
