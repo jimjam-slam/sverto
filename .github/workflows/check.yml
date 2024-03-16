@@ -36,6 +36,9 @@ jobs:
         run: npm install
         working-directory: ./docs
 
+      - name: Create docs _extensions folder
+        run: mkdir docs/_extensions
+
       - name: Copy Sverto extension into docs 
         run: cp -Rf _extensions/sverto docs/_extensions/sverto
 
