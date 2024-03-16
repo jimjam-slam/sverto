@@ -29,31 +29,45 @@ const production = !process.env.ROLLUP_WATCH;
 // const uniqueSvelteFiles = [... new Set(svelteFiles)]
 
 console.log("Command line args:")
-console.log(commandLineArgs)
+console.log(process.argv)
 
-console.log("Env vars:")
-console.log("SVERTO_INPUT_PATHS=" + process.process.env.SVERTO_INPUT_PATHS)
-console.log("QUARTO_RENDER_PATH=" + process.process.env.QUARTO_RENDER_PATH)
+/* get svelte input paths (split by :) from cmd line arg */
+
+const svelteInputPaths = process.argv
+	.filter(d => d.startsWith("--svelte-in-paths="))
+	.map(d => d.replace("--svelte-in-paths=", ""))
+	.join(":")
+	.split(":")
+
+// if no svelte paths, bail out early
+if (svelteInputPaths == undefined || svelteInputPaths.length == 0) {
+	console.log("No Svelte filtes found; skipping Svelte compilation")
+	Deno.exit(0)
+}
+
+/* get quarto render dir from cmd line arg */
+
+let quartoRenderPath = process.argv
+	.filter(d => d.startsWith("--quarto-out-path="))
+	.map(d => d.replace("--quarto-out-path=", ""))
+
+if (quartoRenderPath == undefined || quartoRenderPath.length != 1) {
+	console.error("There should be 1 --quarto-out-path argument.")
+}
+quartoRenderPath = quartoRenderPath[0]
 
 // we export an array of rollup configs: one for each input svelte file
-export default commandLineArgs => {
-	if (commandLineArgs.svertoPaths != undefined &&
-			commandLineArgs.quartoOutDir != undefined) {
+// export default process.argv => {
+// 		return svelteInputPaths.map(
 
-		console.log("Sverto paths found:")
-		console.log(commandLineArgs.svertoPaths)
-		console.log("Quarto output dir found:")
-		console.log(commandLineArgs.quartoOutDir)
-		console.log("Returning Svelte compiler config...")
-
-		return uniqueSvelteFiles.map(
+export default svelteInputPaths.map(
 
 			svelteFile => ({
 				input: svelteFile,
 				output: {
 					format: "es",
 					dir: path.join(
-						quartoOutDir,
+						quartoRenderPath,
 						path.dirname(svelteFile)),
 					sourcemap: true
 				},
@@ -76,9 +90,6 @@ export default commandLineArgs => {
 				]
 			}))
 
-	} else {
-		console.error("Error: need both Svelte input files and Quarto output dir")
-	}
-}
+// }
 
 

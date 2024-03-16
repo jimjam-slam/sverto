@@ -59,20 +59,24 @@ function inject_svelte(m)
   -- %s: obj_name
   -- %s: file_name, adapted for output path (and .svelte => .js)
   local svelteInitTemplate = [[
-    <script>
+    <script type="module">
       // when the doc is ready, find quarto's ojs and inject svelte import
       document.addEventListener("DOMContentLoaded", () => {
-        %s = await import("%s")
+        
+        import("%s").then(svelteModule => {
+          
+          const ojsModule = window._ojs?.ojsConnector?.mainModule
+          if (ojsModule === undefined) {
+            console.error("Quarto OJS module not found")
+          }
+  
+          // TODO - check to see if there's already a variable with that name
+          const svertoImport = ojsModule?.variable()
+          svertoImport?.define("%s", svelteModule)
 
-        const ojsModule = window._ojs?.ojsConnector?.mainModule
-        if (ojsModule === undefined) {
-          console.error("Quarto OJS module not found")
-        }
+        })
 
-        // TODO - check to see if there's already a variable with that name
-        const svertoImport = ojsModule?.variable()
-        svertoImport?.define("%s", %s)
-      }
+      })
     </script>
   ]]
 
@@ -95,7 +99,7 @@ function inject_svelte(m)
     sveltePaths = sveltePaths .. in_path .. ":"
 
     local svelteInsert = string.format(svelteInitTemplate,
-      obj_name, compiled_path, obj_name, obj_name)
+    compiled_path, obj_name)
 
     quarto.log.warning("INJECTION:")
     quarto.log.warning(svelteInsert)
@@ -109,7 +113,7 @@ function inject_svelte(m)
       local svelteCommand =
         "npm run build rollup.config.js -- " ..
         '--quarto-out-path="./" ' ..
-        '--sverto-in-paths="' .. sveltePaths .. '"'
+        '--svelte-in-paths="' .. sveltePaths .. '"'
       quarto.log.warning("Calling Svelte compiler with command:")
       quarto.log.warning(svelteCommand)
       local svelteResult = os.execute(svelteCommand)

@@ -153,10 +153,15 @@ cmd =
   "npm run build " ..
   rollup_config .. " -- " ..
   '--quarto-out-path="' .. os.getenv("QUARTO_PROJECT_OUTPUT_DIR") .. '" ' ..
-  '--sverto-in-paths="' .. svelte_path_string .. '"'
+  '--svelte-in-paths="' .. svelte_path_string .. '"'
 
 print("Calling Svelte compiler via rollup using command: \n\n")
 print(cmd)
 
 local svelteResult = os.execute(cmd)
-print("Svelte compiler finished with code " .. svelteResult)
+
+if svelteResult == nil then
+  print("Svelte compiler finished")
+else
+  print("Svelte compiler finished with code " .. svelteResult)
+end
