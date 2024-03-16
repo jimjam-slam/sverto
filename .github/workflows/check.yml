@@ -36,6 +36,9 @@ jobs:
         run: npm install
         working-directory: ./docs
 
+      - name: Copy Sverto extension into docs 
+        run: cp -Rf _extensions/sverto docs/_extensions/sverto
+
       - name: Render sverto docs
         uses: quarto-dev/quarto-actions/render@v2
         with:
