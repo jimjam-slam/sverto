@@ -46,5 +46,6 @@ jobs:
 
       - name: Render sverto docs
         uses: quarto-dev/quarto-actions/render@v2
+        shell: bash
         with:
           path: docs
