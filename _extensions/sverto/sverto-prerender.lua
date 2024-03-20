@@ -101,19 +101,10 @@ for input_path in input_paths:gmatch("[^\n]+") do
 
       -- add each unique path, resolving relative project location
       for _, svelte_path in ipairs(sverto_use) do
-
         local offset_path = offset_svelte_path(
           pandoc.utils.stringify(svelte_path),
           input_path)
-        
-        if type(svelte_path) ~= "string" then
-          print(
-            "Error: sverto.use entry should be a string, not a " ..
-            type(svelte_path))
-        end
-
         svelte_paths[offset_path] = offset_path
-
       end
 
     end
@@ -142,6 +133,7 @@ cmd =
   get_cmd_prefix() ..
   "npm run build " ..
   rollup_config .. " -- " ..
+  -- "--silent " ..
   '--quarto-out-path="' .. os.getenv("QUARTO_PROJECT_OUTPUT_DIR") .. '" ' ..
   '--svelte-in-paths="' .. svelte_path_string .. '"'
 
@@ -150,8 +142,8 @@ print(cmd)
 
 local svelteResult = os.execute(cmd)
 
-if svelteResult == nil then
-  print("Svelte compiler finished!")
+if svelteResult == nil or svelteResult == true then
+  print("Sverto pre-render finished!")
 else
-  print("Svelte compiler finished with code " .. svelteResult)
+  print("Svelte compiler finished with code " .. tostring(svelteResult))
 end

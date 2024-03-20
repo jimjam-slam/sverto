@@ -16,6 +16,7 @@ const svelteInputPaths = process.argv
 	.map(d => d.replace("--svelte-in-paths=", ""))
 	.join(":")
 	.split(":")
+	.filter(d => d != "")
 
 // if no svelte paths, bail out early
 if (svelteInputPaths == undefined || svelteInputPaths.length == 0) {
@@ -35,7 +36,6 @@ if (quartoRenderPath == undefined || quartoRenderPath.length != 1) {
 quartoRenderPath = quartoRenderPath[0]
 
 /* export an array of rollup configs: one for each input svelte file */
-
 export default svelteInputPaths.map(
 
 	svelteFile => ({

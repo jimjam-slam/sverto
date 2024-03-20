@@ -98,6 +98,7 @@ function inject_svelte_and_compile(m)
     else
       local svelteCommand =
         "npm run build rollup.config.js -- " ..
+        -- "--silent " ..
         '--quarto-out-path="./" ' ..
         '--svelte-in-paths="' .. sveltePaths .. '"'
       local svelteResult = os.execute(svelteCommand)
