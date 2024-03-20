@@ -133,7 +133,6 @@ cmd =
   get_cmd_prefix() ..
   "npm run build " ..
   rollup_config .. " -- " ..
-  -- "--silent " ..
   '--quarto-out-path="' .. os.getenv("QUARTO_PROJECT_OUTPUT_DIR") .. '" ' ..
   '--svelte-in-paths="' .. svelte_path_string .. '"'
 

@@ -9,64 +9,62 @@ const path = require('node:path')
 const production = !process.env.ROLLUP_WATCH;
 
 
-/* get svelte input paths (split by :) from cmd line arg */
+/* export an array of rollup configs - one for each input svelte file - using
+   additional command line args supplied from lua */
+export default cmd => {
 
-const svelteInputPaths = process.argv
-	.filter(d => d.startsWith("--svelte-in-paths="))
-	.map(d => d.replace("--svelte-in-paths=", ""))
-	.join(":")
-	.split(":")
-	.filter(d => d != "")
+	const svelteInputPaths =
+		cmd["svelte-in-paths"].split(":").filter(d => d != "")
 
-// if no svelte paths, bail out early
-if (svelteInputPaths == undefined || svelteInputPaths.length == 0) {
-	console.log("No Svelte filtes found; skipping Svelte compilation")
-	Deno.exit(0)
+	// if no svelte paths, bail out early
+	if (svelteInputPaths == undefined || svelteInputPaths.length == 0) {
+		console.log("No Svelte filtes found; skipping Svelte compilation")
+		process.exit(0)
+	}
+
+	/* get quarto render dir from cmd line arg */
+	const quartoRenderPath = cmd["quarto-out-path"]
+	if (quartoRenderPath == undefined) {
+		console.error(
+			"Error: supply a --quarto-out-path. Please report this to " +
+			"the Sverto developer.")
+		process.exit(1)
+	}
+
+	return svelteInputPaths.map(
+
+		svelteFile => ({
+			input: svelteFile,
+			output: {
+				format: "es",
+				dir: path.join(
+					quartoRenderPath,
+					path.dirname(svelteFile)),
+				sourcemap: true
+			},
+			plugins: [
+				svelte({
+					// css is added to the js bundle instead
+					emitCss: false,
+					compilerOptions: {
+						// required for ojs reactivity
+						accessors: true,
+						dev: !production,
+					}
+				}),
+				resolve({
+					browser: true,
+					dedupe: ["svelte"]
+				}),
+				commonjs(),
+				production && terser()
+			]
+		})
+	
+	)
+
 }
 
-/* get quarto render dir from cmd line arg */
-
-let quartoRenderPath = process.argv
-	.filter(d => d.startsWith("--quarto-out-path="))
-	.map(d => d.replace("--quarto-out-path=", ""))
-
-if (quartoRenderPath == undefined || quartoRenderPath.length != 1) {
-	console.error("There should be 1 --quarto-out-path argument.")
-}
-quartoRenderPath = quartoRenderPath[0]
-
-/* export an array of rollup configs: one for each input svelte file */
-export default svelteInputPaths.map(
-
-	svelteFile => ({
-		input: svelteFile,
-		output: {
-			format: "es",
-			dir: path.join(
-				quartoRenderPath,
-				path.dirname(svelteFile)),
-			sourcemap: true
-		},
-		plugins: [
-			svelte({
-				// css is added to the js bundle instead
-				emitCss: false,
-				compilerOptions: {
-					// required for ojs reactivity
-					accessors: true,
-					dev: !production,
-				}
-			}),
-			resolve({
-				browser: true,
-				dedupe: ["svelte"]
-			}),
-			commonjs(),
-			production && terser()
-		]
-	})
-
-)
 
 
 
