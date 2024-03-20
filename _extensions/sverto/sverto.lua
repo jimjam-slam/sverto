@@ -11,7 +11,7 @@ end
 
 -- inject_svelte: a pandoc filter that extracts svelte files named in the doc
 -- frontmatter and adds javascript blocks to import them as es modules
-function inject_svelte(m)
+function inject_svelte_and_compile(m)
 
   if not quarto.doc.isFormat("html") then
     quarto.log.warning("Sverto shortcode ignored for non-HTML output")
@@ -98,5 +98,5 @@ function inject_svelte(m)
 end
 
 return {
-  Meta = inject_svelte
+  Meta = inject_svelte_and_compile
 }

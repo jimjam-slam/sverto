@@ -42,47 +42,30 @@ function file_exists(name)
   end
 end
 
--- break a path up into folders, and if you encounter ".." then remove both that
--- and the preceding piece (unless you're going back past the project root)
-function reduce_relative_path(path)
-
-  local split_path = pandoc.path.split(path)
-  local reduced_path = {}
-  for _, component in pairs(split_path) do
-    local component_str = tostring(component)
-
-    -- if you find a ".." in the path and there are folders left to remove,
-    -- remove one. otheriwse, add it
-    if component_str == ".." and #reduced_path > 0 then
-      table.remove(reduced_path)
-    else
-      table.insert(reduced_path, component_str)
-    end
-  end
-
-  local final_path = pandoc.utils.stringify(pandoc.path.join(reduced_path))
-  return final_path
-  
-end
-
--- offset a relative svelte_path to be relative to the project directory, via
--- the .qmd it's in
+-- offset a relative `svelte_path` to a .qmd `input_path`, or an absolute
+-- `svelte_path` to the project path. then normalize.
 function offset_svelte_path(svelte_path, input_path)
   
-  if not pandoc.path.is_relative(svelte_path) then
-    return svelte_path
+  -- offset from either input .qmd (if relative) or project dir (if absolute)
+  -- local offset_from = pandoc.system.get_working_directory()
+  local offset_from = "./"
+  if pandoc.path.is_relative(svelte_path) then
+    -- offset_from = pandoc.path.directory(input_path)
+    offset_from = pandoc.path.join({
+      offset_from,
+      pandoc.path.directory(input_path)
+    })
   end
-
-  -- is relative: join qmd path and svelte path
-  local qmd_folder = pandoc.path.directory(input_path)
-  local qmd_relative_path = pandoc.path.join({
-    pandoc.utils.stringify(qmd_folder),
+  
+  -- join offset and svelt paths
+  local relative_path = pandoc.path.join({
+    offset_from,
     pandoc.utils.stringify(svelte_path)
   })
-
-  -- finally reduce any unnecessary ".." out to find duplicates
-  return reduce_relative_path(qmd_relative_path)
-
+  
+  -- normalize and return
+  local final_path = pandoc.path.normalize(relative_path)
+  return final_path
 end
 
 input_paths = os.getenv("QUARTO_PROJECT_INPUT_FILES")
@@ -104,21 +87,33 @@ for input_path in input_paths:gmatch("[^\n]+") do
         return nil
       end
 
-      -- single string: add one path
-      if type(m.sverto.use) == "string" then
-        local offset_path = offset_svelte_path(m.sverto.use, input_path)
-        svelte_paths[offset_path] = offset_path
+      local sverto_use
+      if pandoc.utils.type(m.sverto.use) == "List" then
+        sverto_use = m.sverto.use
+      elseif type(m.sverto.use) == "string" then
+        sverto_use = { m.sverto.use }
+      else
+        print(
+          "Sverto error: sverto.use key should be either a string path or " .. "a list of string paths.")
+        return nil
       end
 
+      -- single string: add one path
+      -- if type(m.sverto.use) == "string" then
+      --   local offset_path = offset_svelte_path(m.sverto.use, input_path)
+      --   sverto_use[offset_path] = offset_path
+      -- end
+
       -- list: add each unique path, offsetting it from its input_path .qmd
-      if pandoc.utils.type(m.sverto.use) == "List" then
-        for i, svelte_path in ipairs(m.sverto.use) do
+      -- if pandoc.utils.type(m.sverto.use) == "List" then
+        -- for i, svelte_path in ipairs(m.sverto.use) do
+        for i, svelte_path in ipairs(sverto_use) do
           local offset_path = offset_svelte_path(
             pandoc.utils.stringify(svelte_path),
             input_path)
           svelte_paths[offset_path] = offset_path
         end
-      end
+      -- end
 
       return nil
 
