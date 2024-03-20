@@ -39,23 +39,51 @@ This will add the extension itself (which includes some project scripts) to the 
 
 ## 🎉 Use
 
-Here's the short way to add Svelte component you've written to a Quarto doc:
+### Step 1: add Svelte to your document
 
-1. Add a magic placeholder block to your document with a [Quarto include](https://quarto.org/docs/authoring/includes.html) to the path to your Quarto doc, prefixed with `/.sverto/`. For example:
+In the document frontmatter, add `sverto` to `filters`, and add one or more `.svelte` files to `sverto.use`:
 
-    ```
-    :::{}
-    {{< include /.sverto/example.qmd >}}
-    :::
-    ```
+```yaml
+---
+title: "My document"
+filters: ["sverto"]
+sverto:
+  use:
+    example.svelte
+---
+```
 
-2. Import your Svelte component in OJS with `Component = import_svelte("Component.svelte")`
-3. Add a target block for your visual using `:::` and give it an `#id`
-4. Instantiate the Svelte component with `myVisual = Component.default()` using some default props and your target block
-5. Update the instantiated component with `myVisual.propName`
-6. Render your Quarto website as usual with `quarto render` or `quarto preview`.
+### Step 2: bring your Svelte component to life
 
-**To see this all in practice, check out [`example.qmd`](./example.qmd).**
+Use an [Observable JS](https://quarto.org/docs/interactive/ojs/) chunk to _instantiate_ your Svelte component.
+
+````js
+```{ojs}
+myChart = new example.default({
+  target: document.querySelector("#chart")
+  props: {
+    chartData: {}
+  }
+})
+```
+
+:::{#chart}
+:::
+````
+
+- the `target` is where it will appear. This needs to be an existing part of the document — you can put a [Pandoc div](https://quarto.org/docs/authoring/markdown-basics.html#divs-and-spans) right after this code, or put one anywhere else on the page
+- `example` is the file name of your Svelte component, without the file extension
+- if your Svelte component has any `props`, add default values here too. Don't put reactive OJS code in here; we'll update the props separately!
+
+### Step 3: make your visual reactive 
+
+If your visual has `props` that allow it to change or transition in response to other OJS code, you can update it by assigning the prop directly.
+
+For example, if we have a dataset called `myData` in OJS, and a year slider called `selectedYear`, we can change a prop called `chartData` whenever the user selects a new year like:
+
+````js
+myChart.chartData = myData.filter(d => d.year == selectedYear)
+````
 
 > **Note:** `quarto preview` won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
 > 
