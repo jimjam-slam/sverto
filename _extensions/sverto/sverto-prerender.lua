@@ -83,6 +83,7 @@ for input_path in input_paths:gmatch("[^\n]+") do
   doc:walk {
     Meta = function(m)
 
+      -- confirm sverto.use is a string or list
       if m.sverto == nil or m.sverto.use == nil then
         return nil
       end
@@ -94,28 +95,26 @@ for input_path in input_paths:gmatch("[^\n]+") do
         sverto_use = { m.sverto.use }
       else
         print(
-          "Sverto error: sverto.use key should be either a string path or " .. "a list of string paths.")
+          "Sverto error: sverto.use key should be either a string path or " .. "a list of string paths, not " .. pandoc.utils.type(m.sverto.use))
         return nil
       end
 
-      -- single string: add one path
-      -- if type(m.sverto.use) == "string" then
-      --   local offset_path = offset_svelte_path(m.sverto.use, input_path)
-      --   sverto_use[offset_path] = offset_path
-      -- end
+      -- add each unique path, resolving relative project location
+      for _, svelte_path in ipairs(sverto_use) do
 
-      -- list: add each unique path, offsetting it from its input_path .qmd
-      -- if pandoc.utils.type(m.sverto.use) == "List" then
-        -- for i, svelte_path in ipairs(m.sverto.use) do
-        for i, svelte_path in ipairs(sverto_use) do
-          local offset_path = offset_svelte_path(
-            pandoc.utils.stringify(svelte_path),
-            input_path)
-          svelte_paths[offset_path] = offset_path
+        local offset_path = offset_svelte_path(
+          pandoc.utils.stringify(svelte_path),
+          input_path)
+        
+        if type(svelte_path) ~= "string" then
+          print(
+            "Error: sverto.use entry should be a string, not a " ..
+            type(svelte_path))
         end
-      -- end
 
-      return nil
+        svelte_paths[offset_path] = offset_path
+
+      end
 
     end
   }

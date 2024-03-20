@@ -25,11 +25,22 @@ function inject_svelte_and_compile(m)
   end
 
   -- abort if sverto.use is not a list of MetaInlines
-  if pandoc.utils.type(m.sverto.use) ~= "List" then
+  local sverto_use
+  if pandoc.utils.type(m.sverto.use) == "List" then
+    sverto_use = m.sverto.use
+  elseif type(m.sverto.use) == "string" then
+    sverto_use = { m.sverto.use }
+  else
     quarto.log.error(
       "sverto.use should be Inlines, not " .. 
       pandoc.utils.type(m.sverto.use))
   end
+
+  -- if pandoc.utils.type(m.sverto.use) ~= "List" then
+  --   quarto.log.error(
+  --     "Sverto error: sverto.use key should be either a string path or " ..
+  --     "a list of string paths, not " .. pandoc.utils.type(m.sverto.use))
+  -- end
 
   local sveltePaths = ""
 
