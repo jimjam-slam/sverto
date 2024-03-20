@@ -23,7 +23,6 @@ The following code initialises our bar chart.
 
 ```{ojs}
 //| code-fold: true
-
 myBarChart = new BarChart.default({
   target: document.querySelector("#mybarchart"),
   props: {
@@ -33,7 +32,7 @@ myBarChart = new BarChart.default({
     barWidth: 25,
     barColor: "#36a7e9"
   }
-});
+})
 ```
 
 :::{#mybarchart}
