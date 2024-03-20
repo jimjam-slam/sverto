@@ -14,7 +14,7 @@ const production = !process.env.ROLLUP_WATCH;
 export default cmd => {
 
 	const svelteInputPaths =
-		cmd["svelte-in-paths"].split(":").filter(d => d != "")
+		cmd["configSvelteInPaths"].split(":").filter(d => d != "")
 
 	// if no svelte paths, bail out early
 	if (svelteInputPaths == undefined || svelteInputPaths.length == 0) {
@@ -23,10 +23,10 @@ export default cmd => {
 	}
 
 	/* get quarto render dir from cmd line arg */
-	const quartoRenderPath = cmd["quarto-out-path"]
+	const quartoRenderPath = cmd["configQuartoOutPath"]
 	if (quartoRenderPath == undefined) {
 		console.error(
-			"Error: supply a --quarto-out-path. Please report this to " +
+			"Error: supply a --configQuartoOutPath. Please report this to " +
 			"the Sverto developer.")
 		process.exit(1)
 	}
@@ -60,7 +60,7 @@ export default cmd => {
 				production && terser()
 			]
 		})
-	
+
 	)
 
 }

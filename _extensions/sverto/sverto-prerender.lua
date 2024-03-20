@@ -133,11 +133,8 @@ cmd =
   get_cmd_prefix() ..
   "npm run build " ..
   rollup_config .. " -- " ..
-  '--quarto-out-path="' .. os.getenv("QUARTO_PROJECT_OUTPUT_DIR") .. '" ' ..
-  '--svelte-in-paths="' .. svelte_path_string .. '"'
-
-print("Preparing to run rollup with command:")
-print(cmd)
+  '--configQuartoOutPath="' .. os.getenv("QUARTO_PROJECT_OUTPUT_DIR") .. '" ' ..
+  '--configSvelteInPaths="' .. svelte_path_string .. '"'
 
 local svelteResult = os.execute(cmd)
 
