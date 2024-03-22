@@ -49,21 +49,18 @@ title: "My document"
 filters: ["sverto"]
 sverto:
   use:
-    example.svelte
+    - example.svelte
 ---
 ```
 
 ### Step 2: bring your Svelte component to life
 
-Use an [Observable JS](https://quarto.org/docs/interactive/ojs/) chunk to _instantiate_ your Svelte component.
+Use an [Observable JS](https://quarto.org/docs/interactive/ojs/) chunk to _construct_ your Svelte component.
 
 ````js
 ```{ojs}
 myChart = new example.default({
   target: document.querySelector("#chart")
-  props: {
-    chartData: {}
-  }
 })
 ```
 
@@ -73,16 +70,17 @@ myChart = new example.default({
 
 - the `target` is where it will appear. This needs to be an existing part of the document — you can put a [Pandoc div](https://quarto.org/docs/authoring/markdown-basics.html#divs-and-spans) right after this code, or put one anywhere else on the page
 - `example` is the file name of your Svelte component, without the file extension
-- if your Svelte component has any `props`, add default values here too. Don't put reactive OJS code in here; we'll update the props separately!
 
-### Step 3: make your visual reactive 
+### Step 3: make your component reactive 
 
-If your visual has `props` that allow it to change or transition in response to other OJS code, you can update it by assigning the prop directly.
+If your component has `props` that allow it to change or transition in response to other OJS code, you can update them by assigning the prop directly.
 
-For example, if we have a dataset called `myData` in OJS, and a year slider called `selectedYear`, we can change a prop called `chartData` whenever the user selects a new year like:
+For example, if we have a dataset called `myData` in OJS, and a year slider called `selectedYear`, we might change a prop called `chartData` whenever the user selects a new year like:
 
 ````js
+```{ojs}
 myChart.chartData = myData.filter(d => d.year == selectedYear)
+```
 ````
 
 > **Note:** `quarto preview` won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
