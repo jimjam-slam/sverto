@@ -26,6 +26,8 @@ jobs:
 
       - name: Install Quarto
         uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.5.25
 
       - name: Install Node
         uses: actions/setup-node@v4
