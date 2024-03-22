@@ -23,7 +23,7 @@ website:
         href: https://github.com/jimjam-slam/sverto
 
 format:
-  sverto-html:
+  html:
     title-block-banner: "#e1e4e6"
     theme: default
     linkcolor: "#36a7e9"
