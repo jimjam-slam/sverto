@@ -13,8 +13,10 @@ website:
         file: index.qmd
       - text: "Examples"
         menu:
-          - text: "Bar chart"
+          - text: "Simple bar chart"
             file: examples/barchart/index.qmd
+          - text: "Time series"
+            file: examples/time-series/index.qmd
       - text: Changelog
         file: news.qmd
       # - about.qmd
