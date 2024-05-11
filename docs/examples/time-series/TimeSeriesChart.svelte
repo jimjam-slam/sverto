@@ -1,32 +1,20 @@
 <script>
-  // import { fly } from "svelte/transition";
+  import { blur } from "svelte/transition"
   import { extent } from "d3-array"
-  import { scaleLinear } from "d3-scale"
-  import { scaleSequential } from "d3-scale"
+  import { scaleLinear, scaleSequential } from "d3-scale"
   import { interpolateYlGnBu, interpolateYlOrRd, select, axisLeft, axisBottom, format, tickFormat, formatLocale } from "d3"
-  import { regressionLinear } from "d3-regression"
-  // , 
-  // should ba array of objects with:
-  // x
-  // y
-  // colour
-  // tooltip text maybe?
+
+  // should be an array of objects with:
+  // year
+  // value
   export let data = []
+  export let valueSuffix = "°C"
   export let colourScheme = "cool" // or warm
   $: console.log(colourScheme)
   $: colourRamp = (colourScheme == "cool") ?
     interpolateYlGnBu :
     interpolateYlOrRd
 
-  // calculate trend line from data
-  const regress = regressionLinear()
-    .x(d => d.date)
-    .y(d => d.value)
-    .domain(extent(data.map(d => d.date)))
-
-  $: trendLine = regress(data)
-
-  
   // dimensions bound to size of container
   let height = 500
   let width = 300
@@ -51,7 +39,7 @@
 
   // temperature formatter (for x-axis)
   const tempFormat = formatLocale({
-    currency: ["", "°C"]
+    currency: ["", valueSuffix]
   });
 
   // axes
@@ -89,13 +77,16 @@
   <svg width={width} height={height}>
 
     <g>
-      {#each data as { year, value }}
+      {#each data as { year, value } (year) }
       <!-- points go here-->
       <circle
         cx="{xScale(year)}px"
         cy="{yScale(value)}px"
         r="5"
-        fill="{colourScale(value)}">
+        fill="{colourScale(value)}"
+        in:blur={{ duration: 500 }}
+        out:blur={{ duration: 500 }}
+        >
       </circle>
       {/each}
     </g>
