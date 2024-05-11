@@ -152,10 +152,9 @@ How did we get this chart going again?
 1. Add `filters: ["sverto"]` to our frontmatter, plus the name of our Svelte file to `sverto.use`
 2. Created the chart with `myBarChart = new BarChart.default()`, giving it a `target` to place the chart in
 3. We created the `target` with a Pandoc div: `:::{#mybarchart}`
-4. We customised the bar chart with `myBarChart.propName`
+4. We customised the bar chart by assigning to `myBarChart.propName`
 
 # Challenges
-
 
 Here's the code in the Svelte file:
 
@@ -165,7 +164,7 @@ Here's the code in the Svelte file:
 ```
 :::
 
-if you'd like to start practising your Svelte, start with [the official tutorial](https://learn.svelte.dev/tutorial/welcome-to-svelte). Sverto is designed to make using Svelte components in Quarto as easy as working in the tutorial.
+If you'd like to start practising your Svelte, start with [the official tutorial](https://learn.svelte.dev/tutorial/welcome-to-svelte). Sverto is designed to make using Svelte components in Quarto as easy as working in the tutorial.
 
 This Svelte component's pretty basic, though. What else is it missing?
 
@@ -189,3 +188,9 @@ The bars are all the same colour. We could write a function that converts each b
 
 - running `npm install d3-scale-chromatic` in the terminal, then
 - adding `import XXXX from "d3-scale-chromatic"`, where `XXXX` is the name of the thing you want to import (or `*`).
+
+### A more complex example
+
+If you'd like to see an example that addresses some of these shortcomings, check out the [time series chart example](../time-series), which automatically resizes and adds axes that transition!
+
+[See the time series chart →]((../time-series)){.btn .btn-success}

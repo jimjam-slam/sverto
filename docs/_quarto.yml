@@ -15,7 +15,7 @@ website:
         menu:
           - text: "Simple bar chart"
             file: examples/barchart/index.qmd
-          - text: "Time series"
+          - text: "Time series chart"
             file: examples/time-series/index.qmd
       - text: Changelog
         file: news.qmd
@@ -26,7 +26,8 @@ website:
 
 format:
   html:
-    title-block-banner: "#e1e4e6"
-    theme: default
+    # title-block-banner: "#e1e4e6"
+    title-block-banner: true
+    theme: [default, style.scss]
     linkcolor: "#36a7e9"
     
