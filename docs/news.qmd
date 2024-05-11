@@ -2,13 +2,19 @@
 title: News
 author: James Goldie
 date: last-modified
-format:
-    html:
-      title-block-banner: "#e1e4e6"
-      linkcolor: "#36a7e9"
 ---
 
-## (Unreleased) Sverto 0.0.3
+## Sverto 1.0.0
+
+- Big refactor of Sverto makes it easier to use and more compatible with Quarto's other features!
+  - Use Sverto in a Quarto document by adding `sverto` to `filters` in the document frontmatter
+  - Add Svelte files to a document using the frontmatter key `sverto.use`
+  - No need for magic blocks anymore!
+  - When working in a website project, optionally use the `sverto` project type to cut down on duplicate Svelte compilation Quarto documents
+- Works properly with Quarto includes
+- **Requires Quarto pre-release 1.5.25 or higher on Windows,** but should work fine on Quarto 1.4 on macOS and Linux.
+
+## Sverto 0.0.3
 
 - Migrated from [`360-info/sverto`](https://github.comn/360-info/sverto) to [`jimjam-slam/sverto`](htps://github.com/jimjam-slam/sverto). Old GitHub links are maintained.
 

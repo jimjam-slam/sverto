@@ -13,8 +13,10 @@ website:
         file: index.qmd
       - text: "Examples"
         menu:
-          - text: "Bar chart"
+          - text: "Simple bar chart"
             file: examples/barchart/index.qmd
+          - text: "Time series chart"
+            file: examples/time-series/index.qmd
       - text: Changelog
         file: news.qmd
       # - about.qmd
@@ -23,8 +25,9 @@ website:
         href: https://github.com/jimjam-slam/sverto
 
 format:
-  sverto-html:
-    title-block-banner: "#e1e4e6"
-    theme: default
+  html:
+    # title-block-banner: "#e1e4e6"
+    title-block-banner: true
+    theme: [default, style.scss]
     linkcolor: "#36a7e9"
     

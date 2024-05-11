@@ -2,101 +2,117 @@
 title: "Examples: basic barchart"
 author: James Goldie
 date: last-modified
+filters:
+  - sverto
+sverto:
+  use:
+    - BarChart.svelte
 ---
-
-:::{}
-{{< include /.sverto/examples/barchart/index.qmd >}}
-:::
 
 Let's start with a simple barchart.
 
 This isn't going to be one of those barcharts you've seen on TV, what with tick marks and hover effects and such. This one's just some bars, some labels and a baseline. It will, however, come with some useful features to help us reuse it.
 
-::::: {.columns .column-page}
+If you'd like to see how the bar chart works internally, the code for it is shown at the bottom of this page.
 
-# Try it out
+But for the purposes of this example, all you need to know about is the chart's _props_: updateable options to customise the chart. We'll cover those in step 2.
 
-::::{.column width="40%"}
+# Step 1: initialise
 
-The following code initialises our bar chart.
+First, we need to add Sverto and the bar chart in our document frontmatter:
 
-```{ojs}
-//| code-fold: true
-
-BarChart =
-  import_svelte("BarChart.svelte")
-
-myBarChart = new BarChart.default({
-  target: document.querySelector("#mybarchart"),
-  props: {
-    data: [5, 5, 5, 5, 5],
-    height: 200,
-    width: 200,
-    barWidth: 25,
-    barColor: "#36a7e9"
-  }
-});
+```yaml
+---
+filters:
+  - sverto
+sverto:
+  use:
+    - BarChart.svelte
+---
 ```
 
+Then, the following OJS code initialises our bar chart.
+
+```{ojs}
+//| echo: fenced
+myBarChart = new BarChart.default({
+  target: document.querySelector("#mybarchart")
+})
+```
+
+We use the name of the Svelte file (without the file extension), then `.default()`, to create the component. So for `BarChart.svelte`, we use `BarChart.default()`. This function is called a _constructor_.
+
+The constructor needs at least one thing to, uhh, _construct_ the chart: a `target`, or place to put the chart. You can use `document.querySelector()` to tell it a place that will exist in the document, and then create that place like this:
+
+```markdown
+:::{#mybarchart}
+:::
+```
+
+<!-- if you're reading this source doc, we've added some sneaky extra stuff
+     to make the barchart stick in the margin. in your own work, all you need
+    is the pandoc div shown above to insert a sverto component! -->
+
+:::::{.column-margin style="height: 1500px;"}
+::::{.barchart-wrapper}
 :::{#mybarchart}
 :::
 
-[See the bar chart source at [BarChart.svelte](./BarChart.svelte)]{style="font-size: smaller; font-color: #999999"}
+[We made this barchart with Svelte!]{style="color: #999999; font-size: smaller; text-transform: uppercase;"}
 
+```{=html}
+<style>
+  @media (min-width: 768px) {
+    .barchart-wrapper {
+      position: sticky;
+      top: 150px;
+    }
+  }
+</style>
+```
 ::::
+:::::
 
-<!-- TODO - .svelte file content here? -->
+Sverto will put the chart inside it.
 
-::::{.column width="5%"}
-::::
+We've also named our chart `myBarChart`. This is important so that we can customise it!
 
+# Step 2: react
 
-::::{.column width="45%"}
+The real power of Sverto is that we can customise aspects of our charts and have them update in response to other things.
+
+In Svelte, these customisable options are called _props_.
+
 This Svelte component accepts a few props:
 
 * `data`: a simple array of (up to) 5 numbers
 * `height`: the height of the chart in pixels
 * `width`: the width of the chart in pixels
 * `barWidth`: the width of each bar
-* `barColor`: the colour of the bars and labels (note the US spelling here)
+* `barColor`: the colour of the bars and labels (note the US spelling here) in res
 
-We can hook any of those values up to OJS code using `myBarChart.propName`.
+**To specify props, use the name of the constructed chart (`myBarChart`, remember?), then the name of the prop.**
 
-Let's give the user the choice between a randomly changing bar chart and user-configurable data and colours:
+Those props can be fixed and unchanging:
 
 ```{ojs}
-//| code-fold: true
-viewof changeType = Inputs.radio(["Random", "Custom"], {value: "Random"})
+//| echo: fenced
+myBarChart.width = 200
 ```
 
-Here's how we generate data and colours that change every two seconds
+But with OJS, we can also tie them to things that change, like our data!
+
+We can update any of those values up to OJS code using `myBarChart.propName`.
+
+:::{.panel-input}
+
+**Let's make some controls so that users can animate the chart's data and colour themselves:**
+
 
 ```{ojs}
+//| echo: fenced
 //| code-fold: true
-randomData = {
-  while(true) {
-    yield Promises.delay(2000, [
-      Math.floor(Math.random() * 100).toString(),
-      Math.floor(Math.random() * 100).toString(),
-      Math.floor(Math.random() * 100).toString(),
-      Math.floor(Math.random() * 100).toString(),
-      Math.floor(Math.random() * 100).toString()
-    ]);
-  }
-}
 
-randomColor = {
-  while(true) {
-    yield Promises.delay(2000,
-    `#${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}`);
-  }
-}
-```
-
-And here are inputs that allow the user to change the data and colour:
-
-```{ojs}
-//| code-fold: true
 viewof userData = Inputs.form(
   [
     Inputs.text({type: "number", value: 25, width: 20}),
@@ -104,31 +120,77 @@ viewof userData = Inputs.form(
     Inputs.text({type: "number", value: 65, width: 20}),
     Inputs.text({type: "number", value: 5, width: 20}),
     Inputs.text({type: "number", value: 50, width: 20})
-  ], {
-    disabled: changeType == "Random"
-  });
+  ]);
 
-viewof userColor = Inputs.color({
-  value: "#36a7e9",
-  disabled: changeType == "Random"});
+viewof userColor = Inputs.color({ value: "#36a7e9" });
 ```
 
-Finally, we update the visual whenever either the choice type changes or the random data does:
+:::
+
+Now, we update the props to the value of these controls:
 
 ```{ojs}
-//| code-fold: true
-myBarChart.data = changeType == "Random" ? randomData : [...userData];
-myBarChart.barColor = changeType == "Random" ? randomColor : userColor;
+//| echo: fenced
+myBarChart.data = [...userData];
+myBarChart.barColor =  userColor;
 ```
-::::
 
-:::::
+And we're done!
 
-## Challenges
+:::{.callout-note appearance="simple" title="What about the other props?" style="background-color:lightblue"}
+Weren't there other props, like `height` and `barWidth`?
+
+Yup! The props in this Svelte component (and many that you'll use) have default values that are used if you don't provide one.
+
+You can also include default `props` as an option when you create the chart, but I generally find it simpler and easier to keep the props away from the constructor.
+:::
+
+# Summary
+
+How did we get this chart going again?
+
+1. Add `filters: ["sverto"]` to our frontmatter, plus the name of our Svelte file to `sverto.use`
+2. Created the chart with `myBarChart = new BarChart.default()`, giving it a `target` to place the chart in
+3. We created the `target` with a Pandoc div: `:::{#mybarchart}`
+4. We customised the bar chart by assigning to `myBarChart.propName`
+
+# Challenges
+
+Here's the code in the Svelte file:
+
+:::{.callout-note appearance="simple" collapse="true" title="BarChart.svelte"}
+```{.html}
+{{< include BarChart.svelte >}}
+```
+:::
+
+If you'd like to start practising your Svelte, start with [the official tutorial](https://learn.svelte.dev/tutorial/welcome-to-svelte). Sverto is designed to make using Svelte components in Quarto as easy as working in the tutorial.
 
 This Svelte component's pretty basic, though. What else is it missing?
 
-* The height and width are configurable, and the bars resize in response to them, but their CSS transitions are slow to catch up. Ideally we'd have the bars apply the transition when they resize because of a change in data but _not_ in response to a change in chart height or width.
-* We have no axes other than the baseline. That's fine for a lot of uses, but we might want to add those elements for other uses.
-  - We could add those elements manually, but the [`d3-axis`](https://github.com/d3/d3-axis) package has some helpers for creating axes quickly!
-* The bars are all the same colour. We could write a function that converts each bar's data value to a colour, and use it for the `<rect>` `fill` attribute, but the [`d3-scale-chromatic`](https://github.com/d3/d3-scale-chromatic) also has some helpers to do this quickly!
+#### Resizing
+
+The `height` and the `width` of the chart are configurable using props, and the bars resize in response to them, but the CSS transitions that grow and shrink them are slow to catch up.
+
+Ideally we'd turn those transitions off when the chart as a whole is resizing!
+
+#### Other barchart elements
+
+We have no axes other than the baseline. That's fine for a lot of uses, but we might want to add those elements for other uses.
+
+We could add those elements manually, but the [`d3-axis`](https://github.com/d3/d3-axis) package has some helpers for creating axes quickly!
+
+#### Colour scales
+
+The bars are all the same colour. We could write a function that converts each bar's data value to a colour, and use it for the `fill` attribute of the `<rect>`, but the [`d3-scale-chromatic`](https://github.com/d3/d3-scale-chromatic) also has some helpers to do this quickly!
+
+`d3` is included with OJS, but if you want to use `d3-scale-chromatic` (or any other part of d3) in your Svelte components, you'll have to add it yourself by:
+
+- running `npm install d3-scale-chromatic` in the terminal, then
+- adding `import XXXX from "d3-scale-chromatic"`, where `XXXX` is the name of the thing you want to import (or `*`).
+
+### A more complex example
+
+If you'd like to see an example that addresses some of these shortcomings, check out the [time series chart example](../time-series), which automatically resizes and adds axes that transition!
+
+[See the time series chart →]((../time-series)){.btn .btn-success}

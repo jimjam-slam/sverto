@@ -1,0 +1,200 @@
+---
+title: "Examples: time series"
+author: James Goldie
+date: last-modified
+format:
+  html:
+    code-fold: true
+    resources:
+      - "*.csv"
+filters:
+  - sverto
+sverto:
+  use:
+    - TimeSeriesChart.svelte
+---
+
+Let's do something more useful: a time series of temperature extremes.
+
+In Quarto, we'll download the data for two cities (Melbourne and Brisbane), letting the user choose which to display. We'll also create controls using [Observable Inputs](https://observablehq.com/documentation/inputs/overview) to let them choose a month and the extreme to display.
+
+:::{.callout-info appearance="simple" title="What is this data?" collapse="true"}
+In climate parlance, the highest temperature of the day is called the "daily maximum temperature", or `tmax` for short. The coldest temperature of the day is called "daily minimum temperature", or `tmin` for short.
+
+I'm just calling them "daytime temperature" and "nighttime temperature" here — although the lowest temperature can technically happen during the day, it's usually at night!
+:::
+
+Once the data has been appropriately filtered and calculated, we'll pass it to our Svelte chart.
+
+The chart expects a prop called `data`, which is an array of objects that each have a numerical `year` and a `value`.
+
+:::{.callout-tip appearance="simple" collapse="true" title="Can I use this chart with other data?"}
+You can! This chart can plot any series of data, although it expects a numerical x value called `year` (it doesn't handle full dates) and a numerical y value called `value`.
+
+The y-axis has a suffix that is set to `"°C"` by default, but you could change this to `°F`, `kph` or something else if you had some other kind of data!
+:::
+
+:::{.panel-input}
+
+##### Controls
+
+```{ojs}
+//| label: controls-city-variable
+viewof selectedCity = Inputs.select(
+  new Map([
+    ["Melbourne", "086338"],
+    ["Brisbane", "040842"]
+  ]),
+  {
+    value: "086338"
+  }
+)
+
+viewof selectedVariable = Inputs.select(
+  new Map([
+    ["Daytime", "tmax"],
+    ["Nighttime", "tmin"]
+  ]),
+  {
+    value: "tmax"
+  }
+)
+```
+
+```{ojs}
+//| label: controls-season-metric
+viewof selectedSeason = Inputs.select(
+  new Map([
+    ["Whole year", 0],
+    ["January", 1],
+    ["February", 2],
+    ["March", 3],
+    ["April", 4],
+    ["May", 5],
+    ["June", 6],
+    ["July", 7],
+    ["August", 8],
+    ["September", 9],
+    ["October", 10],
+    ["November", 11],
+    ["December", 12]
+  ]),
+  {
+    value: 0
+  }
+)
+
+viewof selectedMetric = Inputs.select(
+  new Map([
+    ["Hottest", "max"],
+    ["Average", "mean"],
+    ["Coldest", "min"],
+  ]),
+  {
+    value: "Hottest"
+  }
+)
+```
+
+:::
+
+Now we'll use [Arquero](https://github.com/uwdata/arquero) to download and filter the selected data.
+
+
+```{ojs}
+//| label: download-filter-data
+import { aq, op } from "@uwdata/arquero"
+
+fullCity = aq.loadCSV(selectedVariable + "." + selectedCity + ".daily.csv")
+
+tidiedCity = fullCity
+  .rename(aq.names("date", "value"))
+  .filter(d => d.date !== null)
+  .params({ selectedSeason: selectedSeason })
+  .derive({
+    year: d => op.year(d.date),
+    month: d => op.month(d.date) + 1
+  })
+
+// filter unless "Whole year" is selected
+filteredCity = selectedSeason == 0 ?
+  tidiedCity :
+  tidiedCity.filter(d => d.month == selectedSeason)
+
+// now group by year and calculate the metrics
+allMetrics = filteredCity
+  .groupby("year")
+  .rollup({
+    min:  d => op.min(d.value),
+    mean: d => op.mean(d.value),
+    max:  d => op.max(d.value),
+  })
+
+// finally, select the year and whichever metric column is chosen by the user
+finalData = allMetrics
+  .select("year", selectedMetric)
+  .rename(aq.names("year", "value"))
+```
+
+Now that the data's processed, we're ready to make the chart:
+
+:::{.callout-tip appearance="simple"}
+Try changing from Daytime to Nighttime!
+:::
+
+```{ojs}
+//| label: import-chart
+timeSeriesChart = new TimeSeriesChart.default({
+  target: document.querySelector("#chart")
+})
+```
+
+:::{#chart}
+:::
+
+And there we go! And now to send our data to it:
+
+```{ojs}
+//| label: update-chart-data
+//| output: false
+timeSeriesChart.data = finalData.objects()
+```
+
+This chart also takes an additional prop: `colourScheme` can be either `cool` or `warm` (`cool` is the default). Let's set that depending on whether we're looking at daytime or nighttime temperatures:
+
+
+```{ojs}
+//| label: update-chart-colours
+//| output: false
+timeSeriesChart.colourScheme = selectedVariable == "tmax" ? "warm" : "cool"
+```
+
+:::{.callout-tip appearance="simple"}
+Use `//| output: false` when you update props so that they aren't displayed underneath the cell.
+:::
+
+# Building the chart
+
+Here's the code in the Svelte file:
+
+:::{.callout-note appearance="simple" collapse="true" title="BarChart.svelte"}
+```{.html}
+{{< include TimeSeriesChart.svelte >}}
+```
+:::
+
+This chart has a few differences from the [simpler barchart example](../barchart):
+
+1. We make the chart responsive to changes in window size by wrapping the `<svg>` in a `<main`> and using `bind:clientHeight` and `bind:clientWidth` to track the space available to the chart
+2. Since this is designed for more data, we use axes instead of labelling each datum. We use [`d3-axis`](https://d3js.org/d3-axis) for this. Instead of directly drawing the SVG elements of the axis, we create a placeholder and then use D3's functions to create the content, making them reactive to changes in data or window size with `$:`
+3. Instead of passing in colour directly, we let the user in Quarto choose a colour scheme (`"warm"` or `"cool"`). In this example, the colour scheme is connected to the Daytime or Nighttime option.
+
+And here's the processed data as a table, so we can see what we're sending to Svelte. Note the two columns, `year` and `value`:
+
+:::{.callout-note title="Table of values" collapse="true"  appearance="simple"}
+```{ojs}
+//| label: data-table
+Inputs.table(finalData)
+```
+:::
+

@@ -16,7 +16,7 @@
 
 </script>
 
-<!-- we use svelte's in/out transitions for entering and leaving dom elements,
+<!-- we use svelte's in/out transitions for entering and exiting dom elements,
      and vanilla css transitions for retained elements that change. the
      #each block means we create an svg <circle> for each element of data -->
 <svg>
@@ -24,7 +24,7 @@
     <circle
       in:fly="{{y: 100}}" out:fly="{{y: 100}}"
       style={"transition: all 1s ease-out"}
-      cx={15 * i + "%"} cy="50%" r={d}
+      cx={(15 * i + 10) + "%"} cy="50%" r={d}
       fill="black"
        />
   {/each}

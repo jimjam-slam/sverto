@@ -1,36 +1,22 @@
 ---
 title: Sverto
 description: "**Sverto** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website."
-author: James Goldie
-date: last-modified
 format:
-    sverto-html:
+    html:
       toc: true
       toc-location: left
 ---
 
-:::{}
-{{< include /.sverto/index.qmd >}}
-:::
+Your Svelte components can seamlessly react to your [Observable JavaScript](https://quarto.org/docs/interactive/ojs/) code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document.
 
-Your Svelte components can seamlessly react to your ObservableJS code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document.
-
-## 💭 Why Sverto?
-
-[Quarto](https://quarto.org) helps users build beautiful documents regardless of their language of choice, and it encourages data analysts and scientists to explore web visualisation by making JavaScript accessible and easy to use. It makes interactive visualisations intuitive to write, but animated visuals are still a challenge that require either dipping into a high-level JavaScript library or learning a lower-level one like [d3](https://d3js.org).
-
-[Svelte](https://svelte.dev) is a framework for building web visualisations and apps in JavaScript. Svelte goes out of its way to make writing self-contained components, like charts, comfortable and intuitive. It has a great [playground environment](https://svelte.dev/repl/hello-world?version=3.55.1) for developing and testing components, but like many web frameworks, the experience is much more complex when you start developing locally.
-
-_Sverto aims to make it as easy to use animated Svelte charts in Quarto documents as it is to work on them in the Svelte REPL: just write a `.svelte` file, add it to a Quarto document, and Sverto should take care of the rest._
-
-## 📋 Prerequisites
+# 📋 Prerequisites
 
 You'll need to install two things to run Sverto:
 
 - [Quarto](https://quarto.org)
 - [Node and the Node Package Manager (npm)](https://nodejs.org)
 
-## ⚙️ Installation
+# ⚙️ Installation
 
 Install the project extension using:
 
@@ -46,56 +32,102 @@ npm install
 
 This will add the extension itself (which includes some project scripts) to the `_extension` folder, as well as a few other files.
 
-:::{.callout-note}
-Sverto depends on running [project pre-render scripts](https://quarto.org/docs/projects/scripts.html#pre-and-post-render), so you can't currently use it with single documents.
+## 📦 What's in the box?
+
+When you use the Sverto template in a project, it creates some files for you:
+
+* [`example.qmd`](./example.qmd): an example Quarto doc that uses a Svelte component. If you're adding Sverto to an existing document, you can delete this.
+* [`Circles.svelte`](./Circles.svelte): an example Svelte visualisation. If you have a Svelte component that you want to use instead, you can delete this.
+* [`package.json`](./package.json): this is used to keep track of the dependencies of your Svelte components. **You should add this to version control.**
+* `package-lock.json` is created once you run `npm install`. You should add this to version control.
+* `node_modules/`: This folder is created once you rum `npm install`. Don't add it to version control.
+
+# 🎉 Use
+
+Here's the quick guide to add a Svelte component you've written to a Quarto doc:
+
+## Step 1: add Svelte to your document
+
+In the document frontmatter, add `sverto` to `filters`, and add one or more `.svelte` files to `sverto.use`:
+
+```yaml
+---
+title: "My document"
+filters: ["sverto"]
+sverto:
+  use:
+    - example.svelte
+---
+```
+
+## Step 2: bring your Svelte component to life
+
+Use an [Observable JS](https://quarto.org/docs/interactive/ojs/) chunk to _instantiate_ your Svelte component.
+
+````js
+```{ojs}
+myChart = new example.default({
+  target: document.querySelector("#chart")
+})
+```
+
+:::{#chart}
 :::
+````
 
-## 🎉 Use
+- the `target` is where it will appear. This needs to be an existing part of the document — you can put a [Pandoc div](https://quarto.org/docs/authoring/markdown-basics.html#divs-and-spans) right after this code, or put one anywhere else on the page
+- `example` is the file name of your Svelte component, without the file extension (so if your file is called `example.svelte` call `example.default()`)
+- if your Svelte component has any `props` that don't have defaults built in, supply default values here for them too. Don't put reactive OJS code in here; we'll update the props separately!
 
-Here's the short way to add Svelte component you've written to a Quarto doc:
+## Step 3: make your visual reactive 
 
-1. Add a magic placeholder block to your document with a [Quarto include](https://quarto.org/docs/authoring/includes.html) to the path to your Quarto doc, prefixed with `/.sverto/`. For example:
+If your visual has `props` that allow it to change or transition in response to other OJS code, you can update it by assigning the prop directly.
 
-    ```
-    :::{}
-    {{{< include /.sverto/example.qmd >}}}
-    :::
-    ```
+For example, if we have a dataset called `myData` in OJS, and a year slider called `selectedYear`, we can change a prop called `chartData` whenever the user selects a new year like:
 
-2. Import your Svelte component in OJS with `Component = import_svelte("Component.svelte")`
-3. Add a target block for your visual using `:::` and give it an `#id`
-4. Instantiate the Svelte component with `myVisual = Component.default()` using some default props and your target block
-5. Update the instantiated component with `myVisual.propName`
-6. Render your Quarto project as usual with `quarto render` or `quarto preview`.
+````js
+myChart.chartData = myData.filter(d => d.year == selectedYear)
+````
 
-**To see this all in practice, check out [`example.qmd`](https://github.com/jimjam-slam/sverto/blob/main/example.qmd).**
+If you're writing a single document, you're done! Run `quarto render` and see your hard work.
 
-:::{.callout-note}
+**To see this all in practice, check out the [simple bar chart example](examples/barchart).**
+
+## Step 4 (for websites): set the project type
+
+If you're using a [Quarto website](https://quarto.org/docs/projects/quarto-projects.html), change the `project.type` in `_quarto.yml` from `website` to `sverto`.
+
+This way, your website pages can share Sverto components when you're rendering the whole website.
+
+:::{.callout-tip appearance="simple" title="Hot reloads"}
 The `quarto preview` command won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
 
-If you want to quickly iterate on the Svelte component and you aren't too concerned about the rest of your Quarto doc, you might find the [Svelte Preview](https://marketplace.visualstudio.com/items?itemName=RafaelMartinez.svelte-preview) extension for VSCode handy.
+If you want to quickly iterate on a Svelte component you're building, you might find the [Svelte Preview](https://marketplace.visualstudio.com/items?itemName=RafaelMartinez.svelte-preview) extension for VSCode handy.
 :::
 
-As well as the project format, Sverto ships with document formats (the default is `sverto-html`). If you need to change document options that would normally go under `format: html`, use `format: sverto-html` or `format-sverto-revealjs` instead.
+# Advanced use
 
 ## 🛍 Use other libraries in your Svelte component
 
 If you want to refer to other JavaScript libraries in your Svelte component (like d3, for example), add them to the project using `npm install package1 [package2 ...]`. For example:
 
 ```sh
-npm install d3-scale
+npm install d3
 ```
+# 💭 Why Sverto?
 
-## 🔨 Use pre-compiled Svelte components
+[Quarto](https://quarto.org) helps data scientists and analysts build beautiful documents regardless of their language of choice, and it encourages data analysts and scientists to explore web visualisation by making JavaScript accessible and easy to use.
 
-If you'd prefer to compile your own Svelte components instead of letting this extension do it, you can skip steps 1 and 2 and simply refer to the compiled bundle with, for example, `Component = import("Component.js")` in an OJS block.
+Quarto makes interactive charts intuitive to write, but animated ones are still a challenge that require either dipping into a high-level JavaScript library or learning a lower-level one like [d3](https://d3js.org).
 
-:::{.callout-note}
-You must compile the Svelte component to an ES6 bundle, and you must enable accessors when compiling if you want to be able to update them from OJS. Refer to [`_extensions/sverto/rollup.config.js`](https://github.com/jimjam-slam/sverto/blob/firstrelease/_extensions/sverto/rollup.config.js) for guidance on configuring Rollup to do this.
-:::
+[Svelte](https://svelte.dev) is a framework for building charts, web visualisations and even apps in HTML, CSS and JavaScript. Svelte goes out of its way to make writing self-contained components, like charts, comfortable and intuitive.
 
-## ❓ Issues
+Svelte has a great [playground environment](https://svelte.dev/repl/hello-world?version=3.55.1) for developing and testing components, but like many web frameworks, the experience is much more complex when you start developing locally.
 
-If you have any problems with the extension, please feel free to [create an issue](https://github.com/jimjam-slam/sverto)!
+_Sverto aims to make it as easy to build and use animated Svelte charts in Quarto documents as it is to work on them in the Svelte playground: just write a `.svelte` file, add it to a Quarto document, and Sverto takes care of the rest._
+
+# ❓ Issues
+
+If you have any problems with Sverto, please feel free to [create an issue](https://github.com/jimjam-slam/sverto)!
 
 Special thanks to [Carlos Scheidegger](https://github.com/cscheid) from [Posit](https://posit.co) for his time and advice!

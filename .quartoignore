@@ -1,6 +1,9 @@
 README.md
 NEWS.md
 LICENSE
+.luarc.json
+package-lock.json
 docs/
 .quarto/
+.github/
 !.gitignore
