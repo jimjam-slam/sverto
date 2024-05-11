@@ -1,13 +1,12 @@
-import svelte from 'rollup-plugin-svelte'
-import commonjs from '@rollup/plugin-commonjs'
-import resolve from '@rollup/plugin-node-resolve'
-import { terser } from 'rollup-plugin-terser'
+import svelte from "rollup-plugin-svelte"
+import commonjs from "@rollup/plugin-commonjs"
+import resolve from "@rollup/plugin-node-resolve"
+import terser from "@rollup/plugin-terser"
 
 const path = require('node:path')
 
 // this is false when we run rollup with -w/--watch (never presently)
 const production = !process.env.ROLLUP_WATCH;
-
 
 /* export an array of rollup configs - one for each input svelte file - using
    additional command line args supplied from lua */
