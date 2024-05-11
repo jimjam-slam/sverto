@@ -8,7 +8,7 @@ sverto:
     - Circles.svelte
 ---
 
-Here's an example of how to use the included example Svelte component, `Circles.svelte`.
+This document shows you how to use a basic example Svelte component called `Circles.svelte`.
 
 Create one using `fileName.default()`, where `fileName` is the file name without `.svelte`:
 
@@ -44,9 +44,11 @@ viewof selectedDataset =
 Now we can update the prop `data` of the visual `myCircles` using:
 
 ```{ojs}
+//| output: false
 myCircles.data = selectedDataset
 ```
 
 And there you go! 🚀
 
-For more help writing Svelte components, check out the [Svelte tutorial](https://svelte.dev/tutorial/basics).
+For more help writing Svelte components, check out the [Svelte tutorial](https://svelte.dev/tutorial/basics) or take look at some of the examples in the [Sverto documentation](https://sverto.jamesgoldie.dev).
+
