@@ -193,4 +193,4 @@ The bars are all the same colour. We could write a function that converts each b
 
 If you'd like to see an example that addresses some of these shortcomings, check out the [time series chart example](../time-series), which automatically resizes and adds axes that transition!
 
-[See the time series chart →]((../time-series)){.btn .btn-success}
+[See the time series chart →](../time-series){.btn .btn-success}
