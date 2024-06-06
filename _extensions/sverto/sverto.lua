@@ -101,7 +101,7 @@ function inject_svelte_and_compile(m)
         '--configQuartoOutPath="./" ' ..
         '--configSvelteInPaths="' .. sveltePaths .. '"'
       local svelteResult = os.execute(svelteCommand)
-      quarto.log.warning("Svelte compiler finished with code " .. svelteResult)
+      quarto.log.warning("Svelte compiler finished with code " .. tostring(svelteResult))
       
     end
   end
