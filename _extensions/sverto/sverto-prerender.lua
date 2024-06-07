@@ -1,3 +1,26 @@
+-- fileExists: true if the file at `name` exists
+-- from https://pandoc.org/lua-filters.html#building-images-with-tikz
+local function fileExists(name)
+  local f = io.open(name, 'r')
+  if f ~= nil then
+    io.close(f)
+    return true
+  else
+    return false
+  end
+end
+
+-- getRollupConfig: return the path to the rollup config file
+local function getRollupConfig()
+  if fileExists("./_extensions/jimjam-slam/sverto/rollup.config.js") then
+    return "./_extensions/jimjam-slam/sverto/rollup.config.js"
+  elseif fileExists("./_extensions/sverto/rollup.config.js") then
+    return "./_extensions/sverto/rollup.config.js"
+  else
+    print("Error: no rollup config found. Is Sverto installed properly?")
+    os.exit(1)
+  end
+end
 
 -- return contents of named file
 function read_file(name)
@@ -29,18 +52,6 @@ end
 --     os.execute("mkdir -p " .. path)
 --   end
 -- end
-
--- file_exists: true if the file at `name` exists
--- from https://pandoc.org/lua-filters.html#building-images-with-tikz
-function file_exists(name)
-  local f = io.open(name, 'r')
-  if f ~= nil then
-    io.close(f)
-    return true
-  else
-    return false
-  end
-end
 
 -- offset a relative `svelte_path` to a .qmd `input_path`, or an absolute
 -- `svelte_path` to the project path. then normalize.
@@ -119,20 +130,10 @@ for _, svelte_path in pairs(svelte_paths) do
 end
 
 -- finally, call the svelte compiler via rollup
-rollup_config = ""
-if file_exists("./_extensions/jimjam-slam/sverto/rollup.config.js") then
-  rollup_config = "./_extensions/jimjam-slam/sverto/rollup.config.js"
-elseif file_exists("./_extensions/sverto/rollup.config.js") then
-  rollup_config = "./_extensions/sverto/rollup.config.js"
-else
-  print("Error: no rollup config found. Is Sverto installed properly?")
-  os.exit(1)
-end
-
 cmd =
   get_cmd_prefix() ..
   "npm run build " ..
-  rollup_config .. " -- " ..
+  getRollupConfig() .. " -- " ..
   '--configQuartoOutPath="' .. os.getenv("QUARTO_PROJECT_OUTPUT_DIR") .. '" ' ..
   '--configSvelteInPaths="' .. svelte_path_string .. '"'
 

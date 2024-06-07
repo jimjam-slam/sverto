@@ -1,3 +1,27 @@
+-- fileExists: true if the file at `name` exists
+-- from https://pandoc.org/lua-filters.html#building-images-with-tikz
+local function fileExists(name)
+  local f = io.open(name, 'r')
+  if f ~= nil then
+    io.close(f)
+    return true
+  else
+    return false
+  end
+end
+
+-- getRollupConfig: return the path to the rollup config file
+local function getRollupConfig()
+  if fileExists("./_extensions/jimjam-slam/sverto/rollup.config.js") then
+    return "./_extensions/jimjam-slam/sverto/rollup.config.js"
+  elseif fileExists("./_extensions/sverto/rollup.config.js") then
+    return "./_extensions/sverto/rollup.config.js"
+  else
+    print("Error: no rollup config found. Is Sverto installed properly?")
+    os.exit(1)
+  end
+end
+
 -- append_to_file: append a string of `content` to the file with the path `name`
 function append_to_file(name, content)
   local file = io.open(name, "a")
@@ -96,12 +120,14 @@ function inject_svelte_and_compile(m)
     if quarto.project.directory ~= nil then
       quarto.log.info("Project found; deferring Svelte compilation to post-render script")
     else
+
       local svelteCommand =
-        "npm run build rollup.config.js -- " ..
+        "npm run build " ..
+        getRollupConfig() .. " -- " ..
         '--configQuartoOutPath="./" ' ..
         '--configSvelteInPaths="' .. sveltePaths .. '"'
       local svelteResult = os.execute(svelteCommand)
-      quarto.log.warning("Svelte compiler finished with code " .. svelteResult)
+      quarto.log.warning("Svelte compiler finished with code " .. tostring(svelteResult))
       
     end
   end
