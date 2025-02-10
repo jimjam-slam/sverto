@@ -1,5 +1,7 @@
 project:
   type: sverto
+  pre-render:
+    - './copy-extension.sh'
   
 execute:
   freeze: auto
