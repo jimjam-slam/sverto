@@ -84,11 +84,10 @@ function inject_svelte_and_compile(m)
     -- add path to svelte compiler path list
     sveltePaths = sveltePaths .. in_path .. ":"
 
+    -- create javascript bootstrap code for each import (using *nix paths!)
+    local web_path = compiled_path:gsub("\\", "/")
     local svelteInsert = string.format(svelteInitTemplate,
-    compiled_path, obj_name)
-
-    -- quarto.log.warning("INJECTION:")
-    -- quarto.log.warning(svelteInsert)
+    web_path, obj_name)
 
     quarto.doc.include_text("before-body", svelteInsert)
 
