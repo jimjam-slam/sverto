@@ -1,17 +1,17 @@
 <script>
+
   /* let's borrow svelte's fly transitions for the circles that need to be
      created or destroyed
      https://svelte.dev/tutorial/transition */
   import { fly } from "svelte/transition";
 
-  /* these are our props and their default values (starting with `export let`).
-     in particular, note that data is an array of numbers
-     https://svelte.dev/tutorial/declaring-props */
-  export let data =  [50, 45, 15, 25, 30];
-  export let height = 100;
-  export let width = 400;
-  export let barWidth = 25;
-  export let barColor = "black"
+  let {
+    data = [50, 45, 15, 25, 30],
+    height = 100,
+    width = 400,
+    barWidth = 25,
+    barColor = "black"
+  } = $props();
 
   /* unlike ojs, svelte code isn't "naturally" reactive (except down below in
      the rendered html or svg), but you can prefix a statement with `$:` to
@@ -19,13 +19,14 @@
      here we're going to normalise our data to 100, and we'll use the normalised
      data in our barchart instead
      https://svelte.dev/tutorial/reactive-statements */
-  $: normalisedData = data.map(d => ({
+  let normalisedData = $derived(data.map(d => ({
     y: d,
     h: d / Math.max(...data) * height
-  }));
-  $: console.log(normalisedData);
+  })));
 
 </script>
+
+{@debug normalisedData}
 
 <!-- these css styles just apply to our component -->
 <style>

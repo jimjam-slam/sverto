@@ -6,15 +6,13 @@
 
   // here we declare `data` as a prop that this component can expect. it has
   // a default value in case we don't provide anything
-  // https://svelte.dev/tutorial/declaring-props
-  export let data = [5, 15, 10, 12, 14];
-
-  // prefix a statement with $: to make it reactive (so it runs every time
-  // data changes)
-  // https://svelte.dev/tutorial/reactive-statements
-  $: console.log("Dataset prop:", data);
+  
+  let { data = [5, 15, 10, 12, 14] } = $props();
 
 </script>
+
+<!-- use @debug to log changes in an object to the developer console -->
+{@debug data}
 
 <!-- we use svelte's in/out transitions for entering and exiting dom elements,
      and vanilla css transitions for retained elements that change. the

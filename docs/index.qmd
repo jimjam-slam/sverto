@@ -36,9 +36,9 @@ This will add the extension itself (which includes some project scripts) to the 
 
 When you use the Sverto template in a project, it creates some files for you:
 
-* [`example.qmd`](./example.qmd): an example Quarto doc that uses a Svelte component. If you're adding Sverto to an existing document, you can delete this.
-* [`Circles.svelte`](./Circles.svelte): an example Svelte visualisation. If you have a Svelte component that you want to use instead, you can delete this.
-* [`package.json`](./package.json): this is used to keep track of the dependencies of your Svelte components. **You should add this to version control.**
+* `example.qmd`: an example Quarto doc that uses a Svelte component. If you're adding Sverto to an existing document, you can delete this.
+* `Circles.svelte`: an example Svelte visualisation. If you have a Svelte component that you want to use instead, you can delete this.
+* `package.json`: this is used to keep track of the dependencies of your Svelte components. **You should add this to version control.**
 * `package-lock.json` is created once you run `npm install`. You should add this to version control.
 * `node_modules/`: This folder is created once you rum `npm install`. Don't add it to version control.
 

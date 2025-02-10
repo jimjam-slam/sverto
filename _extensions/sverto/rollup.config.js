@@ -1,6 +1,6 @@
 import svelte from "rollup-plugin-svelte"
 import commonjs from "@rollup/plugin-commonjs"
-import resolve from "@rollup/plugin-node-resolve"
+import { nodeResolve } from "@rollup/plugin-node-resolve"
 import terser from "@rollup/plugin-terser"
 
 const path = require('node:path')
@@ -51,7 +51,7 @@ export default cmd => {
 						dev: !production,
 					}
 				}),
-				resolve({
+				nodeResolve({
 					browser: true,
 					dedupe: ["svelte"]
 				}),

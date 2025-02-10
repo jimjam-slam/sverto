@@ -20,5 +20,7 @@
 /docs/.quarto/
 /docs/.sverto/
 
-# sverto extension in docs site (we get it from project root on render)
+# sverto extension + files in docs site (we get it from project root on render)
 /docs/_extensions/sverto
+/docs/package.json
+/docs/package-lock.json

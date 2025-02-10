@@ -134,7 +134,8 @@ cmd =
   "npm run build " ..
   rollup_config .. " -- " ..
   '--configQuartoOutPath="' .. os.getenv("QUARTO_PROJECT_OUTPUT_DIR") .. '" ' ..
-  '--configSvelteInPaths="' .. svelte_path_string .. '"'
+  '--configSvelteInPaths="' .. svelte_path_string .. '" ' ..
+  '--bundleConfigAsCjs'
 
 local svelteResult = os.execute(cmd)
 

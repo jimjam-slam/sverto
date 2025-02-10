@@ -99,7 +99,8 @@ function inject_svelte_and_compile(m)
       local svelteCommand =
         "npm run build rollup.config.js -- " ..
         '--configQuartoOutPath="./" ' ..
-        '--configSvelteInPaths="' .. sveltePaths .. '"'
+        '--configSvelteInPaths="' .. sveltePaths .. '" ' ..
+        '--bundleConfigAsCjs'
       local svelteResult = os.execute(svelteCommand)
       quarto.log.warning("Svelte compiler finished with code " .. svelteResult)
       
