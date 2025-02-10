@@ -6,5 +6,6 @@
 if [ "$QUARTO_PROJECT_RENDER_ALL" = 1 ]; then
     mkdir -p _extensions/
     cp -Rf ../_extensions/sverto _extensions/
+    cp ../package.json package.json
     echo "> Sverto extension retrieved"
 fi
