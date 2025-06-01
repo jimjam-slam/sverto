@@ -12,22 +12,77 @@ sverto:
     - Circles.svelte
 ---
 
-Your Svelte components can seamlessly react to your [Observable JavaScript](https://quarto.org/docs/interactive/ojs/) code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document. Like this:
+Your Svelte components can seamlessly react to your [Observable JavaScript](https://quarto.org/docs/interactive/ojs/) code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your Quarto document.
 
+Get going in three easy steps:
 
-```{ojs}
-html`<my-circles></my-circles>`
+**Step 1: Add a Svelte file to your doc**
+
+```yaml
+---
+filters:
+  - sverto
+sverto:
+  use:
+    - Circles.svelte
+---
 ```
 
+**Step 2: Place the Svelte component in your document**
 
-# 📋 Prerequisites
+```{ojs}
+//| echo: fenced
+myCircles = html`<my-circles></my-circles>`
+```
+
+**Step 3: To update your Svelte component, use accessors to give it new props**
+
+```{ojs}
+//| echo: fenced
+myCircles.data = newData
+```
+
+:::{.callout-note collapse="true"}
+
+# What kind of new data?
+
+That depends on your graphic! It might not be data but options, like colours, in case you want a graphic you can reuse.
+
+Here we're generating some new random numbers every 1.5 seconds.
+
+```{ojs}
+newData = {
+  while (true) {
+    yield Promises.delay(1500,
+      Array.apply(null,
+        Array(5)).map(
+          d => Math.floor(Math.random() * 25))
+    );
+  }
+}
+```
+
+:::
+
+**Step 4 (for websites): set the project type**
+
+If you're using a [Quarto website](https://quarto.org/docs/projects/quarto-projects.html), change the `project.type` in `_quarto.yml` from `website` to `sverto`.
+
+This way, your website pages can reuse Svelte components when you're rendering the whole website.
+
+:::{.callout-note}
+
+## Already using a custom website type?
+
+If you're already using a custom website type, feel free to skip this step — it just means that your Svelte components might get rendered twice if you reuse them across pages.
+:::
+
+# ⚙️ Installation
 
 You'll need to install two things to run Sverto:
 
 - [Quarto](https://quarto.org)
 - [Node and the Node Package Manager (npm)](https://nodejs.org)
-
-# ⚙️ Installation
 
 Install the project extension using:
 
@@ -51,64 +106,7 @@ When you use the Sverto template in a project, it creates some files for you:
 * `Circles.svelte`: an example Svelte visualisation. If you have a Svelte component that you want to use instead, you can delete this.
 * `package.json`: this is used to keep track of the dependencies of your Svelte components. **You should add this to version control.**
 * `package-lock.json` is created once you run `npm install`. You should add this to version control.
-* `node_modules/`: This folder is created once you rum `npm install`. Don't add it to version control.
-
-# 🎉 Use
-
-Here's the quick guide to add a Svelte component you've written to a Quarto doc:
-
-## Step 1: add Svelte to your document
-
-In the document frontmatter, add `sverto` to `filters`, and add one or more `.svelte` files to `sverto.use`:
-
-```yaml
----
-title: "My document"
-filters: ["sverto"]
-sverto:
-  use:
-    - example.svelte
----
-```
-
-## Step 2: bring your Svelte component to life
-
-Use an [Observable JS](https://quarto.org/docs/interactive/ojs/) chunk to _instantiate_ your Svelte component.
-
-````js
-```{ojs}
-myChart = new example.default({
-  target: document.querySelector("#chart")
-})
-```
-
-:::{#chart}
-:::
-````
-
-- the `target` is where it will appear. This needs to be an existing part of the document — you can put a [Pandoc div](https://quarto.org/docs/authoring/markdown-basics.html#divs-and-spans) right after this code, or put one anywhere else on the page
-- `example` is the file name of your Svelte component, without the file extension (so if your file is called `example.svelte` call `example.default()`)
-- if your Svelte component has any `props` that don't have defaults built in, supply default values here for them too. Don't put reactive OJS code in here; we'll update the props separately!
-
-## Step 3: make your visual reactive 
-
-If your visual has `props` that allow it to change or transition in response to other OJS code, you can update it by assigning the prop directly.
-
-For example, if we have a dataset called `myData` in OJS, and a year slider called `selectedYear`, we can change a prop called `chartData` whenever the user selects a new year like:
-
-````js
-myChart.chartData = myData.filter(d => d.year == selectedYear)
-````
-
-If you're writing a single document, you're done! Run `quarto render` and see your hard work.
-
-**To see this all in practice, check out the [simple bar chart example](examples/barchart).**
-
-## Step 4 (for websites): set the project type
-
-If you're using a [Quarto website](https://quarto.org/docs/projects/quarto-projects.html), change the `project.type` in `_quarto.yml` from `website` to `sverto`.
-
-This way, your website pages can share Sverto components when you're rendering the whole website.
+* `node_modules/`: This folder is created once you rum `npm install`. **Do not** add it to version control.
 
 :::{.callout-tip appearance="simple" title="Hot reloads"}
 The `quarto preview` command won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
@@ -120,7 +118,9 @@ If you want to quickly iterate on a Svelte component you're building, you might 
 
 ## 🛍 Use other libraries in your Svelte component
 
-If you want to refer to other JavaScript libraries in your Svelte component (like d3, for example), add them to the project using `npm install package1 [package2 ...]`. For example:
+If you want to refer to other JavaScript libraries in your Svelte component (like d3, for example), add them to the project using `npm install package1 [package2 ...]`.
+
+For example:
 
 ```sh
 npm install d3
@@ -133,7 +133,7 @@ Quarto makes interactive charts intuitive to write, but animated ones are still 
 
 [Svelte](https://svelte.dev) is a framework for building charts, web visualisations and even apps in HTML, CSS and JavaScript. Svelte goes out of its way to make writing self-contained components, like charts, comfortable and intuitive.
 
-Svelte has a great [playground environment](https://svelte.dev/repl/hello-world?version=3.55.1) for developing and testing components, but like many web frameworks, the experience is much more complex when you start developing locally.
+Svelte has a great [playground environment](https://svelte.dev/repl) for developing and testing components, but like many web frameworks, the experience is much more complex when you start developing locally.
 
 _Sverto aims to make it as easy to build and use animated Svelte charts in Quarto documents as it is to work on them in the Svelte playground: just write a `.svelte` file, add it to a Quarto document, and Sverto takes care of the rest._
 
