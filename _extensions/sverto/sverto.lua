@@ -1,3 +1,13 @@
+-- sverto.lua
+-- this filter runs on individual documents when it's specified. it handles 2–3
+-- things:
+-- 1) looks in the doc meta for svelte paths
+-- 2) adds a vanilla js block to the doc header to initialise the compiled svelte
+-- 3) IF the filter is NOT running in a project context (ie. a single doc),
+--    call the svelte compiler with the svelte paths identified in (1)
+--    (if it is a project, this step is handled by sverto-prerender.lua across
+--    the whole project)
+
 -- append_to_file: append a string of `content` to the file with the path `name`
 function append_to_file(name, content)
   local file = io.open(name, "a")
@@ -42,18 +52,34 @@ function inject_svelte_and_compile(m)
   --     "a list of string paths, not " .. pandoc.utils.type(m.sverto.use))
   -- end
 
-  local sveltePaths = ""
+  -- figure out where mount.js will live
+  -- (in a project, we only need a server js path to add to the html.
+  -- (for single docs, we need a relative path to give to the svelte compiler
+  -- too)
+  local mount_path_compiled
+  if quarto.project.directory ~= nil then
+    mount_path_compiled = '/site_libs/sverto'
+  else
+    local outBasename = pandoc.path.split_extension(
+        pandoc.path.filename(quarto.doc.output_file))
+    mount_path_compiled = './' .. outBasename .. '_files' ..
+      '/libs/sverto'
+    pandoc.system.make_directory(mount_path_compiled, true)
+  end
 
   -- either add text to start of body (and return nil), or return a rawblock
+  -- %s: compiled svelte js path
   -- %s: obj_name
-  -- %s: file_name, adapted for output path (and .svelte => .js)
   local svelteInitTemplate = [[
     <script type="module">
+
       // when the doc is ready, find quarto's ojs and inject svelte import
       document.addEventListener("DOMContentLoaded", () => {
         
         import("%s").then(svelteModule => {
           
+          console.log("Svelte module is:", svelteModule)
+
           const ojsModule = window._ojs?.ojsConnector?.mainModule
           if (ojsModule === undefined) {
             console.error("Quarto OJS module not found")
@@ -69,9 +95,17 @@ function inject_svelte_and_compile(m)
     </script>
   ]]
 
-  for _, path in ipairs(m.sverto.use) do
-    -- this is where we process the path
+  -- create the template for mount.js and inject into the doc
+  local mount_insert = string.format(svelteInitTemplate,
+    pandoc.path.join({ mount_path_compiled, "mount.js" }),
+    "mount")
+  quarto.doc.include_text("before-body", mount_insert)
 
+  -- now inject the ojs init code for the user's svelte bundles while
+  -- buildinga list of .svelte files to potentially compile
+  local sveltePaths = quarto.utils.resolve_path("mount.svelte") .. ":"
+  for index, path in ipairs(m.sverto.use) do
+    -- this is where we process the other .svelte paths
     local in_path  = pandoc.utils.stringify(path)
     local in_dir   = pandoc.path.directory(in_path)
     local in_name  = pandoc.path.filename(in_path)
@@ -81,32 +115,33 @@ function inject_svelte_and_compile(m)
       obj_name .. ".js"
     })
 
-    -- add path to svelte compiler path list
+    -- add .svelte path to svelte compiler path list...
     sveltePaths = sveltePaths .. in_path .. ":"
 
-    local svelteInsert = string.format(svelteInitTemplate,
-    compiled_path, obj_name)
-
-    -- quarto.log.warning("INJECTION:")
-    -- quarto.log.warning(svelteInsert)
-
-    quarto.doc.include_text("before-body", svelteInsert)
+    -- ... and inject the ojs init code for it
+    local svelte_insert = string.format(svelteInitTemplate,
+      compiled_path, obj_name)
+    quarto.doc.include_text("before-body", svelte_insert)
 
     -- now run the svelte compiler... if we're not in a project
+    -- (if we are, let the prerender script handle that step)
+
+    -- finally, if we're rendering a single doc (not in a project),
+    -- compile the svelte file to a js bundle
     if quarto.project.directory ~= nil then
-      quarto.log.info("Project found; deferring Svelte compilation to post-render script")
+      quarto.log.debug("Project found; deferring Svelte compilation to pre-render script")
     else
       local svelteCommand =
         "npm run build rollup.config.js -- " ..
         '--configQuartoOutPath="./" ' ..
         '--configSvelteInPaths="' .. sveltePaths .. '" ' ..
+        '--configSvelteMountPath=' .. mount_path_compiled .. '" ' ..
         '--bundleConfigAsCjs'
       local svelteResult = os.execute(svelteCommand)
-      quarto.log.warning("Svelte compiler finished with code " .. svelteResult)
+      quarto.log.debug("Svelte compiler finished with code " .. svelteResult)
       
     end
   end
-
 end
 
 return {

@@ -5,9 +5,33 @@ format:
     html:
       toc: true
       toc-location: left
+filters:
+  - sverto
+sverto:
+  use:
+    - Circles.svelte
 ---
 
-Your Svelte components can seamlessly react to your [Observable JavaScript](https://quarto.org/docs/interactive/ojs/) code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document.
+Your Svelte components can seamlessly react to your [Observable JavaScript](https://quarto.org/docs/interactive/ojs/) code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your document. Like this:
+
+```{ojs}
+myCircles = mount(Circles, {
+  target: document.querySelector("#demo-circles"),
+  props: {}
+})
+```
+
+:::{#demo-circles}
+:::
+
+```{ojs}
+mount
+```
+
+```{ojs}
+mount.default()
+```
+
 
 # 📋 Prerequisites
 
