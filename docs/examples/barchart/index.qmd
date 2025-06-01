@@ -33,21 +33,9 @@ sverto:
 
 Then, the following OJS code initialises our bar chart.
 
-```{ojs}
-//| echo: fenced
-myBarChart = new BarChart.default({
-  target: document.querySelector("#mybarchart")
-})
-```
-
 We use the name of the Svelte file (without the file extension), then `.default()`, to create the component. So for `BarChart.svelte`, we use `BarChart.default()`. This function is called a _constructor_.
 
 The constructor needs at least one thing to, uhh, _construct_ the chart: a `target`, or place to put the chart. You can use `document.querySelector()` to tell it a place that will exist in the document, and then create that place like this:
-
-```markdown
-:::{#mybarchart}
-:::
-```
 
 <!-- if you're reading this source doc, we've added some sneaky extra stuff
      to make the barchart stick in the margin. in your own work, all you need
@@ -55,8 +43,15 @@ The constructor needs at least one thing to, uhh, _construct_ the chart: a `targ
 
 :::::{.column-margin style="height: 1500px;"}
 ::::{.barchart-wrapper}
-:::{#mybarchart}
-:::
+
+```{ojs}
+//| echo: fenced
+myBarChart =
+  html`
+    <bar-chart
+      barColor="pink">
+    </bar-chart>`
+```
 
 [We made this barchart with Svelte!]{style="color: #999999; font-size: smaller; text-transform: uppercase;"}
 

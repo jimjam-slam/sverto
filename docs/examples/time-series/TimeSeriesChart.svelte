@@ -1,3 +1,5 @@
+<svelte:options customElement="time-series" />
+
 <script>
 
   import { blur } from "svelte/transition"
@@ -8,14 +10,18 @@
   // `data` should be an array of objects with:
   // - year
   // - value
-  let { data = [], valueSuffix = "°C", colourScheme = "cool" } = $props();
+  let {
+    data = [],
+    valueSuffix = "°C",
+    colourScheme = "cool",
+    height = 500
+  } = $props();
   
   let colourRamp = $derived((colourScheme == "cool") ?
     interpolateYlGnBu :
     interpolateYlOrRd)
 
-  // dimensions bound to size of container
-  let height = $state(500)
+  // width bound to size of container
   let width = $state(300)
 
   // add padding to chart
@@ -59,8 +65,6 @@
 
 </script>
 
-{@debug colourScheme}
-
 <style>
 
   svg circle {
@@ -77,7 +81,7 @@
 
 </style>
 
-<main bind:clientHeight={height} bind:clientWidth={width}>
+<main bind:clientWidth={width} >
   <svg width={width} height={height}>
 
     <g>

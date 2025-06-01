@@ -102,32 +102,23 @@ for input_path in input_paths:gmatch("[^\n]+") do
   
 end
 
--- load mount.js and rollup.config.js from extension folder
+-- load rollup.config.js from extension folder
 local rollup_config
-local svelte_path_string
 if file_exists("./_extensions/jimjam-slam/sverto/rollup.config.js") then
   rollup_config = "./_extensions/jimjam-slam/sverto/rollup.config.js"
-  svelte_path_string = "./_extensions/jimjam-slam/sverto/mount.svelte"
 elseif file_exists("./_extensions/sverto/rollup.config.js") then
   rollup_config = "./_extensions/sverto/rollup.config.js"
-  svelte_path_string = "_extensions/sverto/mount.svelte"
 else
   print("Error: Sverto extension files not found. " ..
-    "Is Sverto installed properly?")
+  "Is Sverto installed properly?")
   os.exit(1)
 end
 
--- now concat .svelte paths to mount.js
--- (start with mount.svelte, which is special)
+-- now concat .svelte paths
+local svelte_path_string = ""
 for _, svelte_path in pairs(svelte_paths) do
   svelte_path_string = svelte_path_string ..  ":" .. svelte_path
 end
-
-
--- this is where mount.svelte will be compiled to as svelte.js
-local mount_path_compiled = os.getenv("QUARTO_PROJECT_OUTPUT_DIR") ..
-  '/site_libs/sverto/'
-pandoc.system.make_directory(mount_path_compiled, true)
 
 cmd =
   get_cmd_prefix() ..
@@ -135,7 +126,6 @@ cmd =
   rollup_config .. " -- " ..
   '--configQuartoOutPath="' .. os.getenv("QUARTO_PROJECT_OUTPUT_DIR") .. '" ' ..
   '--configSvelteInPaths="' .. svelte_path_string .. '" ' ..
-  '--configSvelteMountPath="' .. mount_path_compiled .. '" ' ..
   '--bundleConfigAsCjs'
 
 print("About to compile Svelte using cmd:")

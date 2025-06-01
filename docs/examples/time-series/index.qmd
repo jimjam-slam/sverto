@@ -144,9 +144,7 @@ Try changing from Daytime to Nighttime!
 
 ```{ojs}
 //| label: import-chart
-timeSeriesChart = new TimeSeriesChart.default({
-  target: document.querySelector("#chart")
-})
+timeSeriesChart = html`<time-series></time-series>`
 ```
 
 :::{#chart}
@@ -197,4 +195,3 @@ And here's the processed data as a table, so we can see what we're sending to Sv
 Inputs.table(finalData)
 ```
 :::
-

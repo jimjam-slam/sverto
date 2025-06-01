@@ -52,21 +52,6 @@ function inject_svelte_and_compile(m)
   --     "a list of string paths, not " .. pandoc.utils.type(m.sverto.use))
   -- end
 
-  -- figure out where mount.js will live
-  -- (in a project, we only need a server js path to add to the html.
-  -- (for single docs, we need a relative path to give to the svelte compiler
-  -- too)
-  local mount_path_compiled
-  if quarto.project.directory ~= nil then
-    mount_path_compiled = '/site_libs/sverto'
-  else
-    local outBasename = pandoc.path.split_extension(
-        pandoc.path.filename(quarto.doc.output_file))
-    mount_path_compiled = './' .. outBasename .. '_files' ..
-      '/libs/sverto'
-    pandoc.system.make_directory(mount_path_compiled, true)
-  end
-
   -- either add text to start of body (and return nil), or return a rawblock
   -- %s: compiled svelte js path
   -- %s: obj_name
@@ -77,8 +62,6 @@ function inject_svelte_and_compile(m)
       document.addEventListener("DOMContentLoaded", () => {
         
         import("%s").then(svelteModule => {
-          
-          console.log("Svelte module is:", svelteModule)
 
           const ojsModule = window._ojs?.ojsConnector?.mainModule
           if (ojsModule === undefined) {
@@ -95,15 +78,9 @@ function inject_svelte_and_compile(m)
     </script>
   ]]
 
-  -- create the template for mount.js and inject into the doc
-  local mount_insert = string.format(svelteInitTemplate,
-    pandoc.path.join({ mount_path_compiled, "mount.js" }),
-    "mount")
-  quarto.doc.include_text("before-body", mount_insert)
-
   -- now inject the ojs init code for the user's svelte bundles while
   -- buildinga list of .svelte files to potentially compile
-  local sveltePaths = quarto.utils.resolve_path("mount.svelte") .. ":"
+  local sveltePaths = ""
   for index, path in ipairs(m.sverto.use) do
     -- this is where we process the other .svelte paths
     local in_path  = pandoc.utils.stringify(path)
@@ -135,7 +112,6 @@ function inject_svelte_and_compile(m)
         "npm run build rollup.config.js -- " ..
         '--configQuartoOutPath="./" ' ..
         '--configSvelteInPaths="' .. sveltePaths .. '" ' ..
-        '--configSvelteMountPath=' .. mount_path_compiled .. '" ' ..
         '--bundleConfigAsCjs'
       local svelteResult = os.execute(svelteCommand)
       quarto.log.debug("Svelte compiler finished with code " .. svelteResult)
