@@ -17,9 +17,9 @@ If you'd like to see how the bar chart works internally, the code for it is show
 
 But for the purposes of this example, all you need to know about is the chart's _props_: updateable options to customise the chart. We'll cover those in step 2.
 
-# Step 1: initialise
+# Step 1: import
 
-First, we need to add Sverto and the bar chart in our document frontmatter:
+First, we need to add Sverto and the bar chart's `.svelte` file to our document frontmatter:
 
 ```yaml
 ---
@@ -31,25 +31,24 @@ sverto:
 ---
 ```
 
-Then, the following OJS code initialises our bar chart.
-
-We use the name of the Svelte file (without the file extension), then `.default()`, to create the component. So for `BarChart.svelte`, we use `BarChart.default()`. This function is called a _constructor_.
-
-The constructor needs at least one thing to, uhh, _construct_ the chart: a `target`, or place to put the chart. You can use `document.querySelector()` to tell it a place that will exist in the document, and then create that place like this:
+# Step 2: place
 
 <!-- if you're reading this source doc, we've added some sneaky extra stuff
      to make the barchart stick in the margin. in your own work, all you need
     is the pandoc div shown above to insert a sverto component! -->
 
-:::::{.column-margin style="height: 1500px;"}
+To place the component on the page, we use its [custom element name](https://svelte.dev/docs/svelte/custom-elements) (found at the top of the Svelte file) and create it like an HTML tag.
+
+If you're reading this on a desktop, I've placed the barchart in the page margin so we can keep an eye on it as it changes!
+
+:::::{.column-margin style="height: 1500px"}
 ::::{.barchart-wrapper}
 
 ```{ojs}
 //| echo: fenced
 myBarChart =
   html`
-    <bar-chart
-      barColor="pink">
+    <bar-chart>
     </bar-chart>`
 ```
 
@@ -68,15 +67,13 @@ myBarChart =
 ::::
 :::::
 
-Sverto will put the chart inside it.
+We've also assigned the barchart to a variable in OJS, `myBarChart`. You don't have to this—unless you want to change your chart over time!
 
-We've also named our chart `myBarChart`. This is important so that we can customise it!
-
-# Step 2: react
+# Step 3: react
 
 The real power of Sverto is that we can customise aspects of our charts and have them update in response to other things.
 
-In Svelte, these customisable options are called _props_.
+In Svelte, these customisable options are called [props](https://svelte.dev/tutorial/svelte/declaring-props).
 
 This Svelte component accepts a few props:
 
@@ -86,23 +83,20 @@ This Svelte component accepts a few props:
 * `barWidth`: the width of each bar
 * `barColor`: the colour of the bars and labels (note the US spelling here) in res
 
-**To specify props, use the name of the constructed chart (`myBarChart`, remember?), then the name of the prop.**
-
-Those props can be fixed and unchanging:
+We can update any of those props in OJS code using `myBarChart.propName`. We can make them values that are fixed and unchanging:
 
 ```{ojs}
 //| echo: fenced
 myBarChart.width = 200
 ```
 
-But with OJS, we can also tie them to things that change, like our data!
+But we can also tie them to things that change, like our data!
 
-We can update any of those values up to OJS code using `myBarChart.propName`.
+:::{}
 
 :::{.panel-input}
 
 **Let's make some controls so that users can animate the chart's data and colour themselves:**
-
 
 ```{ojs}
 //| echo: fenced
@@ -132,12 +126,14 @@ myBarChart.barColor =  userColor;
 
 And we're done!
 
-:::{.callout-note appearance="simple" title="What about the other props?" style="background-color:lightblue"}
-Weren't there other props, like `height` and `barWidth`?
+:::{.callout-note appearance="simple" collapse="true"}
+## Weren't there other props, like `height` and `barWidth`?
 
-Yup! The props in this Svelte component (and many that you'll use) have default values that are used if you don't provide one.
+Yup! The props in this Svelte component (and many that you'll use) have default values that are used if you don't provide one. Keep in mind that your Svelte component will start with those defaults on page load and _then_ switch to the values you provide in OJS.
 
-You can also include default `props` as an option when you create the chart, but I generally find it simpler and easier to keep the props away from the constructor.
+You can also include default props when you place the component — for example, `<bar-chart barColour="pink"></bar-chart>`.
+
+By default, default prop values are interpreted as strings. If you want to pass other types of data as default props, you'll need to [specify that](https://svelte.dev/docs/svelte/custom-elements#Component-options) at the top of your Svelte file.
 :::
 
 # Summary
@@ -145,9 +141,8 @@ You can also include default `props` as an option when you create the chart, but
 How did we get this chart going again?
 
 1. Add `filters: ["sverto"]` to our frontmatter, plus the name of our Svelte file to `sverto.use`
-2. Created the chart with `myBarChart = new BarChart.default()`, giving it a `target` to place the chart in
-3. We created the `target` with a Pandoc div: `:::{#mybarchart}`
-4. We customised the bar chart by assigning to `myBarChart.propName`
+2. Created the chart with ``myBarChart = html`<bar-chart></bar-chart>` ``
+4. We updated the bar chart by assigning to `myBarChart.propName`
 
 # Challenges
 
