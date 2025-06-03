@@ -2,7 +2,7 @@
 
 **Sverto** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website.
 
-Your Svelte components can seamlessly react to your [Observable JavaScript](https://quarto.org/docs/interactive/ojs/) code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/@observablehq/inputs?collection=@observablehq/inputs) or other changing data in your Quarto document.
+Your Svelte components can seamlessly react to your [Observable JavaScript](https://quarto.org/docs/interactive/ojs/) code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/documentation/inputs/overview) or other changing data in your Quarto document.
 
 Get going in four easy steps:
 
@@ -12,7 +12,7 @@ If you've never written Svelte before, don't worry! You can start learning quick
 
 Sverto now uses a technique called [custom components](https://svelte.dev/docs/svelte/custom-elements) to bring Svelte into Quarto. So your Svelte component will need to start with a line like:
 
-```{.svelte filename="Circles.svelte"}
+```html
 <svelte:options customElement="my-circles" />
 ```
 
@@ -36,29 +36,21 @@ sverto:
 
 Remember the name at the top of your Svelte file? To place your Svelte component, you're going to use that name as if it were an HTML tag:
 
+````js
 ```{ojs}
-//| echo: fenced
 myCircles = html`<my-circles></my-circles>`
 ```
+````
 
 **Step 4: To update your Svelte component, use accessors to give it new props**
 
 If your Svelte component has [props](https://svelte.dev/tutorial/svelte/declaring-props) and you've assigned it to a variable in OJS, you can update the props on the fly! Let's update the data for our circles above:
 
+````js
 ```{ojs}
-//| echo: fenced
 myCircles.data = newData
 ```
-
-**Step 4 (for websites): set the project type**
-
-If you're using a [Quarto website](https://quarto.org/docs/projects/quarto-projects.html), change the `project.type` in `_quarto.yml` from `website` to `sverto`.
-
-This way, your website pages can reuse Svelte components when you're rendering the whole website.
-
-> [!NOTE]
->
-> If you're already using a custom website type, feel free to skip this step — it just means that your Svelte components might get rendered twice if you reuse them across pages.
+````
 
 ## ⚙️ Installation
 

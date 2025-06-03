@@ -1,7 +1,5 @@
 project:
-  type: sverto
-  # pre-render:
-  #   - './copy-extension.sh'
+  type: website
   
 execute:
   freeze: auto
@@ -13,15 +11,18 @@ website:
     left:
       - text: "Sverto"
         file: index.qmd
-      - text: "Examples"
+      - text: Examples
         menu:
           - text: "Simple bar chart"
             file: examples/barchart/index.qmd
           - text: "Time series chart"
             file: examples/time-series/index.qmd
-      - text: Changelog
+      - text: Articles
+        menu:
+          - text: Default prop values
+            file: articles/default-prop-values/index.qmd
+      - text: News
         file: news.qmd
-      # - about.qmd
     right:
       - icon: github
         href: https://github.com/jimjam-slam/sverto

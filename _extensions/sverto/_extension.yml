@@ -5,7 +5,6 @@ quarto-version: ">=1.4.0"
 contributes:
   filters:
     - sverto.lua
-  project:
+  metadata:
     project:
-      type: website
       pre-render: sverto-prerender.lua
