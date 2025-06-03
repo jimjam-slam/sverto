@@ -1,0 +1,7 @@
+---
+title: "Articles"
+description: In-depth use of Sverto.
+listing:
+  contents:
+    - "*/index.qmd"
+---
