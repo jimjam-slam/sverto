@@ -7,3 +7,20 @@
     0 .2em .8em .2em rgba(0,0,0,.05),
     0 .2em .6em .1em rgba(0,0,0,.025);
 }
+
+/* svelte code blocks (no syntax highlighting) */
+
+.code-with-filename {
+  margin: 1em 0;
+}
+
+.svelte.sourceCode {
+  background-color: rgba(233,236,239,.65);
+  border: 1px solid rgba(233,236,239,.65);
+  border-radius: .25rem;
+  color: #003b4f;
+}
+
+.code-with-filename .code-with-filename-file strong {
+  color: var(--quarto-scss-export-text-muted, "slategrey");
+}
