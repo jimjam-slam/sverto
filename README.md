@@ -60,7 +60,7 @@ You'll need to install two things to run Sverto:
 - [Node and the Node Package Manager (npm)](https://nodejs.org)
 
 
-Install the project extension using:
+Install the extension using:
 
 ```
 quarto use template jimjam-slam/sverto
