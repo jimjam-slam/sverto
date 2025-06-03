@@ -1,5 +1,10 @@
 <!-- this line is needed to add your svelte component to quarto! -->
-<svelte:options customElement="bar-chart" />
+<svelte:options customElement={{
+  tag: "bar-chart",
+  props: {
+    data: { type: "Array" }
+  }
+}} />
 
 <script>
 
@@ -28,8 +33,6 @@
   })));
 
 </script>
-
-{@debug normalisedData}
 
 <!-- these css styles just apply to our component -->
 <style>

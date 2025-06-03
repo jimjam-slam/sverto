@@ -15,7 +15,7 @@ This isn't going to be one of those barcharts you've seen on TV, what with tick 
 
 If you'd like to see how the bar chart works internally, the code for it is shown at the bottom of this page.
 
-But for the purposes of this example, all you need to know about is the chart's _props_: updateable options to customise the chart. We'll cover those in step 2.
+But for the purposes of this example, all you need to know about is the chart's _props_: updateable options to customise the chart. We'll cover those in step 3.
 
 # Step 1: import
 
@@ -33,13 +33,7 @@ sverto:
 
 # Step 2: place
 
-<!-- if you're reading this source doc, we've added some sneaky extra stuff
-     to make the barchart stick in the margin. in your own work, all you need
-    is the pandoc div shown above to insert a sverto component! -->
-
 To place the component on the page, we use its [custom element name](https://svelte.dev/docs/svelte/custom-elements) (found at the top of the Svelte file) and create it like an HTML tag.
-
-If you're reading this on a desktop, I've placed the barchart in the page margin so we can keep an eye on it as it changes!
 
 :::::{.column-margin style="height: 1500px"}
 ::::{.barchart-wrapper}
@@ -66,6 +60,8 @@ myBarChart =
 ```
 ::::
 :::::
+
+If you're reading this on a desktop, I've placed the barchart in the page margin so we can keep an eye on it as it changes!
 
 We've also assigned the barchart to a variable in OJS, `myBarChart`. You don't have to this—unless you want to change your chart over time!
 
@@ -104,11 +100,11 @@ But we can also tie them to things that change, like our data!
 
 viewof userData = Inputs.form(
   [
-    Inputs.text({type: "number", value: 25, width: 20}),
-    Inputs.text({type: "number", value: 35, width: 20}),
-    Inputs.text({type: "number", value: 65, width: 20}),
-    Inputs.text({type: "number", value: 5, width: 20}),
-    Inputs.text({type: "number", value: 50, width: 20})
+    Inputs.number({ value: 25, width: 20}),
+    Inputs.number({ value: 35, width: 20}),
+    Inputs.number({ value: 65, width: 20}),
+    Inputs.number({ value: 5, width: 20}),
+    Inputs.number({ value: 50, width: 20})
   ]);
 
 viewof userColor = Inputs.color({ value: "#36a7e9" });
@@ -120,6 +116,7 @@ Now, we update the props to the value of these controls:
 
 ```{ojs}
 //| echo: fenced
+//| 
 myBarChart.data = [...userData];
 myBarChart.barColor =  userColor;
 ```
