@@ -1,3 +1,11 @@
+<!-- this line is needed to add your svelte component to quarto! -->
+<svelte:options customElement={{
+  tag: "my-circles",
+  props: {
+    data: { type: "Array" }
+  }
+}} />
+
 <script>
   // let's borrow svelte's fly transitions for the circles that need to be
   // created or destroyed
