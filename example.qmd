@@ -1,6 +1,5 @@
 ---
 title: Sverto example
-date: last-modified
 filters:
   - sverto
 sverto:
@@ -10,18 +9,11 @@ sverto:
 
 This document shows you how to use a basic example Svelte component called `Circles.svelte`.
 
-Create one using `fileName.default()`, where `fileName` is the file name without `.svelte`:
+Create one using an HTML template:
 
 ```{ojs}
-myCircles = new Circles.default({
-  target: document.querySelector("#mycircles")
-});
+myCircles = html`<my-circles></my-circles>`
 ```
-
-It will appear in a [div](https://quarto.org/docs/authoring/markdown-basics.html#divs-and-spans) called `#mycircles`, which I've added directly below:
-
-:::{#mycircles}
-:::
 
 Now the fun part - updating our visual when our document changes. It's as simple as changing the prop using `componentName.propName =`.
 
