@@ -100,6 +100,10 @@ Install the extension using:
 quarto use template jimjam-slam/sverto
 ```
 
+:::{.callout-note}
+> If you're running Sverto in a Quarto project, be sure to install it from the root, or top-level, project folder.
+:::
+
 Then run:
 
 ```sh
