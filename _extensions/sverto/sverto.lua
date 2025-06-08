@@ -1,4 +1,5 @@
 -- sverto.lua
+-- james goldie
 -- this filter runs on individual documents when it's specified. it handles 2–3
 -- things:
 -- 1) looks in the doc meta for svelte paths
@@ -8,28 +9,10 @@
 --    (if it is a project, this step is handled by sverto-prerender.lua across
 --    the whole project)
 
--- file_exists: true if the file at `name` exists
--- from https://pandoc.org/lua-filters.html#building-images-with-tikz
-function file_exists(name)
-  local f = io.open(name, 'r')
-  if f ~= nil then
-    io.close(f)
-    return true
-  else
-    return false
-  end
-end
+print(">>> FILTER")
+os.execute("pwd")
 
--- append_to_file: append a string of `content` to the file with the path `name`
-function append_to_file(name, content)
-  local file = io.open(name, "a")
-  if file == nil then
-      return ""
-  end
-  file:write(content)
-  file:close()
-  return content
-end
+util = require("./util")
 
 -- inject_svelte: a pandoc filter that extracts svelte files named in the doc
 -- frontmatter and adds javascript blocks to import them as es modules
@@ -47,27 +30,12 @@ function inject_svelte_and_compile(m)
   end
 
   -- abort if sverto.use is not a list of MetaInlines
-  local sverto_use
-  if pandoc.utils.type(m.sverto.use) == "List" then
-    sverto_use = m.sverto.use
-  elseif type(m.sverto.use) == "string" then
-    sverto_use = { m.sverto.use }
-  else
-    quarto.log.error(
-      "sverto.use should be Inlines, not " .. 
-      pandoc.utils.type(m.sverto.use))
-  end
-
-  -- if pandoc.utils.type(m.sverto.use) ~= "List" then
-  --   quarto.log.error(
-  --     "Sverto error: sverto.use key should be either a string path or " ..
-  --     "a list of string paths, not " .. pandoc.utils.type(m.sverto.use))
-  -- end
+  local sverto_use = util.get_svelte_paths_from_meta(m)
 
   -- either add text to start of body (and return nil), or return a rawblock
   -- %s: compiled svelte js path
   -- %s: obj_name
-  local svelteInitTemplate = [[
+  local svelte_js_import_template = [[
     <script type="module">
 
       // when the doc is ready, find quarto's ojs and inject svelte import
@@ -92,7 +60,7 @@ function inject_svelte_and_compile(m)
 
   -- now inject the ojs init code for the user's svelte bundles while
   -- buildinga list of .svelte files to potentially compile
-  local sveltePaths = ""
+  local svelte_paths_string = ""
   for index, path in ipairs(m.sverto.use) do
     -- this is where we process the other .svelte paths
     local in_path  = pandoc.utils.stringify(path)
@@ -105,44 +73,19 @@ function inject_svelte_and_compile(m)
     })
 
     -- add .svelte path to svelte compiler path list...
-    sveltePaths = sveltePaths .. in_path .. ":"
+    svelte_paths_string = svelte_paths_string .. in_path .. ":"
 
     -- ... and inject the ojs init code for it
-    local svelte_insert = string.format(svelteInitTemplate,
+    local svelte_insert = string.format(svelte_js_import_template,
       compiled_path, obj_name)
     quarto.doc.include_text("before-body", svelte_insert)
-
-    -- now run the svelte compiler... if we're not in a project
-    -- (if we are, let the prerender script handle that step)
 
     -- finally, if we're rendering a single doc (not in a project),
     -- compile the svelte file to a js bundle
     if quarto.project.directory ~= nil then
       quarto.log.debug("Project found; deferring Svelte compilation to pre-render script")
     else
-      local rollup_config
-      if file_exists("./_extensions/jimjam-slam/sverto/rollup.config.js") then
-        rollup_config = "./_extensions/jimjam-slam/sverto/rollup.config.js"
-      elseif file_exists("./_extensions/sverto/rollup.config.js") then
-        rollup_config = "./_extensions/sverto/rollup.config.js"
-      else
-        print("Error: Sverto extension files not found. " ..
-        "Is Sverto installed properly?")
-        os.exit(1)
-      end
-
-      local svelteCommand =
-        "npm run build " .. rollup_config .. " -- " ..
-        '--configQuartoOutPath="./" ' ..
-        '--configSvelteInPaths="' .. sveltePaths .. '" ' ..
-        '--bundleConfigAsCjs'
-      local svelteResult = os.execute(svelteCommand)
-      if svelteResult == nil or svelteResult == true then
-        print("Sverto compiler finished!")
-      else
-        print("Svelte compiler finished with code " .. tostring(svelteResult))
-      end
-      
+      util.compile_svelte_files("./", svelte_paths_string) 
     end
   end
 end
