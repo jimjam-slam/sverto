@@ -19,6 +19,8 @@ website:
             file: examples/time-series/index.qmd
       - text: Articles
         menu:
+          - text: Migrating from Sverto v1 and Svelte 3
+            file: articles/migrating-from-sverto-v1
           - text: Default prop values
             file: articles/default-prop-values/index.qmd
       - text: News

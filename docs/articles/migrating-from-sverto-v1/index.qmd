@@ -1,0 +1,110 @@
+---
+title: Migrating from Sverto v1 and Svelte 3
+---
+
+If you've already been using Sverto v1, there are a few changes you'll need to make to update to quarto-svelte v2.
+
+# Update the extension
+
+Because the name of the extension has changed, I recommend deleting `_extensions/jimjam-slam/sverto` (or `_extensions/sverto`, if you installed from a ZIP file) from your project.
+
+Then, from the root of your project (or the same folder as your doc, if you aren't using a project) run:
+
+```bash
+quarto use template jimjam-slam/quarto-svelte
+```
+
+# (For projects) Remove the custom project type
+
+Previously, we used `project.type: sverto` instead of `project.type: website` in `_quarto.yml`. This meant that you couldn't use Sverto with other custom project types.
+
+This is no longer the case: quarto-svelte v2 operates as a [metadata extension](https://quarto.org/docs/extensions/metadata.html), so its project prerender script will work automatically whenever it's installed in a Quarto project. You can revert the project type to `website`, or to another custom project type if you have other extensions installed.
+
+# Migrate components
+
+Version 2 of quarto-svelte moves from Svelte 3 to Svelte 5.
+
+This is a substantial change even to basic components, and your Svelte components will need to be updated for the change. Start with the [Svelte 5 migration guide](https://svelte.dev/docs/svelte/v5-migration-guide) to get a sense of the changes you need to make.
+
+Thankfully, Svelte also provides a [migration script](https://svelte.dev/docs/svelte/v5-migration-guide#Migration-script) that can automatically update old components.
+
+To run the migration tool, from your project or document folder run:
+
+```bash
+npx sv migrate svelte-5
+```
+
+# Add custom element options to components
+
+As well as migrating components to Svelte 5, you will need to configure them as [custom elements](https://svelte.dev/docs/svelte/custom-elements).
+
+Using custom elements allows Svelte components to be placed on the page as if they were HTML elements. It also allows quarto-svelte to sidestep difficult changes to the way Svelte components are normally placed on pages.
+
+Unfortunately, this configuration isn't something that can be done automatically — you'll need to provide, at minimum, a name for your custom element by providing a block like the following at the top of your Svelte component (before the `<script>` tag):
+
+```{.svelte .sourceCode filename="Example.svelte"}
+<svelte:options customElement="my-element" />
+```
+
+Here the filename is `Example.svelte` but the element name is `my-element`.
+
+You can customise this block further — see [Default prop values](/articles/default-prop-values) for examples of other options you can provide.
+
+# Document frontmatter
+
+This is a small change: instead of `sverto` in your document's frontmatter, use `quarto-svelte`. That goes for both the filter name and the list of Svelte files you're importing:
+
+```yaml
+---
+filters:
+  - quarto-svelte    # previously `sverto`
+quarto-svelte:       # previously `sverto`
+  use:
+    - example.svelte
+---
+```
+
+# Instantiation
+
+Previously, you placed a Svelte component called `Example.svelte` on the page with an OJS block that called `new Example.default()`. You gave it the ID of a block to place it in and separately created that block with Pandoc.
+
+Things are a bit simpler now: you create an HTML element using the custom element name.
+
+You can do that using a [Hypertext Literal](https://observablehq.com/@observablehq/htl) or with JavaScript:
+
+:::{.panel-tabset}
+
+## Hypertext Literal
+
+```{ojs}
+//| eval: false
+//| echo: fenced
+myElement = html`<my-element></my-element>`
+```
+
+## JavaScript
+
+```{ojs}
+//| eval: false
+//| echo: fenced
+myElement = document.createElement("my-element")
+```
+
+:::
+
+The HTL syntax is a bit simpler, but if you need to feed complex data structures to your component as default initialisation values, you may prefer the JavaScript syntax. See [Default prop values]((/articles/default-prop-values)) for more details on how to provide default prop values to components.
+
+# Reactivity
+
+Reactivity works just as before: treat your component's props as members and assign to them.
+
+```{ojs}
+//| eval: false
+//| echo: fenced
+myElement.data = [1, 2, 3]
+myElement.theme = "spring"
+```
+
+That's it — you're ready to go!
+
+If you have issues with quarto-svelte v2, please [raise an issue](https://github.com/jimjam-slam/quarto-svelte).
