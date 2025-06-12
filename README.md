@@ -68,6 +68,8 @@ quarto use template jimjam-slam/quarto-svelte
 
 > [!NOTE]
 > If you're running quarto-svelte in a Quarto project, be sure to install it from the root, or top-level, project folder.
+>
+> Do not use `quarto add`: quarto-svelte includes a `package.json` file that must sit in your project or document folder. `quarto use template` will copy this file for you.
 
 Then run:
 
