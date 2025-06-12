@@ -59,17 +59,17 @@ function offset_svelte_path(svelte_path, input_path)
 end
 
 function get_svelte_paths_from_meta(m)
-  local quarto-svelte_use
-  if pandoc.utils.type(m.quarto-svelte.use) == "List" then
-    quarto-svelte_use = m.quarto-svelte.use
-  elseif type(m.quarto-svelte.use) == "string" then
-    quarto-svelte_use = { m.quarto-svelte.use }
+  local quarto_svelte_use
+  if pandoc.utils.type(m["quarto-svelte"].use) == "List" then
+    quarto_svelte_use = m["quarto-svelte"].use
+  elseif type(m["quarto-svelte"].use) == "string" then
+    quarto_svelte_use = { m["quarto-svelte"].use }
   else
     quarto.log.error(
-      "quarto-svelte.use should be Inlines, not " .. 
-      pandoc.utils.type(m.quarto-svelte.use))
+      "[\"quarto-svelte\"].use should be Inlines, not " .. 
+      pandoc.utils.type(m["quarto-svelte"].use))
   end
-  return quarto-svelte_use
+  return quarto_svelte_use
 end
 
 function compile_svelte_files(quarto_out_path, svelte_paths_string)

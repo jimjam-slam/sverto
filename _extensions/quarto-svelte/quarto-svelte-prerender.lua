@@ -38,13 +38,13 @@ for input_path in input_paths:gmatch("[^\n]+") do
     Meta = function(m)
 
       -- confirm quarto-svelte.use is a string or list
-      if m.quarto-svelte == nil or m.quarto-svelte.use == nil then
+      if m["quarto-svelte"] == nil or m["quarto-svelte"].use == nil then
         return nil
       end
 
-      local quarto-svelte_use = util.get_svelte_paths_from_meta(m)
+      local quarto_svelte_use = util.get_svelte_paths_from_meta(m)
       -- add each unique path, resolving relative project location
-      for _, svelte_path in ipairs(quarto-svelte_use) do
+      for _, svelte_path in ipairs(quarto_svelte_use) do
         local offset_path = util.offset_svelte_path(
           pandoc.utils.stringify(svelte_path),
           input_path)
