@@ -183,7 +183,7 @@ Here's the code in the Svelte file:
 
 This chart has a few differences from the [simpler barchart example](../barchart):
 
-1. We make the chart responsive to changes in window size by wrapping the `<svg>` in a `<main`> and using `bind:clientHeight` and `bind:clientWidth` to track the space available to the chart
+1. We make the chart responsive to changes in window size by wrapping the `<svg>` in a `<main>` and using `bind:clientWidth` to track the space available to the chart
 2. Since this is designed for more data, we use axes instead of labelling each datum. We use [`d3-axis`](https://d3js.org/d3-axis) for this. Instead of directly drawing the SVG elements of the axis, we create a placeholder and then use D3's functions to create the content, making them reactive to changes in data or window size with `$:`
 3. Instead of passing in colour directly, we let the user in Quarto choose a colour scheme (`"warm"` or `"cool"`). In this example, the colour scheme is connected to the Daytime or Nighttime option.
 
