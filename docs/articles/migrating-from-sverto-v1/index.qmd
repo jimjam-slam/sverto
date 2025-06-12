@@ -1,5 +1,6 @@
 ---
 title: Migrating from Sverto v1 and Svelte 3
+date: 2025-06-12
 ---
 
 If you've already been using Sverto v1, there are a few changes you'll need to make to update to quarto-svelte v2.
