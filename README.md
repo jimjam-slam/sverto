@@ -66,7 +66,7 @@ Install the extension and required files using:
 quarto use template jimjam-slam/quarto-svelte
 ```
 
-> ![NOTE]
+> [!NOTE]
 > If you're running quarto-svelte in a Quarto project, be sure to install it from the root, or top-level, project folder.
 
 Then run:
@@ -87,7 +87,7 @@ When you use the quarto-svelte template in a project, it creates some files for 
 * `package-lock.json` is created once you run `npm install`. You should add this to version control.
 * `node_modules/`: This folder is created once you rum `npm install`. Don't add it to version control.
 
-> ![NOTE]
+> [!NOTE]
 > `quarto preview` won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
 > 
 > If you want to quickly iterate on the Svelte component, you might find the [Svelte Preview](https://marketplace.visualstudio.com/items?itemName=RafaelMartinez.svelte-preview) extension for VSCode handy.
