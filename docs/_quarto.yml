@@ -8,11 +8,12 @@ website:
   announcement:
     icon: stars
     dismissable: true
-    type: success
+    type: warning
     position: above-navbar
-    content: "Sverto is now quarto-svelte — and it supports Svelte 5! [**Learn how to migrate to the new version.**](/articles/migrating-from-sverto-v1){style=\"color: var(--bs-text-success)\"}"
+    content: "Sverto is now quarto-svelte — and it supports Svelte 5! [**Learn how to migrate to the new version.**](/articles/migrating-from-sverto-v1){style=\"color: var(--bs-text-warning)\"}"
   navbar:
-    background: "#222222"
+    background: "#ff3e00"
+    foreground: "white"
     search: true
     left:
       - text: "quarto-svelte"
@@ -34,11 +35,12 @@ website:
     right:
       - icon: github
         href: https://github.com/jimjam-slam/quarto-svelte
+  page-footer: "quarto-svelte is developed by James Goldie. It is not affiliated with the developers of Svelte."
 
 format:
   html:
-    title-block-banner: true
+    title-block-banner: "#ff3e00"
     theme: [default, style.scss]
-    # linkcolor: "#36a7e9"
+    linkcolor: "#ff3e00"
     callout-appearance: simple
     
