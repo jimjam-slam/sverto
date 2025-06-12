@@ -35,11 +35,11 @@ website:
     right:
       - icon: github
         href: https://github.com/jimjam-slam/quarto-svelte
-  page-footer: "quarto-svelte is developed by James Goldie. It is not affiliated with the developers of Svelte."
+  page-footer: "The developers of Svelte are not affiliated with quarto-svelte."
 
 format:
   html:
-    title-block-banner: "#ff3e00"
+    title-block-banner: "#222222"
     theme: [default, style.scss]
     linkcolor: "#ff3e00"
     callout-appearance: simple

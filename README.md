@@ -1,4 +1,4 @@
-# quarto-svelte
+# quarto-svelte <img src="_extensions/quarto-svelte/quarto-svelte-logo.svg" align="right" width="180px" style="padding-left: 1rem;" />
 
 **quarto-svelte** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website.
 
