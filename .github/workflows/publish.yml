@@ -5,7 +5,7 @@ on:
   push:
     branches: main
 
-name: sverto-publish
+name: quarto-svelte-publish
 
 permissions:
   contents: read
@@ -31,16 +31,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install Sverto docs npm dependencies
+      - name: Install quarto-svelte docs npm dependencies
         run: npm install
         working-directory: ./docs
       - name: Create docs _extensions folder
         run: mkdir docs/_extensions
         shell: bash
-      - name: Copy Sverto extension into docs 
-        run: cp -rf _extensions/sverto docs/_extensions/sverto
+      - name: Copy quarto-svelte extension into docs 
+        run: cp -rf _extensions/quarto-svelte docs/_extensions/quarto-svelte
         shell: bash
-      - name: Render sverto docs
+      - name: Render quarto-svelte docs
         uses: quarto-dev/quarto-actions/render@v2
         with:
           path: docs
