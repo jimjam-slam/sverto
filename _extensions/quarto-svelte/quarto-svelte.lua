@@ -9,8 +9,7 @@
 --    (if it is a project, this step is handled by quarto-svelte-prerender.lua across
 --    the whole project)
 
-print(">>> FILTER")
-os.execute("pwd")
+quarto.log.info(">>> quarto-svelte: document filter")
 
 util = require("./util")
 
@@ -25,7 +24,12 @@ function inject_svelte_and_compile(m)
 
   -- no files to process? abort
   if m["quarto-svelte"] == nil or m["quarto-svelte"].use == nil then
-    quarto.log.warning("No Svelte files found. To use quarto-svelte with this document, add a list of .svelte files to the document frontmatter under the `quarto-svelte.use` key.")
+    quarto.log.warning(
+      "No Svelte files found under `quarto-svelte.use`. " ..
+      "To use quarto-svelte with this document, add a list of .svelte files " .."to the document frontmatter under the `quarto-svelte.use` key.\n\n" ..
+      "If you did not intend to use quarto-svelte on this document, " ..
+      "consider removing the quarto-svelte filter (you can still use it on " ..
+      "other pages of a Quarto website).")
     return nil
   end
 

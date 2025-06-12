@@ -65,7 +65,7 @@ function get_svelte_paths_from_meta(m)
   elseif type(m["quarto-svelte"].use) == "string" then
     quarto_svelte_use = { m["quarto-svelte"].use }
   else
-    quarto.log.error(
+    print(
       "[\"quarto-svelte\"].use should be Inlines, not " .. 
       pandoc.utils.type(m["quarto-svelte"].use))
   end
@@ -93,9 +93,9 @@ function compile_svelte_files(quarto_out_path, svelte_paths_string)
     
     local rollup_result = os.execute(svelte_command)
     if rollup_result == nil or rollup_result == true then
-      print("quarto-svelte compiler finished!")
+      print(">>> quarto-svelte: Svelte compiler finished!")
     else
-      print("Svelte compiler exited with code " .. tostring(rollup_result))
+      print(">>> quarto-svelte: Svelte compiler exited with code " .. tostring(rollup_result))
     end
 end
 

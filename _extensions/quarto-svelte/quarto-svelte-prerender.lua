@@ -5,6 +5,8 @@
 -- 2) calls the svelte compiler with the svelte paths identified in (1)
 -- (injecting the bundled svelte files into the html is handled by quarto-svelte.lua)
 
+print(">>> quarto-svelte: project pre-render")
+
 -- try to load a module from multiple paths
 -- modified version of https://stackoverflow.com/a/17878208/3246758
 local function try_require(path_table)
