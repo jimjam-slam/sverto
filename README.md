@@ -1,6 +1,6 @@
 # quarto-svelte <img src="_extensions/quarto-svelte/quarto-svelte-logo.svg" align="right" width="180px" style="padding-left: 1rem;" />
 
-**quarto-svelte** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website.
+**quarto-svelte** (formerly Sverto) is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website.
 
 Your Svelte components can seamlessly react to your [Observable JavaScript](https://quarto.org/docs/interactive/ojs/) code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/documentation/inputs/overview) or other changing data in your Quarto document.
 
