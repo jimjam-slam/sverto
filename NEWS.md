@@ -1,3 +1,14 @@
+## quarto-svelte 2.0.0
+
+- Rename Sverto to quarto-svelte
+  - **Breaking:** `filters: ["sverto"]` is now `filters: ["quarto-svelte"]`
+  - **Breaking:** `sverto.use` is now `quarto-svelte.use`
+  - Repo name is now `jimjam-slam/quarto-svelte`, but `jimjam-slam/sverto` will continue to work
+- Upgrade from Svelte 3 to Svelte 5
+  - For notes on rewriting existing Svelte components for Svelte 5, see the [Svelte 5 Migration Guide](https://svelte.dev/docs/svelte/v5-migration-guide)
+- Now uses web components
+  - **Breaking:** in addition to general Svelte 5 migration, components for quarto-svelte need to have a [custom element option](https://svelte.dev/docs/svelte/custom-elements)
+  - **Breaking:** old instantiation syntax no longer works in Svelte 5. Instead, use an HTML template or JavaScript to create an element with the custom element name
 
 ## Sverto 1.0.0
 

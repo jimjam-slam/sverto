@@ -1,7 +1,7 @@
 title: quarto-svelte
 author: James Goldie
-version: 1.0.0
-quarto-version: ">=1.4.0"
+version: 2.0.0
+quarto-version: ">=1.5.46"
 contributes:
   filters:
     - quarto-svelte.lua
