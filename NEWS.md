@@ -1,4 +1,5 @@
-## (Unreleased) Sverto 1.0.0
+
+## Sverto 1.0.0
 
 - Significant refactor of Sverto makes it easier to use and more compatible with Quarto's other features
 - Use Sverto in a Quarto document by adding `sverto` to `filters` in the document frontmatter

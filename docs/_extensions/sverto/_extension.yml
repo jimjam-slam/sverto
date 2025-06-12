@@ -4,7 +4,7 @@ version: 1.0.0
 quarto-version: ">=1.4.0"
 contributes:
   filters:
-    - quarto-svelte.lua
+    - sverto.lua
   metadata:
     project:
-      pre-render: quarto-svelte-prerender.lua
+      pre-render: sverto-prerender.lua

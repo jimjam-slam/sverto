@@ -8,8 +8,8 @@ format:
     resources:
       - "*.csv"
 filters:
-  - sverto
-sverto:
+  - quarto-svelte
+quarto-svelte:
   use:
     - TimeSeriesChart.svelte
 ---

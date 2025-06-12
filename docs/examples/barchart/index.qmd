@@ -3,8 +3,8 @@ title: "Examples: basic barchart"
 author: James Goldie
 date: last-modified
 filters:
-  - sverto
-sverto:
+  - quarto-svelte
+quarto-svelte:
   use:
     - BarChart.svelte
 ---
@@ -19,13 +19,13 @@ But for the purposes of this example, all you need to know about is the chart's 
 
 # Step 1: import
 
-First, we need to add Sverto and the bar chart's `.svelte` file to our document frontmatter:
+First, we need to add quarto-svelte and the bar chart's `.svelte` file to our document frontmatter:
 
 ```yaml
 ---
 filters:
-  - sverto
-sverto:
+  - quarto-svelte
+quarto-svelte:
   use:
     - BarChart.svelte
 ---
@@ -67,7 +67,7 @@ We've also assigned the barchart to a variable in OJS, `myBarChart`. You don't h
 
 # Step 3: react
 
-The real power of Sverto is that we can customise aspects of our charts and have them update in response to other things.
+The real power of quarto-svelte is that we can customise aspects of our charts and have them update in response to other things.
 
 In Svelte, these customisable options are called [props](https://svelte.dev/tutorial/svelte/declaring-props).
 
@@ -137,7 +137,7 @@ By default, default prop values are interpreted as strings. If you want to pass 
 
 How did we get this chart going again?
 
-1. Add `filters: ["sverto"]` to our frontmatter, plus the name of our Svelte file to `sverto.use`
+1. Add `filters: ["quarto-svelte"]` to our frontmatter, plus the name of our Svelte file to `quarto-svelte.use`
 2. Created the chart with ``myBarChart = html`<bar-chart></bar-chart>` ``
 4. We updated the bar chart by assigning to `myBarChart.propName`
 
@@ -151,7 +151,7 @@ Here's the code in the Svelte file:
 ```
 :::
 
-If you'd like to start practising your Svelte, start with [the official tutorial](https://learn.svelte.dev/tutorial/welcome-to-svelte). Sverto is designed to make using Svelte components in Quarto as easy as working in the tutorial.
+If you'd like to start practising your Svelte, start with [the official tutorial](https://learn.svelte.dev/tutorial/welcome-to-svelte). quarto-svelte is designed to make using Svelte components in Quarto as easy as working in the tutorial.
 
 This Svelte component's pretty basic, though. What else is it missing?
 

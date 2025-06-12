@@ -59,26 +59,26 @@ function offset_svelte_path(svelte_path, input_path)
 end
 
 function get_svelte_paths_from_meta(m)
-  local quarto-svelte_use
-  if pandoc.utils.type(m.quarto-svelte.use) == "List" then
-    quarto-svelte_use = m.quarto-svelte.use
-  elseif type(m.quarto-svelte.use) == "string" then
-    quarto-svelte_use = { m.quarto-svelte.use }
+  local sverto_use
+  if pandoc.utils.type(m.sverto.use) == "List" then
+    sverto_use = m.sverto.use
+  elseif type(m.sverto.use) == "string" then
+    sverto_use = { m.sverto.use }
   else
     quarto.log.error(
-      "quarto-svelte.use should be Inlines, not " .. 
-      pandoc.utils.type(m.quarto-svelte.use))
+      "sverto.use should be Inlines, not " .. 
+      pandoc.utils.type(m.sverto.use))
   end
-  return quarto-svelte_use
+  return sverto_use
 end
 
 function compile_svelte_files(quarto_out_path, svelte_paths_string)
   -- first, find the rollup config
   local rollup_config
-    if file_exists("./_extensions/jimjam-slam/quarto-svelte/rollup.config.js") then
-      rollup_config = "./_extensions/jimjam-slam/quarto-svelte/rollup.config.js"
-    elseif file_exists("./_extensions/quarto-svelte/rollup.config.js") then
-      rollup_config = "./_extensions/quarto-svelte/rollup.config.js"
+    if file_exists("./_extensions/jimjam-slam/sverto/rollup.config.js") then
+      rollup_config = "./_extensions/jimjam-slam/sverto/rollup.config.js"
+    elseif file_exists("./_extensions/sverto/rollup.config.js") then
+      rollup_config = "./_extensions/sverto/rollup.config.js"
     else
       print("Error: quarto-svelte extension files not found. " ..
       "Is quarto-svelte installed properly?")

@@ -1,8 +1,8 @@
 ---
-title: Sverto example
+title: quarto-svelte example
 filters:
-  - sverto
-sverto:
+  - quarto-svelte
+quarto-svelte:
   use:
     - Circles.svelte
 ---
@@ -42,5 +42,5 @@ myCircles.data = selectedDataset
 
 And there you go! 🚀
 
-For more help writing Svelte components, check out the [Svelte tutorial](https://svelte.dev/tutorial/basics) or take look at some of the examples in the [Sverto documentation](https://sverto.jamesgoldie.dev).
+For more help writing Svelte components, check out the [Svelte tutorial](https://svelte.dev/tutorial/basics) or take look at some of the examples in the [quarto-svelte documentation](https://quarto-svelte.jamesgoldie.dev).
 

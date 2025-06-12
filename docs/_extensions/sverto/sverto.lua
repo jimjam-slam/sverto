@@ -1,13 +1,12 @@
--- quarto-svelte.lua
--- james goldie
+-- sverto.lua
 -- this filter runs on individual documents when it's specified. it handles 2–3
 -- things:
 -- 1) looks in the doc meta for svelte paths
 -- 2) adds a vanilla js block to the doc header to initialise the compiled svelte
 -- 3) IF the filter is NOT running in a project context (ie. a single doc),
 --    call the svelte compiler with the svelte paths identified in (1)
---    (if it is a project, this step is handled by quarto-svelte-prerender.lua across
---    the whole project)
+--    (if it is a project, this step is handled by sverto-prerender.lua across
+--    the whole project)\
 
 print(">>> FILTER")
 os.execute("pwd")
@@ -24,13 +23,13 @@ function inject_svelte_and_compile(m)
   end
 
   -- no files to process? abort
-  if m.quarto-svelte == nil or m.quarto-svelte.use == nil then
-    quarto.log.warning("No Svelte files found. To use quarto-svelte with this document, add a list of .svelte files to the document frontmatter under the `quarto-svelte.use` key.")
+  if m.sverto == nil or m.sverto.use == nil then
+    quarto.log.warning("No Svelte files found. To use quarto-svelte with this document, add a list of .svelte files to the document frontmatter under the `sverto.use` key.")
     return nil
   end
 
-  -- abort if quarto-svelte.use is not a list of MetaInlines
-  local quarto-svelte_use = util.get_svelte_paths_from_meta(m)
+  -- abort if sverto.use is not a list of MetaInlines
+  local sverto_use = util.get_svelte_paths_from_meta(m)
 
   -- either add text to start of body (and return nil), or return a rawblock
   -- %s: compiled svelte js path
@@ -49,8 +48,8 @@ function inject_svelte_and_compile(m)
           }
   
           // TODO - check to see if there's already a variable with that name
-          const quarto-svelteImport = ojsModule?.variable()
-          quarto-svelteImport?.define("%s", svelteModule)
+          const svertoImport = ojsModule?.variable()
+          svertoImport?.define("%s", svelteModule)
 
         })
 
@@ -61,7 +60,7 @@ function inject_svelte_and_compile(m)
   -- now inject the ojs init code for the user's svelte bundles while
   -- buildinga list of .svelte files to potentially compile
   local svelte_paths_string = ""
-  for index, path in ipairs(m.quarto-svelte.use) do
+  for index, path in ipairs(m.sverto.use) do
     -- this is where we process the other .svelte paths
     local in_path  = pandoc.utils.stringify(path)
     local in_dir   = pandoc.path.directory(in_path)

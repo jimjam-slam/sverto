@@ -1,6 +1,6 @@
-# Sverto
+# quarto-svelte
 
-**Sverto** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website.
+**quarto-svelte** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website.
 
 Your Svelte components can seamlessly react to your [Observable JavaScript](https://quarto.org/docs/interactive/ojs/) code, making it quick and easy to build bespoke visuals that animate in response to [user inputs](https://observablehq.com/documentation/inputs/overview) or other changing data in your Quarto document.
 
@@ -10,7 +10,7 @@ Get going in four easy steps:
 
 If you've never written Svelte before, don't worry! You can start learning quickly with the comprehensive [Svelte tutorial](https://svelte.dev/tutorial/svelte/welcome-to-svelte).
 
-Sverto now uses a technique called [custom components](https://svelte.dev/docs/svelte/custom-elements) to bring Svelte into Quarto. So your Svelte component will need to start with a line like:
+quarto-svelte now uses a technique called [custom components](https://svelte.dev/docs/svelte/custom-elements) to bring Svelte into Quarto. So your Svelte component will need to start with a line like:
 
 ```html
 <svelte:options customElement="my-circles" />
@@ -20,13 +20,13 @@ This name, `my-circles`, is what we'll use to place the component in our Quarto 
 
 **Step 2: Add the Svelte file to your doc**
 
-You can import your shiny new Svelte component into Quarto by adding the `sverto` filter and then including it (and any other Svelte files you want) as a list under `sverto.use`:
+You can import your shiny new Svelte component into Quarto by adding the `quarto-svelte` filter and then including it (and any other Svelte files you want) as a list under `quarto-svelte.use`:
 
 ```yaml
 ---
 filters:
-  - sverto
-sverto:
+  - quarto-svelte
+quarto-svelte:
   use:
     - Circles.svelte
 ---
@@ -54,7 +54,7 @@ myCircles.data = newData
 
 ## ⚙️ Installation
 
-You'll need to install two things to run Sverto:
+You'll need to install two things to run quarto-svelte:
 
 - [Quarto](https://quarto.org)
 - [Node and the Node Package Manager (npm)](https://nodejs.org)
@@ -63,11 +63,11 @@ You'll need to install two things to run Sverto:
 Install the extension and required files using:
 
 ```
-quarto use template jimjam-slam/sverto
+quarto use template jimjam-slam/quarto-svelte
 ```
 
 > ![NOTE]
-> If you're running Sverto in a Quarto project, be sure to install it from the root, or top-level, project folder.
+> If you're running quarto-svelte in a Quarto project, be sure to install it from the root, or top-level, project folder.
 
 Then run:
 
@@ -79,7 +79,7 @@ This will add the extension itself (which includes some project scripts) to the 
 
 ### 📦 What's in the box?
 
-When you use the Sverto template in a project, it creates some files for you:
+When you use the quarto-svelte template in a project, it creates some files for you:
 
 * [`example.qmd`](./example.qmd): an example Quarto doc that uses a Svelte component
 * [`Circles.svelte`](./Circles.svelte): an example Svelte visualisation
@@ -101,7 +101,7 @@ If you want to refer to other JavaScript libraries in your Svelte component (lik
 npm install d3
 ```
 
-# 💭 Why Sverto?
+# 💭 Why quarto-svelte?
 
 [Quarto](https://quarto.org) helps data scientists and analysts build beautiful documents regardless of their language of choice, and it encourages data analysts and scientists to explore web visualisation by making JavaScript accessible and easy to use.
 
@@ -111,11 +111,11 @@ Quarto makes interactive charts intuitive to write, but animated ones are still 
 
 Svelte has a great [playground environment](https://svelte.dev/repl) for developing and testing components, but like many web frameworks, the experience is much more complex when you start developing locally.
 
-_Sverto aims to make it as easy to build and use animated Svelte charts in Quarto documents as it is to work on them in the Svelte playground: just write a `.svelte` file, add it to a Quarto document, and Sverto takes care of the rest._
+_quarto-svelte aims to make it as easy to build and use animated Svelte charts in Quarto documents as it is to work on them in the Svelte playground: just write a `.svelte` file, add it to a Quarto document, and quarto-svelte takes care of the rest._
 
 ## ❓ Issues
 
-If you have any problems with the extension, please feel free to [create an issue](https://github.com/jimjam-slam/sverto)!
+If you have any problems with the extension, please feel free to [create an issue](https://github.com/jimjam-slam/quarto-svelte)!
 
-Special thanks to [Carlos Scheidegger](https://github.com/cscheid) from [Posit](https://posit.co) for his time and guidance getting Sverto working!
+Special thanks to [Carlos Scheidegger](https://github.com/cscheid) from [Posit](https://posit.co) for his time and guidance getting quarto-svelte working!
 

@@ -9,7 +9,7 @@ website:
     background: "#222222"
     search: true
     left:
-      - text: "Sverto"
+      - text: "quarto-svelte"
         file: index.qmd
       - text: Examples
         menu:
@@ -25,7 +25,7 @@ website:
         file: news.qmd
     right:
       - icon: github
-        href: https://github.com/jimjam-slam/sverto
+        href: https://github.com/jimjam-slam/quarto-svelte
 
 format:
   html:
