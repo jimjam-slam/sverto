@@ -5,6 +5,12 @@ execute:
   freeze: auto
 
 website:
+  announcement:
+    icon: stars
+    dismissable: true
+    type: success
+    position: above-navbar
+    content: "Sverto is now quarto-svelte — and it supports Svelte 5! [**Learn how to migrate to the new version.**](/articles/migrating-from-sverto-v1){style=\"color: var(--bs-text-success)\"}"
   navbar:
     background: "#222222"
     search: true
@@ -33,6 +39,6 @@ format:
   html:
     title-block-banner: true
     theme: [default, style.scss]
-    linkcolor: "#36a7e9"
+    # linkcolor: "#36a7e9"
     callout-appearance: simple
     

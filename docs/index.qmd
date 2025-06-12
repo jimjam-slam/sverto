@@ -1,6 +1,6 @@
 ---
 title: quarto-svelte
-description: "**quarto-svelte** is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website."
+description: "**quarto-svelte** (formerly Sverto) is an extension for [Quarto](https://quarto.org) that lets you seamlessly write and include [Svelte](https://svelte.dev) components, like charts and other visuals, in your Quarto website."
 format:
     html:
       toc: true
