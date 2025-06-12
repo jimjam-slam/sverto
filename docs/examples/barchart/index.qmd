@@ -88,8 +88,6 @@ myBarChart.width = 200
 
 But we can also tie them to things that change, like our data!
 
-:::{}
-
 :::{.panel-input}
 
 **Let's make some controls so that users can animate the chart's data and colour themselves:**
@@ -123,7 +121,7 @@ myBarChart.barColor =  userColor;
 
 And we're done!
 
-:::{.callout-note appearance="simple" collapse="true"}
+:::{.callout-note collapse="true"}
 ## Weren't there other props, like `height` and `barWidth`?
 
 Yup! The props in this Svelte component (and many that you'll use) have default values that are used if you don't provide one. Keep in mind that your Svelte component will start with those defaults on page load and _then_ switch to the values you provide in OJS.
@@ -145,7 +143,7 @@ How did we get this chart going again?
 
 Here's the code in the Svelte file:
 
-:::{.callout-note appearance="simple" collapse="true" title="BarChart.svelte"}
+:::{.callout-note collapse="true" title="BarChart.svelte"}
 ```{.html}
 {{< include BarChart.svelte >}}
 ```

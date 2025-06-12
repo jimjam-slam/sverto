@@ -18,7 +18,7 @@ Let's do something more useful: a time series of temperature extremes.
 
 In Quarto, we'll download the data for two cities (Melbourne and Brisbane), letting the user choose which to display. We'll also create controls using [Observable Inputs](https://observablehq.com/documentation/inputs/overview) to let them choose a month and the extreme to display.
 
-:::{.callout-info appearance="simple" title="What is this data?" collapse="true"}
+:::{.callout-info title="What is this data?" collapse="true"}
 In climate parlance, the highest temperature of the day is called the "daily maximum temperature", or `tmax` for short. The coldest temperature of the day is called "daily minimum temperature", or `tmin` for short.
 
 I'm just calling them "daytime temperature" and "nighttime temperature" here — although the lowest temperature can technically happen during the day, it's usually at night!
@@ -28,7 +28,7 @@ Once the data has been appropriately filtered and calculated, we'll pass it to o
 
 The chart expects a prop called `data`, which is an array of objects that each have a numerical `year` and a `value`.
 
-:::{.callout-tip appearance="simple" collapse="true" title="Can I use this chart with other data?"}
+:::{.callout-tip collapse="true" title="Can I use this chart with other data?"}
 You can! This chart can plot any series of data, although it expects a numerical x value called `year` (it doesn't handle full dates) and a numerical y value called `value`.
 
 The y-axis has a suffix that is set to `"°C"` by default, but you could change this to `°F`, `kph` or something else if you had some other kind of data!
@@ -88,7 +88,7 @@ viewof selectedMetric = Inputs.select(
   new Map([
     ["Hottest", "max"],
     ["Average", "mean"],
-    ["Coldest", "min"],
+    ["Coldest", "min"]
   ]),
   {
     value: "Hottest"
@@ -138,7 +138,7 @@ finalData = allMetrics
 
 Now that the data's processed, we're ready to make the chart:
 
-:::{.callout-tip appearance="simple"}
+:::{.callout-tip}
 Try changing from Daytime to Nighttime!
 :::
 
@@ -160,14 +160,13 @@ timeSeriesChart.data = finalData.objects()
 
 This chart also takes an additional prop: `colourScheme` can be either `cool` or `warm` (`cool` is the default). Let's set that depending on whether we're looking at daytime or nighttime temperatures:
 
-
 ```{ojs}
 //| label: update-chart-colours
 //| output: false
 timeSeriesChart.colourScheme = selectedVariable == "tmax" ? "warm" : "cool"
 ```
 
-:::{.callout-tip appearance="simple"}
+:::{.callout-tip}
 Use `//| output: false` when you update props so that they aren't displayed underneath the cell.
 :::
 
@@ -175,7 +174,7 @@ Use `//| output: false` when you update props so that they aren't displayed unde
 
 Here's the code in the Svelte file:
 
-:::{.callout-note appearance="simple" collapse="true" title="BarChart.svelte"}
+:::{.callout-note collapse="true" title="BarChart.svelte"}
 ```{.html}
 {{< include TimeSeriesChart.svelte >}}
 ```
@@ -189,7 +188,7 @@ This chart has a few differences from the [simpler barchart example](../barchart
 
 And here's the processed data as a table, so we can see what we're sending to Svelte. Note the two columns, `year` and `value`:
 
-:::{.callout-note title="Table of values" collapse="true"  appearance="simple"}
+:::{.callout-note title="Table of values" collapse="true"}
 ```{ojs}
 //| label: data-table
 Inputs.table(finalData)

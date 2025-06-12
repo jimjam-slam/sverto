@@ -122,7 +122,7 @@ When you use the quarto-svelte template in a project, it creates some files for 
 * `package-lock.json` is created once you run `npm install`. You should add this to version control.
 * `node_modules/`: This folder is created once you rum `npm install`. **Do not** add it to version control.
 
-:::{.callout-tip appearance="simple" title="Hot reloads"}
+:::{.callout-tip title="Hot reloads"}
 The `quarto preview` command won't "live reload" when you modify your Svelte component—but if you modify and save the Quarto doc that imports it, that will trigger a re-render. You may need to hard reload the page in your browser to see the updated Svelte component.
 
 If you want to quickly iterate on a Svelte component you're building, you might find the [Svelte Preview](https://marketplace.visualstudio.com/items?itemName=RafaelMartinez.svelte-preview) extension for VSCode handy.
