@@ -1,27 +1,19 @@
 ---
-title: Sverto example
-date: last-modified
+title: quarto-svelte example
 filters:
-  - sverto
-sverto:
+  - quarto-svelte
+quarto-svelte:
   use:
     - Circles.svelte
 ---
 
 This document shows you how to use a basic example Svelte component called `Circles.svelte`.
 
-Create one using `fileName.default()`, where `fileName` is the file name without `.svelte`:
+Create one using an HTML template:
 
 ```{ojs}
-myCircles = new Circles.default({
-  target: document.querySelector("#mycircles")
-});
+myCircles = html`<my-circles></my-circles>`
 ```
-
-It will appear in a [div](https://quarto.org/docs/authoring/markdown-basics.html#divs-and-spans) called `#mycircles`, which I've added directly below:
-
-:::{#mycircles}
-:::
 
 Now the fun part - updating our visual when our document changes. It's as simple as changing the prop using `componentName.propName =`.
 
@@ -50,5 +42,5 @@ myCircles.data = selectedDataset
 
 And there you go! 🚀
 
-For more help writing Svelte components, check out the [Svelte tutorial](https://svelte.dev/tutorial/basics) or take look at some of the examples in the [Sverto documentation](https://sverto.jamesgoldie.dev).
+For more help writing Svelte components, check out the [Svelte tutorial](https://svelte.dev/tutorial/basics) or take look at some of the examples in the [quarto-svelte documentation](https://quarto-svelte.jamesgoldie.dev).
 

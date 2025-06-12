@@ -1,33 +1,46 @@
 project:
-  type: sverto
+  type: website
   
 execute:
   freeze: auto
 
 website:
+  announcement:
+    icon: stars
+    dismissable: true
+    type: warning
+    position: above-navbar
+    content: "Sverto is now quarto-svelte — and it supports Svelte 5! [**Learn how to migrate to the new version.**](/articles/migrating-from-sverto-v1){style=\"color: var(--bs-text-warning)\"}"
   navbar:
-    background: "#222222"
+    background: "#ff3e00"
+    foreground: "white"
     search: true
     left:
-      - text: "Sverto"
+      - text: "quarto-svelte"
         file: index.qmd
-      - text: "Examples"
+      - text: Examples
         menu:
           - text: "Simple bar chart"
             file: examples/barchart/index.qmd
           - text: "Time series chart"
             file: examples/time-series/index.qmd
-      - text: Changelog
+      - text: Articles
+        menu:
+          - text: Migrating from Sverto v1 and Svelte 3
+            file: articles/migrating-from-sverto-v1
+          - text: Default prop values
+            file: articles/default-prop-values/index.qmd
+      - text: News
         file: news.qmd
-      # - about.qmd
     right:
       - icon: github
-        href: https://github.com/jimjam-slam/sverto
+        href: https://github.com/jimjam-slam/quarto-svelte
+  page-footer: "The developers of Svelte are not affiliated with quarto-svelte."
 
 format:
   html:
-    # title-block-banner: "#e1e4e6"
-    title-block-banner: true
+    title-block-banner: "#222222"
     theme: [default, style.scss]
-    linkcolor: "#36a7e9"
+    linkcolor: "#ff3e00"
+    callout-appearance: simple
     

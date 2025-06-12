@@ -1,0 +1,101 @@
+---
+title: Default prop values
+description: More advanced ways to instantiate your Svelte components and pass props to them.
+---
+
+When you place your Svelte component on the page, it will be instantiated (created) with initial values for its props — either the default prop values written into the component, or initial values that you give it.
+
+For example, the `Circles.svelte` component on this site's home page has a prop, `data`:
+
+```{.svelte .sourceCode filename="Circles.svelte"}
+let { data = [5, 15, 10, 12, 14] } = $props();
+```
+
+If you create `<my-circles>` without supplying `data`, that prop will first be `[5, 15, 10, 12, 14]`:
+
+```{ojs}
+//| eval: false
+myCircles = html`
+  <my-circles>
+  </my-circles>`
+```
+
+But you could also create it your own initial value for `data`:
+
+```{ojs}
+//| eval: false
+myCircles = html`
+  <my-circles data="[1, 2, 3, 4, 5]">
+  </my-circles>`
+```
+
+If you are also supplying prop values to a Svelte component via OJS, the component will begin at the initial value above and then switch to the OJS-supplied value as soon as it becomes available.
+
+That might be nearly immediately, so you may not notice the differnce. But if your component is near the top of the page and transitions elements slowly, you may notice the change — a bar chart might immediate transition from one set of bar chart heights to another, for example. You may want to supply initial props that make sense for your component.
+
+# Passing complex data as default props
+
+If you're supplying props to your Svelte component when you place it, you may notice that they're in quotes. Like regular HTML attributes, those props are strings.
+
+If you want a Svelte component to convert those props from strings to something else, you can specify that at the top of the component using [component options](https://svelte.dev/docs/svelte/custom-elements#Component-options).
+
+For example, the component options for `Circles.svelte` looks like this:
+
+```{.svelte .sourceCode filename="Circles.svelte"}
+<svelte:options customElement={{
+  tag: "my-circles",
+  props: {
+    data: { type: "Array" }
+  }
+}} />
+```
+
+Instead of simply supplying a name, like `customElement="bar-chart"`, we provide an object with the configuration. The name of the element is the `tag` option, while prop configuration is under `props`.
+
+For each prop, you can provide a `type`—one of `'String'`, `'Boolean'`, `'Number'`, `'Array'` or `'Object'`. For our data prop, the type is set to `"Array"`, so the default value `"[1, 2, 3, 4, 5]"` is converted from a String to an array of numbers.
+
+## Nested arrays and objects
+
+Nested arrays and objects are common in data science, where we might want to pass a data-frame like array through.
+
+For example, you might be tempted to try something like this:
+
+```{ojs}
+//| eval: false
+myCircles = html`
+  <my-circles
+    data="[ { name: 'James', score: 13 }, { name: 'Andrew', score: 15 } ]">
+  </my-circles>`
+```
+
+This, unfortunately, won't work, even if you've set the prop type to `"Array"` or `"Object"`.
+
+But there is also an alternate way of placing your element with JavaScript that allows you to pass nested arrays and objects as default props:
+
+```{ojs}
+//| eval: false
+anotherBarChart = {
+  const chart = document.createElement("bar-chart")
+  chart.data = [
+    { name: "James", score: 13 },
+    { name: "Andrew", score: 15 } ]
+  return chart
+}
+```
+
+Of course, you can always make your default value an empty array (or make the default value inside the component an empty array) and then pass the nested one via OJS:
+
+```{ojs}
+//| eval: false
+myCircles = html`
+  <my-circles data="[]">
+  </my-circles>`
+```
+
+
+```{ojs}
+//| eval: false
+myCircles.data = [
+  { name: "James", score: 13 },
+  { name: "Andrew", score: 15 } ]
+```

@@ -1,10 +1,10 @@
 # quarto backend folder
 /.quarto/
 
-# .sverto directory (except rollup.config.js)
-/.sverto/import
-/.sverto/.sverto-*
-!/.sverto/rollup.config.js
+# .quarto-svelte directory (except rollup.config.js)
+/.quarto-svelte/import
+/.quarto-svelte/.quarto-svelte-*
+!/.quarto-svelte/rollup.config.js
 
 # installed npm packages
 /node_modules/
@@ -18,10 +18,11 @@
 # rendered documentation site
 /docs/_site/
 /docs/.quarto/
-/docs/.sverto/
+/docs/.quarto-svelte/
 
-# sverto extension in docs site (we get it from project root on render)
-/docs/_extensions/sverto
-
-# rendered single doc example files
+# quarto-svelte extension + files in docs site (we get it from project root on render)
+/docs/_extensions/quarto-svelte
+/docs/package.json
+/docs/package-lock.json
 /example_files/
+

@@ -17,6 +17,10 @@
   
   let { data = [5, 15, 10, 12, 14] } = $props();
 
+  // the graphic is set to 50px, but for a real graphic we might want to 
+  // rescale the data to fit!
+  let height = 50
+
 </script>
 
 <!-- use @debug to log changes in an object to the developer console -->
@@ -25,7 +29,7 @@
 <!-- we use svelte's in/out transitions for entering and exiting dom elements,
      and vanilla css transitions for retained elements that change. the
      #each block means we create an svg <circle> for each element of data -->
-<svg>
+<svg height={height}>
   {#each data as d, i (i)}
     <circle
       in:fly="{{y: 100}}" out:fly="{{y: 100}}"

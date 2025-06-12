@@ -1,0 +1,7 @@
+---
+title: "Articles"
+description: In-depth use of quarto-svelte.
+listing:
+  contents:
+    - "*/index.qmd"
+---

@@ -1,9 +1,9 @@
-# Sverto documentation website
+# quarto-svelte documentation website
 
-Render (getting the latest copy of Sverto) and preview using:
+Render (getting the latest copy of quarto-svelte) and preview using:
 
 ```bash
-cp -Rf ../_extensions/sverto _extensions/sverto && quarto render
+./copy-extension.sh && quarto render
 
 quarto preview
 ```

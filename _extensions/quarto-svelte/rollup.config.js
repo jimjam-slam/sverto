@@ -1,12 +1,12 @@
 import svelte from "rollup-plugin-svelte"
 import commonjs from "@rollup/plugin-commonjs"
-import resolve from "@rollup/plugin-node-resolve"
+import { nodeResolve } from "@rollup/plugin-node-resolve"
 import terser from "@rollup/plugin-terser"
 
-const path = require('node:path')
+const path = require("node:path")
 
 // this is false when we run rollup with -w/--watch (never presently)
-const production = !process.env.ROLLUP_WATCH;
+const production = !process.env.ROLLUP_WATCH
 
 /* export an array of rollup configs - one for each input svelte file - using
    additional command line args supplied from lua */
@@ -26,19 +26,18 @@ export default cmd => {
 	if (quartoRenderPath == undefined) {
 		console.error(
 			"Error: supply a --configQuartoOutPath. Please report this to " +
-			"the Sverto developer.")
+			"the quarto-svelte developer.")
 		process.exit(1)
 	}
-
+	
+	// send a rollup config for each svelte file
 	return svelteInputPaths.map(
 
-		svelteFile => ({
+		(svelteFile, index) => ({
 			input: svelteFile,
 			output: {
 				format: "es",
-				dir: path.join(
-					quartoRenderPath,
-					path.dirname(svelteFile)),
+				dir: path.join(quartoRenderPath, path.dirname(svelteFile)),
 				sourcemap: true
 			},
 			plugins: [
@@ -48,10 +47,11 @@ export default cmd => {
 					compilerOptions: {
 						// required for ojs reactivity
 						accessors: true,
+						customElement: true,
 						dev: !production,
 					}
 				}),
-				resolve({
+				nodeResolve({
 					browser: true,
 					dedupe: ["svelte"]
 				}),

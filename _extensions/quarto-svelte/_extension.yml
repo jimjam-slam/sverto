@@ -1,0 +1,10 @@
+title: quarto-svelte
+author: James Goldie
+version: 2.0.0
+quarto-version: ">=1.5.46"
+contributes:
+  filters:
+    - quarto-svelte.lua
+  metadata:
+    project:
+      pre-render: quarto-svelte-prerender.lua

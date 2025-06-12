@@ -1,41 +1,46 @@
+<svelte:options customElement="time-series" />
+
 <script>
+
   import { blur } from "svelte/transition"
   import { extent } from "d3-array"
   import { scaleLinear, scaleSequential } from "d3-scale"
-  import { interpolateYlGnBu, interpolateYlOrRd, select, axisLeft, axisBottom, format, tickFormat, formatLocale } from "d3"
+  import { interpolateYlGnBu, interpolateYlOrRd, select, axisLeft, axisBottom, format, formatLocale } from "d3"
 
-  // should be an array of objects with:
-  // year
-  // value
-  export let data = []
-  export let valueSuffix = "°C"
-  export let colourScheme = "cool" // or warm
-  $: console.log(colourScheme)
-  $: colourRamp = (colourScheme == "cool") ?
+  // `data` should be an array of objects with:
+  // - year
+  // - value
+  let {
+    data = [],
+    valueSuffix = "°C",
+    colourScheme = "cool",
+    height = 500
+  } = $props();
+  
+  let colourRamp = $derived((colourScheme == "cool") ?
     interpolateYlGnBu :
-    interpolateYlOrRd
+    interpolateYlOrRd)
 
-  // dimensions bound to size of container
-  let height = 500
-  let width = 300
+  // width bound to size of container
+  let width = $state(300)
 
   // add padding to chart
-  $: padX = [60, width - 10]
-  $: padY = [height - 30, 10]
+  let padX = $derived([60, width - 10])
+  let padY = $derived([height - 30, 10])
 
-  $: xDomain = extent(data.map(d => d.year))
-  $: yDomain = extent(data.map(d => d.value))
+  let xDomain = $derived(extent(data.map(d => d.year)))
+  let yDomain = $derived(extent(data.map(d => d.value)))
 
   // scales (flip the colours if they're cool)
-  $: xScale = scaleLinear()
+  let xScale = $derived(scaleLinear()
     .domain(xDomain)
-    .range(padX)
-  $: yScale = scaleLinear()
+    .range(padX))
+  let yScale = $derived(scaleLinear()
     .domain(yDomain)
-    .range(padY)
-  $: colourScale = scaleSequential()
+    .range(padY))
+  let colourScale = $derived(scaleSequential()
     .domain(colourScheme == "cool" ? yDomain.reverse() : yDomain)
-    .interpolator(colourRamp)
+    .interpolator(colourRamp))
 
   // temperature formatter (for x-axis)
   const tempFormat = formatLocale({
@@ -43,16 +48,20 @@
   });
 
   // axes
-  let xAxisGroup
-  let yAxisGroup
-  $: select(xAxisGroup)
-    .transition()
-    .duration(500)
-    .call(axisBottom(xScale).tickFormat(format(".0f")))
-  $: select(yAxisGroup)
-    .transition()
-    .duration(500)
-    .call(axisLeft(yScale).tickFormat(tempFormat.format("$.1f")))
+  let xAxisGroup = $state()
+  let yAxisGroup = $state()
+  $effect(() => {
+    select(xAxisGroup)
+      .transition()
+      .duration(500)
+      .call(axisBottom(xScale).tickFormat(format(".0f")))
+  });
+  $effect(() => {
+    select(yAxisGroup)
+      .transition()
+      .duration(500)
+      .call(axisLeft(yScale).tickFormat(tempFormat.format("$.1f")))
+  });
 
 </script>
 
@@ -70,10 +79,9 @@
     font-size: 14px;
   }
 
-
 </style>
 
-<main bind:clientHeight={height} bind:clientWidth={width}>
+<main bind:clientWidth={width} >
   <svg width={width} height={height}>
 
     <g>
