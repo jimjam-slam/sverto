@@ -71,17 +71,16 @@ function inject_svelte_and_compile(m)
     local in_dir   = pandoc.path.directory(in_path)
     local in_name  = pandoc.path.filename(in_path)
     local obj_name = pandoc.path.split_extension(in_name)
-    local compiled_path = pandoc.path.join({
-      in_dir,
-      obj_name .. ".js"
-    })
+    -- bundle path should use *nix separators for web, not platform default
+    local compiled_path = pandoc.path.join({ in_dir, obj_name .. ".js" })
+    local web_path = compiled_path:gsub("\\", "/")
 
     -- add .svelte path to svelte compiler path list...
     svelte_paths_string = svelte_paths_string .. in_path .. ":"
 
     -- ... and inject the ojs init code for it
     local svelte_insert = string.format(svelte_js_import_template,
-      compiled_path, obj_name)
+      web_path, obj_name)
     quarto.doc.include_text("before-body", svelte_insert)
 
     -- finally, if we're rendering a single doc (not in a project),
