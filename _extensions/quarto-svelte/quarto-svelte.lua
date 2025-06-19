@@ -36,28 +36,7 @@ function inject_svelte_and_compile(m)
   -- either add text to start of body (and return nil), or return a rawblock
   -- %s: compiled svelte js path
   -- %s: obj_name
-  local svelte_js_import_template = [[
-    <script type="module">
-
-      // when the doc is ready, find quarto's ojs and inject svelte import
-      document.addEventListener("DOMContentLoaded", () => {
-        
-        import("%s").then(svelteModule => {
-
-          const ojsModule = window._ojs?.ojsConnector?.mainModule
-          if (ojsModule === undefined) {
-            console.error("Quarto OJS module not found")
-          }
-  
-          // TODO - check to see if there's already a variable with that name
-          const quartoSvelteImport = ojsModule?.variable()
-          quartoSvelteImport?.define("%s", svelteModule)
-
-        })
-
-      })
-    </script>
-  ]]
+  local svelte_js_import_template = '<script src="%s" type="module"></script>'
   
   -- abort if quarto-svelte.use is not a string or a list of MetaInlines
   local quarto_svelte_use = util.get_svelte_paths_from_meta(m)
@@ -80,7 +59,7 @@ function inject_svelte_and_compile(m)
 
     -- ... and inject the ojs init code for it
     local svelte_insert = string.format(svelte_js_import_template,
-      web_path, obj_name)
+      web_path)
     quarto.doc.include_text("before-body", svelte_insert)
 
     -- finally, if we're rendering a single doc (not in a project),

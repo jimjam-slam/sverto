@@ -1,3 +1,7 @@
+## quarto-svelte 2.0.1
+
+- Improvement: extraneous OJS import code is removed from bootstrapping script
+
 ## quarto-svelte 2.0.0
 
 - Rename Sverto to quarto-svelte
